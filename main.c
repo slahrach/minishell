@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/04/28 20:38:33 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/04/29 03:17:10 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(void)
 		to_parse(g_data.line, &g_data.list);
 		while (g_data.list)
 		{
-			printf("%s\n", g_data.list->content);
+			printf("id = %d ------ %s\n",g_data.list->id, g_data.list->content);
 			g_data.list = g_data.list->next;
 		}
 		free (g_data.line);

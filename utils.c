@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/04/28 20:56:06 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/04/29 03:21:22 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,25 @@ int	is_whitespace(char c)
 	if ((c >= 9 && c <= 13) || c == 32)
 		return (1);
 	return (0);
+}
+
+int	is_special(char c)
+{
+	if (c == '<')
+		return (INPUT);
+	if (c == '>')
+		return (OUTPUT);
+	if (c == '|')
+		return (PIPE);
+	return (0);
+}
+
+char	*chr_to_str(char c)
+{
+	char	*str;
+
+	str = malloc (2 * sizeof(char));
+	str[0] = c;
+	str[1] = '\0';
+	return (str);
 }
