@@ -6,32 +6,34 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/04/29 03:21:22 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/10 16:24:07 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-const char	*find_prompt(void)
+char	*find_prompt(void)
 {
-	const char	*folder = NULL;
-	const char	*user = NULL;
-	const char	*prompt = NULL;
+	char	*folder;
+	char	*user;
+	char	*prompt;
 
 	folder = getenv("PWD");
 	user = getenv("USER");
 	if (ft_strrchr(folder, '/'))
 		folder = ft_strrchr(folder, '/') + 1;
-	folder = (const char *) ft_strjoin ("\033[1;33m", folder);
-	folder = (const char *) ft_strjoin (folder, "\033[0m");
+	folder = ft_strjoin ("\033[1;33m", folder);
+	folder = ft_strjoin1 (folder, "\033[0m");
 	if (ft_strchr(user, '='))
 		user = ft_strchr(user, '=') + 1;
-	user = (const char *) ft_strjoin ("\033[1;31m", user);
-	user = (const char *) ft_strjoin (user, "\033[0m");
-	prompt = (const char *) ft_strjoin ("\033[1;33m* {\033[0m", user);
-	prompt = (const char *) ft_strjoin (prompt, "\033[1;33m} \033[0m");
-	prompt = (const char *) ft_strjoin (prompt, folder);
-	prompt = (const char *) ft_strjoin (prompt, "\033[1;31m $ \033[0m");
+	user = ft_strjoin ("\033[1;31m", user);
+	user = ft_strjoin1 (user, "\033[0m");
+	prompt = ft_strjoin ("\033[1;33m* {\033[0m", user);
+	free(user);
+	prompt = ft_strjoin1 (prompt, "\033[1;33m} \033[0m");
+	prompt = ft_strjoin1 (prompt, folder);
+	free(folder);
+	prompt = ft_strjoin1 (prompt, "\033[1;31m $ \033[0m");
 	return (prompt);
 }
 

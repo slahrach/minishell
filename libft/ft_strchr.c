@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/05 18:36:22 by slahrach          #+#    #+#             */
-/*   Updated: 2022/04/28 05:21:18 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/09 23:24:02 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*ft_strchr(const char *s, int c)
 	}
 	return (NULL);
 }
-
 
 int	ft_strchr1(const char *s, int c)
 {
