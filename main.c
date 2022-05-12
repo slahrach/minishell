@@ -6,13 +6,11 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/10 20:18:21 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/11 23:18:12 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_data	g_data;
 
 void	handle_sigint(int sig)
 {
@@ -26,16 +24,15 @@ void	handle_sigint(int sig)
 
 void	handle_sigquit(int sig)
 {
-	if (sig != SIGQUIT)
-		return ;
-	if (rl_end > 0)
+	if (!sig || rl_end > 0)
 		exit (0);
 	else
-		return ;
+		rl_on_new_line();
 }
 
 int	main(void)
 {
+	t_data	g_data;
 	char	*prompt;
 	t_list	*temp;
 
