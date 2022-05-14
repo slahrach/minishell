@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 16:36:50 by slahrach          #+#    #+#             */
-/*   Updated: 2021/11/23 21:45:48 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/14 01:29:49 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_list	*ft_lstnew(void *content)
 	new->next = NULL;
 	return (new);
 }
+
 /*
 #include <stdio.h>
 

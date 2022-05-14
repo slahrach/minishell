@@ -6,13 +6,13 @@
 #    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/05/10 19:08:28 by slahrach         ###   ########.fr        #
+#    Updated: 2022/05/14 02:14:51 by slahrach         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRCS = main.c utils.c error.c parsing.c expansion.c
+SRCS = main.c utils.c error.c parsing.c expansion.c builtins.c devide.c
 
 CFLAGS = -Wall -Wextra -Werror
 

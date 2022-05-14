@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/10 19:07:46 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/14 04:19:22 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@
 
 typedef struct s_data
 {
-	char	*line;
-	t_list	*list;
+	char		*line;
+	t_list		*list;
+	t_list		*f_list;
 }	t_data;
 
 char		*find_prompt(void);
@@ -40,5 +41,7 @@ char		*handle_quoting(int	*i, char *line, t_list **list);
 char		*expansion(char *token);
 int			is_special(char c);
 char		*chr_to_str(char c);
+void		builtins(t_list *f_list, char **env);
+t_list		*devide(t_list *list);
 
 #endif

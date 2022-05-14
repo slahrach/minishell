@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/11 23:18:12 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/14 04:54:46 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,16 @@ void	handle_sigquit(int sig)
 		rl_on_new_line();
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
-	t_data	g_data;
+	int		i;
+	t_data	data;
 	char	*prompt;
 	t_list	*temp;
+	t_list	*tempi;
 
-	g_data.list = NULL;
+	if (!argc || !argv || !env)
+		return (0);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	prompt = find_prompt();
@@ -44,20 +47,36 @@ int	main(void)
 		prompt = "\033[1;31m$\033[0m ";
 	while (1)
 	{
-		g_data.line = readline (prompt);
-		if (!g_data.line)
+		i = 1;
+		data.line = readline (prompt);
+		if (!data.line)
 			exit (0);
-		if (*g_data.line)
-			add_history(g_data.line);
-		to_parse(g_data.line, &g_data.list);
-		temp = g_data.list;
+		if (*data.line)
+			add_history(data.line);
+		to_parse(data.line, &data.list);
+		data.f_list = devide(data.list);
+		ft_lstclear(&data.list);
+		temp = data.f_list;
+		//this while is just for test to see result
 		while (temp)
 		{
-			printf("id = %d ------ %s\n", temp->id, temp->content);
+			printf("infile == %s\n", temp->infile);
+			printf("output == %s\n", temp->output);
+			printf("delimiter == %s\n", temp->delimiter);
+			printf("append == %s\n", temp->append);
+			printf("pipe after == %d\n", temp->pipe_after);
+			printf("pipe before == %d\n", temp->pipe_before);
+			tempi = temp->inside;
+			while (tempi)
+			{
+				printf("%s*****", tempi->content);
+				tempi = tempi->next;
+			}
+			printf("\ncommand : %d\n", i);
 			temp = temp->next;
+			i++;
 		}
-		free (g_data.line);
-		ft_lstclear(&g_data.list);
+		ft_lstclear1(&data.f_list);
 	}
 	return (0);
 }
