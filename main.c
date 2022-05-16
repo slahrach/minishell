@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/14 04:54:46 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/16 17:26:15 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	handle_sigquit(int sig)
 
 int	main(int argc, char **argv, char **env)
 {
+	int		j;
 	int		i;
 	t_data	data;
 	char	*prompt;
 	t_list	*temp;
-	t_list	*tempi;
-
+	char	**arr;
 	if (!argc || !argv || !env)
 		return (0);
 	signal(SIGINT, handle_sigint);
@@ -66,13 +66,11 @@ int	main(int argc, char **argv, char **env)
 			printf("append == %s\n", temp->append);
 			printf("pipe after == %d\n", temp->pipe_after);
 			printf("pipe before == %d\n", temp->pipe_before);
-			tempi = temp->inside;
-			while (tempi)
-			{
-				printf("%s*****", tempi->content);
-				tempi = tempi->next;
-			}
-			printf("\ncommand : %d\n", i);
+			arr = temp->arr;
+			j = -1;
+			while (arr[++j])
+				printf("%s *****\n", arr[j]);
+			printf("command : %d\n\n", i);
 			temp = temp->next;
 			i++;
 		}

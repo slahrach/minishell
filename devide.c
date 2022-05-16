@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/14 04:47:34 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/16 17:18:23 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,31 @@ t_list	*new(void)
 	new->inside = NULL;
 	new->next = NULL;
 	return (new);
+}
+
+static void	make_arr(t_list **head)
+{
+	int		i;
+	int		l;
+	t_list	*temp_head;
+	t_list	*temp;
+
+	temp_head = *head;
+	while (temp_head)
+	{
+		temp = temp_head->inside;
+		i = 0;
+		l = ft_lstsize(temp);
+		temp_head->arr = malloc ((l + 1) * sizeof (char *));
+		while (temp)
+		{
+			temp_head->arr[i] = ft_strdup(temp->content);
+			i++;
+			temp = temp->next;
+		}
+		temp_head->arr[i] = NULL;
+		temp_head = temp_head->next;
+	}
 }
 
 t_list	*devide(t_list *list)
@@ -75,5 +100,6 @@ t_list	*devide(t_list *list)
 			list = list->next->next;
 		}
 	}
+	make_arr(&temp);
 	return (temp);
 }

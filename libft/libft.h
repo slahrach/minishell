@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/14 04:28:42 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/16 17:02:12 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_list
 	int				id;
 	struct s_list	*inside;
 	char			*content;
+	char			**arr;
 	int				pipe_after;
 	int				pipe_before;
 	char			*infile;

@@ -6,12 +6,12 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 23:49:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/14 02:58:01 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/16 00:01:10 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"libft.h"
-#include <stdio.h>
+
 void	ft_lstadd_back(t_list **lst, t_list *new)
 {
 	t_list	*last;

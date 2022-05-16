@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/06 16:15:15 by slahrach          #+#    #+#             */
-/*   Updated: 2021/11/16 21:52:58 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/14 17:43:32 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static	int	retur(int sign, unsigned long long n)
 {
 	if (n >= 9223372036854775808U && sign == 1)
-		return (-1);
-	if (n >= 9223372036854775808U && sign == -1)
+		return (0);
+	if (n > 9223372036854775808U && sign == -1)
 		return (0);
 	return (n * sign);
 }
@@ -41,6 +41,8 @@ int	ft_atoi(const char *str)
 		nbr = (nbr * 10) + (*str - '0');
 		str++;
 	}
+	if (*str)
+		return (0);
 	return (retur(sign, nbr));
 }
 /*
