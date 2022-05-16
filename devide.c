@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 17:18:23 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/16 18:25:14 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ t_list	*new(void)
 	new = malloc (sizeof (t_list));
 	new->inside = NULL;
 	new->next = NULL;
+	new->pipe_after = 0;
+	new->pipe_before = 0;
+	new->append = NULL;
+	new->delimiter = NULL;
+	new->infile = NULL;
+	new->output = NULL;
+	new->arr = NULL;
 	return (new);
 }
 
