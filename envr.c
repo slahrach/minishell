@@ -6,13 +6,13 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 00:51:09 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/19 02:37:21 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*before_char(char *str, int c)
+static char	*before_char(char *str, int c)
 {
 	char			*s;
 	unsigned int	i;
@@ -29,6 +29,7 @@ void	set_env(char **envp, t_env **env)
 	char	*value;
 	int		i;
 
+	*env = NULL;
 	i = 0;
 	while (envp[i])
 	{

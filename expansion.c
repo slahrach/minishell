@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 18:50:57 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/10 19:09:19 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/19 03:01:32 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	dollar(char *token, int *i, t_list **head)
 		str = ft_substr(token, *i + 1, j - *i - 1);
 		if (!*str)
 		{
+			free(str);
 			node = ft_lstnew(ft_strdup("$"));
-			node->id = 0;
 			ft_lstadd_back(head, node);
 		}
 		else
@@ -60,8 +60,9 @@ void	other(char *token, int *i, t_list **head)
 	}
 }
 
-void	change(t_list **head)
+void	change(t_list **head, t_env *env)
 {
+	char	*str;
 	t_list	*temp;
 
 	temp = *head;
@@ -76,15 +77,17 @@ void	change(t_list **head)
 			}
 			else
 			{
+				str = ft_strdup(temp->content);
 				free(temp->content);
-				temp->content = ft_strdup(getenv(temp->content));
+				temp->content = ft_strdup(ft_getenv(env, str));
+				free(str);
 			}
 		}
 		temp = temp->next;
 	}
 }
 
-char	*expansion(char *token)
+char	*expansion(char *token, t_env *env)
 {
 	int		i;
 	char	*result;
@@ -93,14 +96,15 @@ char	*expansion(char *token)
 
 	i = 0;
 	head = NULL;
-	if (!token || !*token)
+	result = NULL;
+	if (!token)
 		return (NULL);
 	while (token[i])
 	{
 		dollar(token, &i, &head);
 		other(token, &i, &head);
 	}
-	change(&head);
+	change(&head, env);
 	temp = head;
 	while (temp)
 	{

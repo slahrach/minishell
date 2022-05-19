@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 17:02:12 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/19 02:51:11 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_list
 {
@@ -59,6 +66,7 @@ char		*ft_strdup(const char *s1);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strjoin1(char *s1, char *s2);
+char		*ft_strjoin2(char *s1, char *s2);
 char		*ft_strtrim(char *s1, char const *set);
 char		**ft_split(char const *s, char c);
 char		*ft_itoa(int nbr);
@@ -78,5 +86,6 @@ void		ft_lstclear(t_list **lst);
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 void		ft_lstclear1(t_list **lst);
+void		clear_env(t_env **env);
 
 #endif

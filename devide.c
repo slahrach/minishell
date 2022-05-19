@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 18:25:14 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/19 02:45:32 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_list	*new(void)
 	new->infile = NULL;
 	new->output = NULL;
 	new->arr = NULL;
+	new->content = NULL;
 	return (new);
 }
 
@@ -54,59 +55,69 @@ static void	make_arr(t_list **head)
 	}
 }
 
-t_list	*devide(t_list *list)
+static void	t_pipe(t_list **list, t_list **head)
 {
+	if (!(*head) || !(*list)->next)
+		error(4);
+	(*list) = (*list)->next;
+	(*head)->pipe_after = 1;
+	ft_lstadd_back(head, new());
+	(*head) = (*head)->next;
+	(*head)->pipe_before = 1;
+}
+
+static void	check(t_list **list, t_list **head)
+{
+	if ((*list)->id == INPUT)
+	{
+		if (!(*list)->next)
+			error(4);
+		(*head)->infile = ft_strdup((*list)->next->content);
+	}
+	else if ((*list)->id == OUTPUT)
+	{
+		if (!(*list)->next)
+			error(4);
+		(*head)->output = ft_strdup((*list)->next->content);
+	}
+	else if ((*list)->id == DELIMITER)
+	{
+		if (!(*list)->next)
+			error(4);
+		(*head)->delimiter = ft_strdup((*list)->next->content);
+	}
+	else if ((*list)->id == APPEND)
+	{
+		if (!(*list)->next)
+			error(4);
+		(*head)->append = ft_strdup((*list)->next->content);
+	}
+	(*list) = (*list)->next->next;
+}
+
+t_list	*devide(t_list **list_free)
+{
+	t_list	*list;
 	t_list	*head;
 	t_list	*temp;
 
+	list = *list_free;
 	head = new();
 	temp = head;
 	while (list)
 	{
 		if (list->id == PIPE)
-		{
-			if (!head || !list->next)
-				error(4);
-			list = list->next;
-			head->pipe_after = 1;
-			ft_lstadd_back(&head, new());
-			head = head->next;
-			head->pipe_before = 1;
-		}
+			t_pipe (&list, &head);
 		else if (list->id == 0)
 		{
-			ft_lstadd_back(&(head->inside), ft_lstnew(ft_strdup(list->content)));
+			ft_lstadd_back(&(head->inside), ft_lstnew((list->content)));
 			list = list->next;
 		}
-		else if (list->id == INPUT)
-		{
-			if (!list->next)
-				error(4);
-			head->infile = ft_strdup(list->next->content);
-			list = list->next->next;
-		}
-		else if (list->id == OUTPUT)
-		{
-			if (!list->next)
-				error(4);
-			head->output = ft_strdup(list->next->content);
-			list = list->next->next;
-		}
-		else if (list->id == DELIMITER)
-		{
-			if (!list->next)
-				error(4);
-			head->delimiter = ft_strdup(list->next->content);
-			list = list->next->next;
-		}
-		else if (list->id == APPEND)
-		{
-			if (!list->next)
-				error(4);
-			head->append = ft_strdup(list->next->content);
-			list = list->next->next;
-		}
+		else
+			check(&list, &head);
 	}
 	make_arr(&temp);
+	ft_lstclear(list_free);
+	list_free = 0;
 	return (temp);
 }

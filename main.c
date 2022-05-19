@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 18:04:02 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/19 01:44:42 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,50 +30,28 @@ void	handle_sigquit(int sig)
 		rl_on_new_line();
 }
 
-int	main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **envp)
 {
-	int		j;
-	int		i;
 	t_data	data;
 	char	*prompt;
-	t_list	*temp;
-	char	**arr;
-	if (!argc || !argv || !env)
+
+	if (!argc || !argv)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	prompt = find_prompt();
 	if (!prompt)
 		prompt = "\033[1;31m$\033[0m ";
+	set_env(envp, &data.env);
 	while (1)
 	{
-		i = 1;
 		data.line = readline (prompt);
 		if (!data.line)
 			exit (0);
 		if (*data.line)
 			add_history(data.line);
-		to_parse(data.line, &data.list);
-		data.f_list = devide(data.list);
-		ft_lstclear(&data.list);
-		temp = data.f_list;
-		//this while is just for test to see result
-		while (temp)
-		{
-			printf("infile == %s\n", temp->infile);
-			printf("output == %s\n", temp->output);
-			printf("delimiter == %s\n", temp->delimiter);
-			printf("append == %s\n", temp->append);
-			printf("pipe after == %d\n", temp->pipe_after);
-			printf("pipe before == %d\n", temp->pipe_before);
-			arr = temp->arr;
-			j = -1;
-			while (arr[++j])
-				printf("%s *****\n", arr[j]);
-			printf("command : %d\n\n", i);
-			temp = temp->next;
-			i++;
-		}
+		to_parse(data.line, &data.list, data.env);
+		data.f_list = devide(&data.list);
 		ft_lstclear1(&data.f_list);
 	}
 	return (0);

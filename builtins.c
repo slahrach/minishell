@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:34:44 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 00:07:48 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/16 23:21:16 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,19 @@
 #include <unistd.h>
 #include "minishell.h"
 
-int	builtins(t_list *f_list, char **env)
+int	builtins(t_list *f_list, t_env **env)
 {
+	t_env	*copy;
 	int		atoi;
 	int		i;
 	char	*str_cp;
+	char	*name;
+	char	*value;
 	char	pwd[256];
 	t_list	*list;
 
 	i = 0;
+	copy = *env;
 	list = f_list->inside;
 	str_cp = ft_strmapi(list->content, ft_tolower);
 	if (!ft_strcmp(str_cp, "pwd"))
@@ -85,12 +89,36 @@ int	builtins(t_list *f_list, char **env)
 			write (2, "too many arguments \n", 21);
 			return (127);
 		}
-		while (env[i])
+		while (copy)
 		{
-			printf("%s\n", env[i]);
-			i++;
+			printf("%s=%s\n", copy->name, copy->value);
+			copy = copy->next;
 		}
 		return (0);
+	}
+	if (!ft_strcmp(list->content, "unset"))
+	{
+		if (list->next)
+			unset_node(env, list->next->content);
+		return (0);
+	}
+	if (!ft_strcmp(f_list->arr[0], "export"))
+	{
+		i = 1;
+		while (f_list->arr[i])
+		{
+			if (!ft_strcmp(f_list->arr[i], "="))
+			{
+				if (i - 1 > 0)
+					name = f_list->arr[i - 1];
+				if (f_list->arr[i + 1])
+					value = f_list->arr[i + 1];
+				else
+					value = ft_strdup("");
+				if (name && value)
+					env_add_change(env, name, value);
+			}
+		}
 	}
 	return (0);
 }

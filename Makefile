@@ -6,7 +6,7 @@
 #    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/05/16 00:29:08 by slahrach         ###   ########.fr        #
+#    Updated: 2022/05/19 03:08:35 by slahrach         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,6 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} ${CFLAGS} -I/Users/slahrach/.brew/opt/readline/include -c $<
+	${CC} ${CFLAGS} -I /Users/slahrach/.brew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re

@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 16:36:50 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/15 23:54:13 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/17 20:31:07 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,15 @@ t_list	*ft_lstnew(void *content)
 	if (!new)
 		return (NULL);
 	new->content = content;
+	new->arr = NULL;
+	new->inside = NULL;
+	new->append = NULL;
+	new->delimiter = NULL;
+	new->infile = NULL;
+	new->output = NULL;
+	new->pipe_after = 0;
+	new->pipe_before = 0;
+	new->id = 0;
 	new->next = NULL;
 	return (new);
 }
