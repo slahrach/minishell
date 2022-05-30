@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/19 01:44:42 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:29:07 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,30 @@ int	main(int argc, char **argv, char **envp)
 			add_history(data.line);
 		to_parse(data.line, &data.list, data.env);
 		data.f_list = devide(&data.list);
+		execute_commands(&data);
+		// t_list *tmp = data.f_list;
+		// t_env *tmp ;
+		// while (tmp)
+		// {
+			// printf("content = %s \n", tmp->content);
+			// // printf("inside = %s \n", tmp->inside);
+			// printf("id = %d \n", tmp->id);
+			// printf("pipe_after = %d \n", tmp->pipe_after);
+			// printf("pipe_before = %d \n", tmp->pipe_before);
+			// printf("infile = %s \n", tmp->infile);
+			// printf("output = %s \n", tmp->output);
+			// printf("append = %s \n", tmp->append);
+			// printf("delimiter = %s \n", tmp->delimiter);
+		// 	int i = 0;
+		// 	while (tmp->arr[i])
+		// 	{
+		// 		printf("arr[%d] = %s}\n", i, tmp->arr[i]);
+		// 		i++;
+		// 	}
+		// 	puts(" ");
+		// 	tmp = tmp->next;
+		// }
+		//while (1);
 		ft_lstclear1(&data.f_list);
 	}
 	return (0);

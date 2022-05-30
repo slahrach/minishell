@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/19 02:37:29 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:25:41 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,14 @@ t_env		*find_last(t_env *lst);
 void		add_front(t_env **lst, t_env *new);
 void		add_back(t_env **lst, t_env *new);
 int			sizelst(t_env *lst);
-t_env		*new_node(char *name, char *value);
+t_env		*new_node(char *name, char *value, int flag);
 void		set_env(char **envp, t_env **env);
 char		*ft_getenv(t_env *env, char *name);
 void		env_add_change(t_env **env, char *name, char *value);
 void		unset_node(t_env **env, char *name);
+void		env_add_change1(t_env **env, char *name, char *value);
+
+/********************execution*******************************/
+
+void	execute_commands(t_data	*data);
 #endif

@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:54:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/19 01:37:17 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:22:20 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*new_node(char *name, char *value)
+t_env	*new_node(char *name, char *value, int flag)
 {
 	t_env	*new;
 
 	new = malloc (sizeof(t_env));
 	new->name = name;
 	new->value = value;
+	new->flag = flag;
 	new->next = NULL;
 	return (new);
 }
