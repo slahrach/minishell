@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/26 17:25:41 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/05/30 22:54:46 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		set_env(char **envp, t_env **env);
 char		*ft_getenv(t_env *env, char *name);
 void		env_add_change(t_env **env, char *name, char *value);
 void		unset_node(t_env **env, char *name);
-void		env_add_change1(t_env **env, char *name, char *value);
+void		env_add_change1(t_env **env, char *name, char *value, int flag);
 
 /********************execution*******************************/
 

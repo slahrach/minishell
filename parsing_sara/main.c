@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/26 17:29:07 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/05/30 23:24:55 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,15 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		data.line = readline (prompt);
-		if (!data.line)
-			exit (0);
+		// if (!data.line)
+		// 	exit (0);
 		if (*data.line)
+		{
 			add_history(data.line);
-		to_parse(data.line, &data.list, data.env);
-		data.f_list = devide(&data.list);
-		execute_commands(&data);
+			to_parse(data.line, &data.list, data.env);
+			data.f_list = devide(&data.list);
+			execute_commands(&data);
+		}
 		// t_list *tmp = data.f_list;
 		// t_env *tmp ;
 		// while (tmp)

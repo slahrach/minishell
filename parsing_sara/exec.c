@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/05/30 18:55:12 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/05/31 00:54:11 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,10 @@ int	parse_args(char *var)
 	return (1);
 }
 
-int	already_exists(char **arg, t_env *env, int flag)
+int	already_exists_export(char **arg, t_env *env, int flag)
 {
 	t_env	*tmp;
-	
+
 	tmp = env;
 	while (tmp)
 	{
@@ -158,16 +158,14 @@ int	already_exists(char **arg, t_env *env, int flag)
 				else
 					return (2);
 			}
-			else if ((!tmp->value && !arg[1] && flag))
-				return (3);
-			else if ((arg[1] && !tmp->value) && !flag)
+			else if (!tmp->value && arg[1])
 				return (2);
+			else if ((!arg[1] && flag))
+				return (3);
 			else if (!arg[1] && !tmp->value && !flag)
 				return (1);
 			else if (!arg[1] && tmp->value && !flag)
 				return (1);
-			else if (!arg[1] && tmp->value && flag)
-				return (3);
 		}
 		tmp = tmp->next;
 	}
@@ -194,13 +192,16 @@ void	export_command(char **arr, t_env *env)
 			flag = 1;
 		arg_splited = split_name_value(arr[i]);
 		if (!parse_args(arg_splited[0]))
-			return ;
-		if (!already_exists(arg_splited, env, flag))
+		{
+			i++;
+			continue ;
+		}
+		if (!already_exists_export(arg_splited, env, flag))
 			add_back(&env, new_node(arg_splited[0], arg_splited[1], flag));
-		else if (already_exists(arg_splited, env, flag) == 2)
-				env_add_change1(&env, arg_splited[0], arg_splited[1]);
-		else if (already_exists(arg_splited, env, flag) == 3)
-				env_add_change1(&env, arg_splited[0], ft_strdup(""));
+		else if (already_exists_export(arg_splited, env, flag) == 2)
+				env_add_change1(&env, arg_splited[0], arg_splited[1], flag);
+		else if (already_exists_export(arg_splited, env, flag) == 3)
+				env_add_change1(&env, arg_splited[0], ft_strdup(""), flag);
 		i++;
 	}
 }
@@ -223,6 +224,39 @@ void	env_command(char **arr, t_env *env)
 	}
 }
 
+// void	already_exists_unset(t_env *env, char *arr)
+// {
+// 	t_env	*tmp;
+	
+// 	tmp = env;
+// 	while (tmp)
+// 	{
+// 		if (!ft_strcmp(tmp->name, arr))
+// 		{
+			
+// 		}
+// 	}
+// }
+
+void	unset_command(char **arr, t_env *env)
+{
+	t_env	*tmp;
+	int		i;
+
+	tmp = env;
+	i = 1;
+	while (arr[i])
+	{
+		if (!parse_args(arr[i]))
+		{
+			i++;
+			continue ;
+		}
+		unset_node(&env, arr[i]);
+		i++;
+	}
+}
+
 void	execute_commands(t_data	*data)
 {
 	if (!ft_strcmp(data->f_list->arr[0], "echo"))
@@ -235,4 +269,6 @@ void	execute_commands(t_data	*data)
 		export_command(data->f_list->arr, data->env);
 	if (!ft_strcmp(data->f_list->arr[0], "env"))
 		env_command(data->f_list->arr, data->env);
+	if (!ft_strcmp(data->f_list->arr[0], "unset"))
+		unset_command(data->f_list->arr, data->env);
 }
