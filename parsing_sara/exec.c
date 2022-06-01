@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/05/31 00:54:11 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/01 01:07:50 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,20 +224,6 @@ void	env_command(char **arr, t_env *env)
 	}
 }
 
-// void	already_exists_unset(t_env *env, char *arr)
-// {
-// 	t_env	*tmp;
-	
-// 	tmp = env;
-// 	while (tmp)
-// 	{
-// 		if (!ft_strcmp(tmp->name, arr))
-// 		{
-			
-// 		}
-// 	}
-// }
-
 void	unset_command(char **arr, t_env *env)
 {
 	t_env	*tmp;
@@ -252,6 +238,7 @@ void	unset_command(char **arr, t_env *env)
 			i++;
 			continue ;
 		}
+		printf("arg = %s\n", arr[i]);
 		unset_node(&env, arr[i]);
 		i++;
 	}
@@ -261,14 +248,18 @@ void	execute_commands(t_data	*data)
 {
 	if (!ft_strcmp(data->f_list->arr[0], "echo"))
 		echo_command(data->f_list->arr);
-	if (!ft_strcmp(data->f_list->arr[0], "cd"))
+	else if (!ft_strcmp(data->f_list->arr[0], "cd"))
 		cd_command(data->f_list->arr, data->env);
-	if (!ft_strcmp(data->f_list->arr[0], "pwd"))
+	else if (!ft_strcmp(data->f_list->arr[0], "pwd"))
 		pwd_command();
-	if (!ft_strcmp(data->f_list->arr[0], "export"))
+	else if (!ft_strcmp(data->f_list->arr[0], "export"))
 		export_command(data->f_list->arr, data->env);
-	if (!ft_strcmp(data->f_list->arr[0], "env"))
+	else if (!ft_strcmp(data->f_list->arr[0], "env"))
 		env_command(data->f_list->arr, data->env);
-	if (!ft_strcmp(data->f_list->arr[0], "unset"))
+	else if (!ft_strcmp(data->f_list->arr[0], "unset"))
 		unset_command(data->f_list->arr, data->env);
+	else if (!ft_strcmp(data->f_list->arr[0], "exit"))
+		unset_command(data->f_list->arr, data->env);
+	else
+		other_commands(data->f_list->arr, data->env);
 }

@@ -6,19 +6,19 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:54:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/26 17:22:20 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/01 01:03:56 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*had to allocate the name n value cz they cause problems when they needed to be freed*/
 t_env	*new_node(char *name, char *value, int flag)
 {
 	t_env	*new;
 
 	new = malloc (sizeof(t_env));
-	new->name = name;
-	new->value = value;
+	new->name = ft_strdup(name);
+	new->value = ft_strdup(value);
 	new->flag = flag;
 	new->next = NULL;
 	return (new);

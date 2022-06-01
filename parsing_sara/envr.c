@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/31 00:51:53 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/01 00:49:52 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,22 +94,34 @@ void	env_add_change1(t_env **env, char *name, char *value, int flag)
 
 void	unset_node(t_env **env, char *name)
 {
-	t_env	*temp;
+	t_env	*after_node;
+	t_env	*before_node;
 	t_env	*copy;
+	int		sign;
+	
 
 	copy = *env;
+	sign = 0;
 	while (copy)
 	{
+		if (!sign)
+		{
+			before_node = copy;
+			sign = 1;
+		}
 		if (!ft_strcmp(name, copy->name))
 		{
-			temp = copy->next;
+			if (!copy->next)
+				after_node = NULL;
+			else
+				after_node = copy->next;
 			free(copy->name);
 			free(copy->value);
-			// copy->flag = 0;
 			free(copy);
-			copy = temp;
+			before_node->next = after_node;
+			return ;
 		}
-		else
-			copy = copy->next;
+		before_node = copy;
+		copy = copy->next;
 	}
 }
