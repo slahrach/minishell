@@ -1,41 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/01 01:07:50 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/03 22:44:57 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing_sara/minishell.h"
-
-void    echo_command(char **arr)
-{
-	int		i;
-
-	if (!ft_strncmp(arr[1], "-n", ft_strlen(arr[1])))
-	{
-		i = 2;
-		while (arr[i])
-		{
-			write (1, arr[i], ft_strlen(arr[i]));
-			i++;
-		}
-	}
-	else
-	{
-		i = 1;
-		while (arr[i])
-		{
-			write (1, arr[i], ft_strlen(arr[i]));
-			i++;
-		}
-		write (1, "\n", 1);
-	}
-}
 
 char	*check_path_home(t_env *env)
 {
@@ -44,27 +19,45 @@ char	*check_path_home(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		if (ft_strnstr(tmp->name, "HOME", ft_strlen(tmp->name)))
-			return(tmp->value);
-		tmp= tmp->next;
+		if (!ft_strcmp(tmp->name, "HOME"))
+			return (tmp->value);
+		tmp = tmp->next;
 	}
 	return (NULL);
 }
 
-void	cd_command(char	**arr, t_env *env)
+void	change_pwd_env(t_env *env)
 {
+	char	*pwd_val;
+
+	pwd_val = getcwd(NULL, 0);
+	if (pwd_val)
+		env_add_change1(&env, "PWD", pwd_val, 1);
+}
+
+void	cd_command(t_list **list, t_env *env)
+{
+	char	**arr;
 	int		i;
 	t_env	*tmp_new;
 	t_env	*tmp;
 	t_env	*tmp1;
 	char	*path;
 
+	arr = (*list)->arr;
 	i = 1;
 	tmp = env;
 	if (!arr[1])
 	{
 		path = check_path_home(env);
+		if (!path)
+		{
+			printf("cd: HOME not set \n");
+			(*list)->exit_status = 1;
+			return ;
+		}
 		chdir(path);
+		change_pwd_env(env);
 		return ;
 	}
 	tmp = env;
@@ -78,21 +71,18 @@ void	cd_command(char	**arr, t_env *env)
 				tmp1 = tmp->next->next;
 				tmp->next = tmp_new;
 				tmp_new->next = tmp1;
+				change_pwd_env(env);
 				return ;
 			}
 			tmp = tmp->next;
 		}
+		change_pwd_env(env);
 	}
 	else
+	{
 		printf("bash: cd: %s: No such file or directory\n", arr[1]);
-}
-
-void	pwd_command()
-{
-	char	*buffer;
-
-	if ((buffer = getcwd(NULL, 0)))
-		printf("%s\n", buffer);//don't forget to check in case of an error
+		(*list)->exit_status = 1;
+	}
 }
 
 void	print_export_env(t_env *env)
@@ -106,7 +96,7 @@ void	print_export_env(t_env *env)
 			printf("declare -x %s=\"\"\n", tmp->name);
 		else if (!tmp->value && !tmp->flag)
 			printf("declare -x %s\n", tmp->name);
-		else		
+		else
 			printf("declare -x %s=\"%s\"\n", tmp->name, tmp->value);
 		tmp = tmp->next;
 	}
@@ -118,28 +108,6 @@ char	**split_name_value(char	*arg)
 
 	arr = ft_split(arg, '=');
 	return (arr);
-}
-
-int	parse_args(char *var)
-{
-	int		i;
-
-	if (!ft_isalpha(var[0]) && var[0] != '_')
-	{
-		printf("bash: export: `%s': not a valid identifier\n", var);
-		return (0);
-	}
-	i = 1;
-	while (var[i])
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-		{
-			printf("bash: export: `%s': not a valid identifier\n", var);
-			return (0);
-		}
-		i++;
-	}
-	return (1);
 }
 
 int	already_exists_export(char **arg, t_env *env, int flag)
@@ -172,26 +140,34 @@ int	already_exists_export(char **arg, t_env *env, int flag)
 	return (0);
 }
 
-void	export_command(char **arr, t_env *env)
+void	export_command(t_list **list, t_env *env)
 {
+	char	**arr;
 	int		i;
 	char	**arg_splited;
 	int		flag;
 
 	i = 1;
-	if (!arr[1])
+	arr = (*list)->arr;
+	if (!arr[1] || !(*arr[1]))
 	{
 		print_export_env(env);
 		return ;
 	}
 	while (arr[i])
 	{
+		if (*arr[i] == '=')
+		{
+			printf("export: `=': not a valid identifier");
+			(*list)->exit_status = 1;
+			return ;
+		}
 		if (!ft_strchr(arr[i], '='))
 			flag = 0;
 		else
 			flag = 1;
 		arg_splited = split_name_value(arr[i]);
-		if (!parse_args(arg_splited[0]))
+		if (!parse_args(list, arg_splited[0]))
 		{
 			i++;
 			continue ;
@@ -199,67 +175,63 @@ void	export_command(char **arr, t_env *env)
 		if (!already_exists_export(arg_splited, env, flag))
 			add_back(&env, new_node(arg_splited[0], arg_splited[1], flag));
 		else if (already_exists_export(arg_splited, env, flag) == 2)
-				env_add_change1(&env, arg_splited[0], arg_splited[1], flag);
+			env_add_change1(&env, arg_splited[0], arg_splited[1], flag);
 		else if (already_exists_export(arg_splited, env, flag) == 3)
-				env_add_change1(&env, arg_splited[0], ft_strdup(""), flag);
+			env_add_change1(&env, arg_splited[0], ft_strdup(""), flag);
 		i++;
 	}
 }
 
-void	env_command(char **arr, t_env *env)
+void	exit_command(t_list **f_list)
 {
-	int		i;
-	t_env	*tmp;
+	char	**arr;
+	int		atoi;
+	t_list	*list;
 
-	i = 1;
-	tmp = env;
-	if (!arr[1])
+	list = (*f_list)->inside;
+	while (list)
 	{
-		while (tmp)
-		{
-			if (tmp->flag)
-				printf("%s=%s\n", tmp->name, tmp->value);
-			tmp = tmp->next;
-		}
+		printf("%s\n", list->content);
+		list = list->next;
 	}
-}
-
-void	unset_command(char **arr, t_env *env)
-{
-	t_env	*tmp;
-	int		i;
-
-	tmp = env;
-	i = 1;
-	while (arr[i])
+	arr = (*f_list)->arr;
+	if (ft_lstsize(list) > 1)
 	{
-		if (!parse_args(arr[i]))
+		printf("%s\n", arr[1]);
+		atoi = ft_atoi(list->next->content);
+		printf("atoi = %d\n", atoi);
+		if (!atoi && ft_strcmp(list->next->content, "0"))
 		{
-			i++;
-			continue ;
+			write (2, "numeric argument required !\n", 28);
+			(*f_list)->exit_status = 255;
 		}
-		printf("arg = %s\n", arr[i]);
-		unset_node(&env, arr[i]);
-		i++;
+		else if (ft_lstsize(list) > 2)
+		{
+			write (2, "too many arguments \n", 21);
+			(*f_list)->exit_status = 1;
+		}
+		else
+			(*f_list)->exit_status = atoi % 256;
 	}
+	printf("exit\n");
+	printf("%d\n", (*f_list)->exit_status);
+	//exit(0);
 }
 
 void	execute_commands(t_data	*data)
 {
 	if (!ft_strcmp(data->f_list->arr[0], "echo"))
-		echo_command(data->f_list->arr);
+		echo_command(&data->f_list);
 	else if (!ft_strcmp(data->f_list->arr[0], "cd"))
-		cd_command(data->f_list->arr, data->env);
+		cd_command(&data->f_list, data->env);
 	else if (!ft_strcmp(data->f_list->arr[0], "pwd"))
-		pwd_command();
-	else if (!ft_strcmp(data->f_list->arr[0], "export"))
-		export_command(data->f_list->arr, data->env);
+		pwd_command(&data->f_list);
+	else if (!strcmp(data->f_list->arr[0], "export"))
+		export_command(&data->f_list, data->env);
 	else if (!ft_strcmp(data->f_list->arr[0], "env"))
-		env_command(data->f_list->arr, data->env);
+		env_command(&data->f_list, data->env);
 	else if (!ft_strcmp(data->f_list->arr[0], "unset"))
-		unset_command(data->f_list->arr, data->env);
+		unset_command(&data->f_list, data->env);
 	else if (!ft_strcmp(data->f_list->arr[0], "exit"))
-		unset_command(data->f_list->arr, data->env);
-	else
-		other_commands(data->f_list->arr, data->env);
+		exit_command(&data->f_list);
 }

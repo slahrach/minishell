@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/26 01:57:51 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/03 00:17:34 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_env
 typedef struct s_list
 {
 	int				id;
+	int				exit_status;
 	struct s_list	*inside;
 	char			*content;
 	char			**arr;

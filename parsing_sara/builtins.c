@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 20:34:44 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 23:21:16 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/03 05:55:38 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	builtins(t_list *f_list, t_env **env)
 	copy = *env;
 	list = f_list->inside;
 	str_cp = ft_strmapi(list->content, ft_tolower);
-	if (!ft_strcmp(str_cp, "pwd"))
+	if (!ft_strcmp(str_cp, "pwd"))//done
 	{
 		if (!getcwd(pwd, sizeof (pwd)))
 		{
@@ -40,7 +40,7 @@ int	builtins(t_list *f_list, t_env **env)
 		printf("%s\n", pwd);
 		return (0);
 	}
-	if (!ft_strcmp(list->content, "cd"))
+	if (!ft_strcmp(list->content, "cd"))//done
 	{
 		if (!list->next)
 		{

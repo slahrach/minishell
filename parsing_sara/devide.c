@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/19 02:45:32 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/03 22:39:59 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_list	*new(void)
 
 	new = malloc (sizeof (t_list));
 	new->inside = NULL;
+	new->exit_status = 0;
 	new->next = NULL;
 	new->pipe_after = 0;
 	new->pipe_before = 0;
@@ -118,6 +119,5 @@ t_list	*devide(t_list **list_free)
 	}
 	make_arr(&temp);
 	ft_lstclear(list_free);
-	list_free = 0;
 	return (temp);
 }

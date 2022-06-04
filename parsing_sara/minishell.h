@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/30 22:54:46 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/03 06:13:02 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ typedef struct s_data
 	t_env		*env;
 }	t_data;
 
-char		*find_prompt(void);
+char		*find_prompt(t_env *env);
 void		error(int a);
 void		to_parse(char *line, t_list **list, t_env *env);
 char		*expansion(char *token, t_env *env);
@@ -56,5 +56,11 @@ void		env_add_change1(t_env **env, char *name, char *value, int flag);
 
 /********************execution*******************************/
 
-void	execute_commands(t_data	*data);
+void		execute_commands(t_data	*data);
+void		echo_command(t_list **list);
+void		pwd_command(t_list **list);
+void		env_command(t_list **list, t_env *env);
+void		unset_command(t_list **list, t_env *env);
+int			parse_args(t_list **list, char *var);
+
 #endif

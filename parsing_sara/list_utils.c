@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:54:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/01 01:03:56 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/03 23:02:38 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ t_env	*new_node(char *name, char *value, int flag)
 	t_env	*new;
 
 	new = malloc (sizeof(t_env));
-	new->name = ft_strdup(name);
-	new->value = ft_strdup(value);
+	new->name = name;
+	new->value = value;
 	new->flag = flag;
 	new->next = NULL;
 	return (new);
