@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/05/31 00:49:41 by iouardi          ###   ########.fr        #
+#    Updated: 2022/06/04 18:03:05 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRCS = main.c \
 	devide.c \
 	envr.c \
 	list_utils.c \
-	exec.c
+	exec.c \
+	execution_cmd.c
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -32,7 +33,7 @@ OBJS = ${SRCS:.c=.o}
 
 ${NAME} : ${OBJS}
 		make -C libft
-		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include #-fsanitize=address -g
+		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include -fsanitize=address -g
 
 all : ${NAME}
 

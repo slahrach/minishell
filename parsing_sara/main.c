@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/30 23:24:55 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/04 17:44:10 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		data.line = readline (prompt);
-		// if (!data.line)
-		// 	exit (0);
+		if (!data.line)
+			exit (0);
 		if (*data.line)
 		{
 			add_history(data.line);
@@ -56,22 +56,22 @@ int	main(int argc, char **argv, char **envp)
 			execute_commands(&data);
 		}
 		// t_list *tmp = data.f_list;
-		// t_env *tmp ;
+		// // t_env *tmp ;
 		// while (tmp)
 		// {
-			// printf("content = %s \n", tmp->content);
-			// // printf("inside = %s \n", tmp->inside);
-			// printf("id = %d \n", tmp->id);
-			// printf("pipe_after = %d \n", tmp->pipe_after);
-			// printf("pipe_before = %d \n", tmp->pipe_before);
-			// printf("infile = %s \n", tmp->infile);
-			// printf("output = %s \n", tmp->output);
-			// printf("append = %s \n", tmp->append);
-			// printf("delimiter = %s \n", tmp->delimiter);
+		// 	printf("content = %s \n", tmp->content);
+		// 	// printf("inside = %s \n", tmp->inside);
+		// 	printf("id = %d \n", tmp->id);
+		// 	printf("pipe_after = %d \n", tmp->pipe_after);
+		// 	printf("pipe_before = %d \n", tmp->pipe_before);
+		// 	printf("infile = %s \n", tmp->infile);
+		// 	printf("output = %s \n", tmp->output);
+		// 	printf("append = %s \n", tmp->append);
+		// 	printf("delimiter = %s \n", tmp->delimiter);
 		// 	int i = 0;
 		// 	while (tmp->arr[i])
 		// 	{
-		// 		printf("arr[%d] = %s}\n", i, tmp->arr[i]);
+		// 		printf("arr[%d] = \"%s\"\n", i, tmp->arr[i]);
 		// 		i++;
 		// 	}
 		// 	puts(" ");

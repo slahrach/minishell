@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/10 16:24:07 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/04 17:51:10 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,21 @@ char	*chr_to_str(char c)
 	str[0] = c;
 	str[1] = '\0';
 	return (str);
+}
+
+int	ft_lstsize_env(t_env *lst)
+{
+	t_env	*temp;
+	int		i;
+
+	if (!lst)
+		return (0);
+	i = 1;
+	temp = lst;
+	while (temp->next)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return (i);
 }

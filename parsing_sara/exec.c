@@ -6,13 +6,13 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/01 01:07:50 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/04 17:56:05 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing_sara/minishell.h"
 
-void    echo_command(char **arr)
+void    echo_command(char **arr)// need to add a new line and space between args
 {
 	int		i;
 
@@ -34,7 +34,7 @@ void    echo_command(char **arr)
 			i++;
 		}
 		write (1, "\n", 1);
-	}
+	}//doesn't fail n always returns a big fat 0
 }
 
 char	*check_path_home(t_env *env)
@@ -85,6 +85,7 @@ void	cd_command(char	**arr, t_env *env)
 	}
 	else
 		printf("bash: cd: %s: No such file or directory\n", arr[1]);
+		//returns 1 in case of an error and 0 when it's working
 }
 
 void	pwd_command()
@@ -172,14 +173,15 @@ int	already_exists_export(char **arg, t_env *env, int flag)
 	return (0);
 }
 
-void	export_command(char **arr, t_env *env)
+void	export_command(char **arr, t_env *env)//  need to handle the space after the name and before the equal
 {
 	int		i;
 	char	**arg_splited;
 	int		flag;
 
 	i = 1;
-	if (!arr[1])
+	// if (!arr[1] || arr[2])
+	if (!arr[1] || !ft_strlen(arr[1]))
 	{
 		print_export_env(env);
 		return ;
@@ -244,6 +246,37 @@ void	unset_command(char **arr, t_env *env)
 	}
 }
 
+char	**linked_list_to_table(t_env *env)
+{
+	t_env	*tmp;
+	char	**arr;
+	int		i;
+
+	tmp = env;
+	i = 0;
+	arr = malloc(sizeof(char *) * ft_lstsize_env(tmp));
+	while (tmp)
+	{
+		arr[i] = ft_strjoin(tmp->name, "=");
+		arr[i] = ft_strjoin(arr[i], tmp->value);
+		i++;
+		tmp = tmp->next;
+	}
+	arr[i] = 0;
+	return (arr);
+}
+
+void	other_commands(t_data *data)
+{
+	char	*path;
+	
+	if (!check_path(data->f_list->arr[0]) || check_path(data->f_list->arr[0]) == 2)
+		path = ft_strdup(data->f_list->arr[0]);
+	else
+		path = find_path(data->env, data->f_list->arr[0]);
+	execve(path, data->f_list->arr, linked_list_to_table(data->env));
+}
+
 void	execute_commands(t_data	*data)
 {
 	if (!ft_strcmp(data->f_list->arr[0], "echo"))
@@ -261,5 +294,5 @@ void	execute_commands(t_data	*data)
 	else if (!ft_strcmp(data->f_list->arr[0], "exit"))
 		unset_command(data->f_list->arr, data->env);
 	else
-		other_commands(data->f_list->arr, data->env);
+		other_commands(data);
 }
