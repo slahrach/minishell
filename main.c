@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/19 01:44:42 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/03 22:58:08 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
-	prompt = find_prompt();
-	if (!prompt)
-		prompt = "\033[1;31m$\033[0m ";
 	set_env(envp, &data.env);
 	while (1)
 	{
+		prompt = find_prompt();
+		if (!prompt)
+			prompt = "\033[1;31m$\033[0m ";
 		data.line = readline (prompt);
 		if (!data.line)
 			exit (0);
@@ -53,6 +53,7 @@ int	main(int argc, char **argv, char **envp)
 		to_parse(data.line, &data.list, data.env);
 		data.f_list = devide(&data.list);
 		ft_lstclear1(&data.f_list);
+		free(prompt);
 	}
 	return (0);
 }
