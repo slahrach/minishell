@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 02:28:32 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/04 18:18:11 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/06 00:56:51 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,6 @@ char	*find_path2(char **path, int i)
 	return (NULL);
 }
 
-void	free_all(char **cmd_temp1)
-{
-	int		i;
-
-	i = 0;
-	while (cmd_temp1[i])
-	{
-		free (cmd_temp1[i]);
-		cmd_temp1[i] = NULL;
-		i++;
-	}
-	free (cmd_temp1);
-}
-
 char	*find_path(t_env *env, char	*cmd)
 {
 	int		i;
@@ -103,30 +89,3 @@ int	check_path(char *path)
 		return (2);
 	return (1);
 }
-
-void	print_error(char *cmd)
-{
-	char	*err;
-
-	err = strerror (errno);
-	ft_putstr_fd("shell: ", 2);
-	ft_putstr_fd(err, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putchar_fd('\n', 2);
-}
-
-// void	execute_cmd(t_list *f_list, t_env *env)
-// {
-// 	char	**path;
-// 	int		*pid;
-// 	int		j;
-// 	t_list	*tmp;
-	
-// 	tmp = f_list;
-// 	j = 0;
-// 	pid = malloc (sizeof(int) * (ft_lstsize(tmp) - 1));
-// 	while (tmp)
-// 		pid[j] = execute_cmd1(f_list, env);
-// 	close_n_wait(f_list, pid);	
-// }

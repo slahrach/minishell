@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/04 17:44:10 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/06 02:10:48 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ int	main(int argc, char **argv, char **envp)
 	if (!prompt)
 		prompt = "\033[1;31m$\033[0m ";
 	set_env(envp, &data.env);
+	//data.line = "";
 	while (1)
 	{
+		//printf("data.line = %s \n", data.line);
 		data.line = readline (prompt);
 		if (!data.line)
 			exit (0);
@@ -55,19 +57,19 @@ int	main(int argc, char **argv, char **envp)
 			data.f_list = devide(&data.list);
 			execute_commands(&data);
 		}
-		// t_list *tmp = data.f_list;
-		// // t_env *tmp ;
-		// while (tmp)
+		//  t_list *tmp = data.f_list;
+		// // // t_env *tmp ;
+		//  while (tmp)
 		// {
-		// 	printf("content = %s \n", tmp->content);
+		// 	//printf("content = %s \n", tmp->content);
 		// 	// printf("inside = %s \n", tmp->inside);
-		// 	printf("id = %d \n", tmp->id);
-		// 	printf("pipe_after = %d \n", tmp->pipe_after);
-		// 	printf("pipe_before = %d \n", tmp->pipe_before);
+		// 	// printf("id = %d \n", tmp->id);
+		// 	// printf("pipe_after = %d \n", tmp->pipe_after);
+		// 	// printf("pipe_before = %d \n", tmp->pipe_before);
 		// 	printf("infile = %s \n", tmp->infile);
-		// 	printf("output = %s \n", tmp->output);
-		// 	printf("append = %s \n", tmp->append);
-		// 	printf("delimiter = %s \n", tmp->delimiter);
+		// 	// printf("output = %s \n", tmp->output);
+		// 	// printf("append = %s \n", tmp->append);
+		// 	// printf("delimiter = %s \n", tmp->delimiter);
 		// 	int i = 0;
 		// 	while (tmp->arr[i])
 		// 	{

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/04 17:51:35 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/06 00:56:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <readline/readline.h>
 # include <stdio.h>
 # include <errno.h>
+# include <fcntl.h>
 # include "libft/libft.h"
 # include <signal.h>
 # define INPUT 1
@@ -61,5 +62,6 @@ void	execute_commands(t_data	*data);
 int		check_path(char *path);
 char	*find_path(t_env *env, char	*cmd);
 int		ft_lstsize_env(t_env *lst);
+void	free_all(char **cmd_temp1);
 
 #endif
