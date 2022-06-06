@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/05 23:45:52 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/06 16:11:12 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct	s_tools
 {
 	int		p[2];
 	char	*path;
+	int		fd1;
 }	t_tools;
 
 int			ft_isalpha(int c);

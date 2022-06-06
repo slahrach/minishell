@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/06 02:06:03 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/06 16:43:54 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,52 +309,59 @@ void	other_commands(t_data *data, t_tools *tool)
 	exit(1);
 }
 
-void	check_fd1(int fd1, t_list *tmp)
+// void	check_fd1(int fd1, t_list *tmp)
+// {
+// 	if (fd1 < 0)
+// 	{
+// 		tmp = tmp;
+// 		write(2, "shell: no such file or directory\n", 34);
+// 	}
+// 	// dup2(fd1, 0);
+// }
+
+void	check_builtins_or_others(t_data *data, t_list *tmp, t_tools *tool)
 {
-	if (fd1 < 0)
-	{
-		tmp = tmp->next;
-		write(2, "shell: no such file or directory\n", 34);
-	}
-	dup2(fd1, 0);
+	if (!ft_strcmp(tmp->arr[0], "echo"))
+			echo_command(tmp->arr);
+	else if (!ft_strcmp(tmp->arr[0], "cd"))
+		cd_command(tmp->arr, data->env);
+	else if (!ft_strcmp(tmp->arr[0], "pwd"))
+		pwd_command();
+	else if (!ft_strcmp(tmp->arr[0], "export"))
+		export_command(tmp->arr, data->env);
+	else if (!ft_strcmp(tmp->arr[0], "env"))
+		env_command(tmp->arr, data->env);
+	else if (!ft_strcmp(tmp->arr[0], "unset"))
+		unset_command(tmp->arr, data->env);
+	//else if (!ft_strcmp(tmp->arr[0], "exit"))
+		//unset_command(tmp->arr, data->env);
+	else
+		other_commands(data, tool);
 }
 
 int	before_execution(t_data *data, t_list *tmp, t_tools *tool)
 {
-	// int 	fd1;
 	int		pid;
 
-	// printf("---------------infile = %s-----------\n", tmp->infile);
-	write (2, tmp->infile, ft_strlen(tmp->infile));
-	// if (tmp->infile)
-	// 	fd1 = open (tmp->infile, O_RDONLY, 0666);
-	// else
-	// 	fd1 = 0;
-	// check_fd1(fd1, tmp);
+	if (tmp->infile)
+		tool->fd1 = open (tmp->infile, O_RDONLY, 0666);
+	else
+		tool->fd1 = 0;
+	// check_fd1(tool->fd1, tmp);
+	dup2(tool->fd1, 0);
 	if (pipe(tool->p) == -1)
 		exit (1);//not sure of the return value
 	pid = fork();
+	if (pid == -1)
+		exit (1);
 	if (pid == 0)
 	{
 		close(tool->p[0]);
 		dup2(tool->p[1], 1);
 		close(tool->p[1]);
-		if (!ft_strcmp(tmp->arr[0], "echo"))
-			echo_command(tmp->arr);
-		else if (!ft_strcmp(tmp->arr[0], "cd"))
-			cd_command(tmp->arr, data->env);
-		else if (!ft_strcmp(tmp->arr[0], "pwd"))
-			pwd_command();
-		else if (!ft_strcmp(tmp->arr[0], "export"))
-			export_command(tmp->arr, data->env);
-		else if (!ft_strcmp(tmp->arr[0], "env"))
-			env_command(tmp->arr, data->env);
-		else if (!ft_strcmp(tmp->arr[0], "unset"))
-			unset_command(tmp->arr, data->env);
-		// else if (!ft_strcmp(tmp->arr[0], "exit"))
-		// 	unset_command(tmp->arr, data->env);
-		else
-			other_commands(data, tool);
+		check_builtins_or_others(data, tmp, tool);
+		print_error(tmp->arr[0]);
+		exit(1);
 	}
 	else
 	{
@@ -367,8 +374,8 @@ int	before_execution(t_data *data, t_list *tmp, t_tools *tool)
 
 void	last_command_(t_tools *tool, int fd, t_data *data, char *path_temp)
 {
-	printf("----------data->f_list = %s---------\n", data->f_list->infile);
-	printf("--data->f_list->output = %s---------\n", data->f_list->output);
+// 	printf("----------data->f_list = %s---------\n", data->f_list->infile);
+// 	printf("--data->f_list->output = %s---------\n", data->f_list->output);
 	dup2(fd, 1);
 	execve(tool->path, data->f_list->arr, linked_list_to_table(data->env));
 	print_error(data->f_list->arr[0]);
@@ -396,7 +403,6 @@ int	last_command(t_tools *tool, t_list *tmp, t_data *data)
 	// char	*path_temp;
 	int		pid;
 
-	// printf("-------------------fd1 = %d---------\n", fd1);
 	if (!check_path(tmp->arr[0]) || check_path(tmp->arr[0]) == 2)
 		tool->path = ft_strdup(tmp->arr[0]);
 	else
@@ -418,13 +424,10 @@ int	last_command(t_tools *tool, t_list *tmp, t_data *data)
 		exit (1);
 	if (pid == 0)
 	{
-		// printf("----------data->f_list = %s---------\n", data->f_list->infile);
-		// printf("--data->f_list->output = %s---------\n", tmp->output);
 		return (last_command_(tool, fd, data, tool->path), pid);
 	}
 	else
 		return (free_o_ziid_free(tool), pid);
-	// return (pid);
 }
 
 void	close_n_wait(t_tools *tool, int *pid)
@@ -447,17 +450,16 @@ void	execute_commands(t_data	*data)
 	t_tools *tool;
 	int		*pid;
 	int		i;
-	int		fd1;
 
 	i = 0;
 	tool = malloc (sizeof(t_tools));
 	tmp = data->f_list;
 	pid = malloc(sizeof(int) * ft_lstsize(data->f_list));
-	if (tmp->infile)
-		fd1 = open (tmp->infile, O_RDONLY, 0666);
-	else
-		fd1 = 0;
-	check_fd1(fd1, tmp);
+	// if (tmp->infile)
+	// 	tool->fd1 = open (tmp->infile, O_RDONLY, 0666);
+	// else
+	// 	tool->fd1 = 0;
+	// check_fd1(tool->fd1, tmp);
 	while (tmp->next)
 	{
 		pid[i++] = before_execution(data, tmp, tool);
