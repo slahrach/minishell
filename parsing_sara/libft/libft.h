@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/03 00:17:34 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 00:30:03 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_redir
+{
+	char			*content;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_list
 {
 	int				id;
@@ -33,10 +39,10 @@ typedef struct s_list
 	char			**arr;
 	int				pipe_after;
 	int				pipe_before;
-	char			*infile;
-	char			*output;
-	char			*append;
-	char			*delimiter;
+	t_redir			*infile;
+	t_redir			*outfile;
+	t_redir			*append;
+	t_redir			*delimiter;
 	struct s_list	*next;
 }	t_list;
 
@@ -87,7 +93,12 @@ void		ft_lstdelone(t_list *lst, void (*del)(void*));
 void		ft_lstclear(t_list **lst);
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_redir		*redir_new(char	*content);
+t_redir		*redir_last(t_redir *lst);
+void		redir_add_front(t_redir **lst, t_redir *new);
+void		redir_add_back(t_redir **lst, t_redir *new);
 void		ft_lstclear1(t_list **lst);
 void		clear_env(t_env **env);
+void		ft_clear(t_redir **lst);
 
 #endif

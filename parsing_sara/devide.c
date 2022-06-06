@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 22:18:46 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 00:30:39 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_list	*new(void)
 	new->append = NULL;
 	new->delimiter = NULL;
 	new->infile = NULL;
-	new->output = NULL;
+	new->outfile = NULL;
 	new->arr = NULL;
 	new->content = NULL;
 	return (new);
@@ -69,30 +69,19 @@ static void	t_pipe(t_list **list, t_list **head)
 
 static void	check(t_list **list, t_list **head)
 {
+	char	*content;
+
+	if (!(*list)->next)
+		error(4);
+	content = ft_strdup((*list)->next->content);
 	if ((*list)->id == INPUT)
-	{
-		if (!(*list)->next)
-			error(4);
-		(*head)->infile = ft_strdup((*list)->next->content);
-	}
+		redir_add_back(&(*head)->infile, redir_new(content));
 	else if ((*list)->id == OUTPUT)
-	{
-		if (!(*list)->next)
-			error(4);
-		(*head)->output = ft_strdup((*list)->next->content);
-	}
+		redir_add_back(&(*head)->outfile, redir_new(content));
 	else if ((*list)->id == DELIMITER)
-	{
-		if (!(*list)->next)
-			error(4);
-		(*head)->delimiter = ft_strdup((*list)->next->content);
-	}
+		redir_add_back(&(*head)->delimiter, redir_new(content));
 	else if ((*list)->id == APPEND)
-	{
-		if (!(*list)->next)
-			error(4);
-		(*head)->append = ft_strdup((*list)->next->content);
-	}
+		redir_add_back(&(*head)->append, redir_new(content));
 	(*list) = (*list)->next->next;
 }
 

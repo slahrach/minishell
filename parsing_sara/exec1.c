@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/06 22:16:33 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 00:14:55 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	exit_status_command(t_data **data)
 			(*data)->last_exitstatus = list->exit_status;
 			return ;
 		}
-		(*data)->last_exitstatus = list->exit_status;
+		(*data)->last_exitstatus = 0;
 		list = list->next;
 	}
 }
@@ -82,5 +82,5 @@ void	execute_commands(t_data *data)
 		unset_command(&data->f_list, data->env);
 	else if (!ft_strcmp(data->f_list->arr[0], "exit"))
 		exit_command(&data->f_list);
-	exit_status_command(&data);
+	//exit_status_command(&data);
 }

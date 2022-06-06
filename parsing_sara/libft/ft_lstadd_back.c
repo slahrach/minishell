@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 23:49:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/16 00:01:10 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 00:31:51 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,25 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		return ;
 	}
 	last = ft_lstlast(*lst);
+	if (new->next == NULL)
+		last->next = new;
+	while (new->next != NULL)
+	{
+		last->next = new;
+		new = new->next;
+	}
+}
+
+void	redir_add_back(t_redir **lst, t_redir *new)
+{
+	t_redir	*last;
+
+	if (!(*lst))
+	{
+		redir_add_front(lst, new);
+		return ;
+	}
+	last = redir_last(*lst);
 	if (new->next == NULL)
 		last->next = new;
 	while (new->next != NULL)
