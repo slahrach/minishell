@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/03 23:09:51 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/06 22:59:43 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	handle_sigquit(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
-	//t_list	*inside;
 	t_data	data;
 	char	*prompt;
 
@@ -41,7 +40,6 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	set_env(envp, &data.env);
-	while(1);
 	while (1)
 	{
 		prompt = find_prompt(data.env);
@@ -55,27 +53,8 @@ int	main(int argc, char **argv, char **envp)
 			add_history(data.line);
 			to_parse(data.line, &data.list, data.env);
 			data.f_list = devide(&data.list);
-			//execute_commands(&data);
+			execute_commands(&data);
 		}
-		/*t_list *tmp = data.f_list;
-		while (tmp)
-		{
-			printf("id = %d \n", tmp->id);
-			printf("pipe_after = %d \n", tmp->pipe_after);
-			printf("pipe_before = %d \n", tmp->pipe_before);
-			printf("infile = %s \n", tmp->infile);
-			printf("output = %s \n", tmp->output);
-			printf("append = %s \n", tmp->append);
-			printf("delimiter = %s \n", tmp->delimiter);
-			inside = tmp->inside;
-			while (inside)
-			{
-				printf("%s\n", inside->content);
-				inside = inside->next;
-			}
-			tmp = tmp->next;
-		}
-		//while (1);*/
 		free(prompt);
 		ft_lstclear1(&data.f_list);
 	}

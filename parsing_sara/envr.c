@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/03 23:12:13 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/06 23:05:04 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*ft_getenv(t_env *env, char *name)
 	return (NULL);
 }
 
-void	env_add_change(t_env **env, char *name, char *value)
+void	env_add_change(t_env **env, char *name, char *value, int flag)
 {
 	t_env	*copy;
 
@@ -70,10 +70,11 @@ void	env_add_change(t_env **env, char *name, char *value)
 		{
 			free(copy->value);
 			copy->value = value;
+			copy->flag = flag;
 		}
 		copy = copy->next;
 	}
-	add_back(env, new_node(name, value, copy->flag));//new
+	add_back(env, new_node(name, value, copy->flag));
 }
 
 void	env_add_change1(t_env **env, char *name, char *value, int flag)

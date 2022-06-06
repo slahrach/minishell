@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/03 22:39:59 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/06 22:18:46 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ t_list	*devide(t_list **list_free)
 	t_list	*list;
 	t_list	*head;
 	t_list	*temp;
+	char	*content;
 
 	list = *list_free;
 	head = new();
@@ -111,7 +112,8 @@ t_list	*devide(t_list **list_free)
 			t_pipe (&list, &head);
 		else if (list->id == 0)
 		{
-			ft_lstadd_back(&(head->inside), ft_lstnew((list->content)));
+			content = ft_strdup(list->content);
+			ft_lstadd_back(&(head->inside), ft_lstnew(content));
 			list = list->next;
 		}
 		else

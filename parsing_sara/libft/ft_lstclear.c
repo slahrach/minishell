@@ -73,7 +73,7 @@ void	ft_lstclear1(t_list **lst)
 			free((*lst)->output);
 		if ((*lst)->delimiter)
 			free((*lst)->delimiter);
-		ft_clear(&(*lst)->inside);
+		ft_lstclear(&(*lst)->inside);
 		free_arr((*lst)->arr);
 		free(*lst);
 		*lst = temp;

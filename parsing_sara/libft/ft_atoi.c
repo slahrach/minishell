@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static	int	retur(int sign, unsigned long long n)
+static	long long	retur(int sign, unsigned long long n)
 {
 	if (n >= 9223372036854775808U && sign == 1)
 		return (0);
@@ -21,7 +21,7 @@ static	int	retur(int sign, unsigned long long n)
 	return (n * sign);
 }
 
-int	ft_atoi(const char *str)
+long long	ft_atoi(const char *str)
 {
 	int		sign;
 	size_t	nbr;
@@ -51,7 +51,7 @@ int	ft_atoi(const char *str)
 #include <stdio.h>
 int main()
 {
-	char str[50] = "9223372036854775808";
-	printf("%d\n",atoi(str));
-	printf("%d",ft_atoi(str));
+	char str[50] = "9223372036854775807";
+	//printf("%d\n",atoi(str));
+	printf("%lld",ft_atoi(str));
 }*/

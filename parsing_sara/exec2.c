@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 05:48:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/03 06:12:51 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/06 22:57:42 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,12 @@ void	pwd_command(t_list **list)
 {
 	char	*buffer;
 
+	if (ft_lstsize((*list)->inside) != 1)
+	{
+		printf("pwd : too many arguments !\n");
+		(*list)->exit_status = 1;
+		return ;
+	}
 	buffer = getcwd(NULL, 0);
 	if (buffer)
 		printf("%s\n", buffer);
@@ -101,10 +107,8 @@ int	parse_args(t_list **list, char *var)
 void	unset_command(t_list **list, t_env *env)
 {
 	char	**arr;
-	t_env	*tmp;
 	int		i;
 
-	tmp = env;
 	i = 1;
 	arr = (*list)->arr;
 	while (arr[i])

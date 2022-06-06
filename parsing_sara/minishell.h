@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/03 06:13:02 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/06 23:05:38 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 typedef struct s_data
 {
+	int			last_exitstatus;
 	char		*line;
 	t_list		*list;
 	t_list		*f_list;
@@ -50,17 +51,22 @@ int			sizelst(t_env *lst);
 t_env		*new_node(char *name, char *value, int flag);
 void		set_env(char **envp, t_env **env);
 char		*ft_getenv(t_env *env, char *name);
-void		env_add_change(t_env **env, char *name, char *value);
+void		env_add_change(t_env **env, char *name, char *value, int flag);
 void		unset_node(t_env **env, char *name);
 void		env_add_change1(t_env **env, char *name, char *value, int flag);
 
 /********************execution*******************************/
 
 void		execute_commands(t_data	*data);
+void		exit_command(t_list **f_list);
+void		exit_status_command(t_data **data);
+void		print_status(t_data **data);
 void		echo_command(t_list **list);
 void		pwd_command(t_list **list);
 void		env_command(t_list **list, t_env *env);
 void		unset_command(t_list **list, t_env *env);
 int			parse_args(t_list **list, char *var);
+void		cd_command(t_list **list, t_env *env);
+void		export_command(t_list **list, t_env *env);
 
 #endif

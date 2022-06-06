@@ -6,7 +6,7 @@
 #    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/03 05:49:00 by slahrach         ###   ########.fr        #
+#    Updated: 2022/06/06 23:07:20 by slahrach         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,13 @@ SRCS = main.c \
 	error.c \
 	parsing.c \
 	expansion.c \
-	builtins.c \
 	devide.c \
 	envr.c \
 	list_utils.c \
 	exec1.c \
 	exec2.c \
+	cd_command.c \
+	export.c \
 
 CFLAGS = -Wall -Wextra -Werror
 
