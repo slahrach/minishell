@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:58:01 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/04 17:11:57 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/01 01:19:59 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv, char **env)
 	piipe.path = NULL;
 	if (argc >= 5)
 	{
-		if_its_here_doc_or_not(piipe, argv, &i, fd1);
+		// if_its_here_doc_or_not(piipe, argv, &i, fd1);
 		while (i < argc - 2)
 			pid[j++] = execute_cmd(piipe, argv[i++], env);
 		pid[j] = last_command(piipe, argv, argc, env);

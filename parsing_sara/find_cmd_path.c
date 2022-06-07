@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution_cmd.c                                    :+:      :+:    :+:   */
+/*   find_cmd_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/03 02:28:32 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/06 00:56:51 by iouardi          ###   ########.fr       */
+/*   Created: 2022/06/07 01:08:18 by iouardi           #+#    #+#             */
+/*   Updated: 2022/06/07 06:51:31 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,20 @@ char	*find_path2(char **path, int i)
 		return (path_temp1);
 	}
 	return (NULL);
+}
+
+void	free_all(char **cmd_temp1)//recheck this cz it may cz a prblm
+{
+	int		i;
+
+	i = 0;
+	while (cmd_temp1[i])
+	{
+		free (cmd_temp1[i]);
+		cmd_temp1[i] = NULL;
+		i++;
+	}
+	free (cmd_temp1);
 }
 
 char	*find_path(t_env *env, char	*cmd)

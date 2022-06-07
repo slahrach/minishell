@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 18:50:57 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/19 03:01:32 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/03 00:21:55 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	dollar(char *token, int *i, t_list **head)
 	if (token[*i] == '$')
 	{
 		j = *i + 1;
-		while (token[j] && !is_whitespace(token[j])
+		while (token[j] && !is_whitespace(token[j]) && token[j] != '='
 			&& token[j] != '\'' && token[j] != '"')
 			j++;
 		str = ft_substr(token, *i + 1, j - *i - 1);

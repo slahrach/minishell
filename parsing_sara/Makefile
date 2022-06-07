@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
+#    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/04 18:03:05 by iouardi          ###   ########.fr        #
+#    Updated: 2022/06/06 23:07:20 by slahrach         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,13 @@ SRCS = main.c \
 	error.c \
 	parsing.c \
 	expansion.c \
-	builtins.c \
 	devide.c \
 	envr.c \
 	list_utils.c \
-	exec.c \
-	execution_cmd.c
+	exec1.c \
+	exec2.c \
+	cd_command.c \
+	export.c \
 
 CFLAGS = -Wall -Wextra -Werror
 
@@ -33,7 +34,7 @@ OBJS = ${SRCS:.c=.o}
 
 ${NAME} : ${OBJS}
 		make -C libft
-		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include -fsanitize=address -g
+		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I/Users/slahrach/.brew/opt/readline/include #-fsanitize=address -g
 
 all : ${NAME}
 
@@ -48,6 +49,6 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} ${CFLAGS} -I /Users/iouardi/.brew/opt/readline/include -c $<
+	${CC} ${CFLAGS} -I /Users/slahrach/.brew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 16:11:12 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/07 02:10:48 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+# include <stdio.h>
 
 typedef struct s_env
 {
@@ -24,27 +25,37 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_redir
+{
+	char			*content;
+	struct s_redir	*next;
+}	t_redir;
+
 typedef struct s_list
 {
 	int				id;
+	int				exit_status;
 	struct s_list	*inside;
 	char			*content;
 	char			**arr;
 	int				pipe_after;
 	int				pipe_before;
-	char			*infile;
-	char			*output;
-	char			*append;
-	char			*delimiter;
+	t_redir			*infile;
+	t_redir			*outfile;
+	t_redir			*append;
+	t_redir			*delimiter;
 	struct s_list	*next;
 }	t_list;
-/*---------------new-------------------------------------*/
+
+/*---------------------------------new-------------------------------------*/
 typedef struct	s_tools
 {
 	int		p[2];
 	char	*path;
-	int		fd1;
+	int		fd_in;
+	int		fd_out;
 }	t_tools;
+/*---------------------------------new-------------------------------------*/
 
 int			ft_isalpha(int c);
 int			ft_isdigit(int arg);
@@ -68,7 +79,7 @@ int			ft_strcmp(const char *s1, const char *s2);
 void		*ft_memchr(const void *s, int c, size_t n);
 int			ft_memcmp(const void *s1, const void *s2, size_t n);
 char		*ft_strnstr(const char *origin, const char *find, size_t len);
-int			ft_atoi(const char *str);
+long long	ft_atoi(const char *str);
 void		*ft_calloc(size_t count, size_t size);
 char		*ft_strdup(const char *s1);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
@@ -93,7 +104,12 @@ void		ft_lstdelone(t_list *lst, void (*del)(void*));
 void		ft_lstclear(t_list **lst);
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+t_redir		*redir_new(char	*content);
+t_redir		*redir_last(t_redir *lst);
+void		redir_add_front(t_redir **lst, t_redir *new);
+void		redir_add_back(t_redir **lst, t_redir *new);
 void		ft_lstclear1(t_list **lst);
 void		clear_env(t_env **env);
+void		ft_clear(t_redir **lst);
 
 #endif

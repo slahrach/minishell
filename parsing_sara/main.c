@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 15:09:43 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/07 00:45:55 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,20 @@ void	handle_sigquit(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
+	//t_list	*inside;
 	t_data	data;
 	char	*prompt;
 
-	if (!argc || !argv)
+	if (!argc || !argv || !envp)
 		return (0);
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
-	prompt = find_prompt();
-	if (!prompt)
-		prompt = "\033[1;31m$\033[0m ";
 	set_env(envp, &data.env);
-	//data.line = "";
 	while (1)
 	{
-		//printf("data.line = %s \n", data.line);
+		prompt = find_prompt(data.env);
+		if (!prompt)
+			prompt = ft_strdup("\033[1;31m$\033[0m ");
 		data.line = readline (prompt);
 		if (!data.line)
 			exit (0);
@@ -57,29 +56,41 @@ int	main(int argc, char **argv, char **envp)
 			data.f_list = devide(&data.list);
 			execute_commands(&data);
 		}
-		//  t_list *tmp = data.f_list;
-		// // // t_env *tmp ;
-		//  while (tmp)
-		// {
-		// 	//printf("content = %s \n", tmp->content);
-		// 	// printf("inside = %s \n", tmp->inside);
-		// 	// printf("id = %d \n", tmp->id);
-		// 	// printf("pipe_after = %d \n", tmp->pipe_after);
-		// 	// printf("pipe_before = %d \n", tmp->pipe_before);
-		// 	printf("infile = %s \n", tmp->infile);
-		// 	// printf("output = %s \n", tmp->output);
-		// 	// printf("append = %s \n", tmp->append);
-		// 	// printf("delimiter = %s \n", tmp->delimiter);
-		// 	int i = 0;
-		// 	while (tmp->arr[i])
-		// 	{
-		// 		printf("arr[%d] = \"%s\"\n", i, tmp->arr[i]);
-		// 		i++;
-		// 	}
-		// 	puts(" ");
-		// 	tmp = tmp->next;
-		// }
-		//while (1);
+		//t_list *tmp = data.f_list;
+		/*while (tmp)
+		{
+			printf("pipe_after = %d \n", tmp->pipe_after);
+			printf("pipe_before = %d \n", tmp->pipe_before);
+			while (tmp->append)
+			{
+				printf("***append****%s\n", tmp->append->content);
+				tmp->append = tmp->append->next;
+			}
+			while (tmp->infile)
+			{
+				printf("***infile****%s\n", tmp->infile->content);
+				tmp->infile = tmp->infile->next;
+			}
+			while (tmp->outfile)
+			{
+				printf("***outfile****%s\n", tmp->outfile->content);
+				tmp->outfile = tmp->outfile->next;
+			}
+			while (tmp->delimiter)
+			{
+				printf("***delimiter****%s\n", tmp->delimiter->content);
+				tmp->delimiter = tmp->delimiter->next;
+			}
+			inside = tmp->inside;
+			while (inside)
+			{
+				printf("%s\n", inside->content);
+				inside = inside->next;
+			}
+			tmp = tmp->next;
+		}
+		//while (1);*/
+		free(prompt);
 		ft_lstclear1(&data.f_list);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 00:56:43 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/07 06:46:14 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@
 
 typedef struct s_data
 {
+	int			last_exitstatus;
 	char		*line;
 	t_list		*list;
 	t_list		*f_list;
 	t_env		*env;
+	t_tools		*tool;
 }	t_data;
 
-char		*find_prompt(void);
+char		*find_prompt(t_env *env);
 void		error(int a);
 void		to_parse(char *line, t_list **list, t_env *env);
 char		*expansion(char *token, t_env *env);
@@ -52,16 +54,22 @@ int			sizelst(t_env *lst);
 t_env		*new_node(char *name, char *value, int flag);
 void		set_env(char **envp, t_env **env);
 char		*ft_getenv(t_env *env, char *name);
-void		env_add_change(t_env **env, char *name, char *value);
+void		env_add_change(t_env **env, char *name, char *value, int flag);
 void		unset_node(t_env **env, char *name);
 void		env_add_change1(t_env **env, char *name, char *value, int flag);
 
 /********************execution*******************************/
 
-void	execute_commands(t_data	*data);
-int		check_path(char *path);
-char	*find_path(t_env *env, char	*cmd);
-int		ft_lstsize_env(t_env *lst);
-void	free_all(char **cmd_temp1);
+void		execute_commands(t_data	*data);
+void		exit_command(t_list **f_list);
+void		exit_status_command(t_data **data);
+void		print_status(t_data **data);
+void		echo_command(t_list **list);
+void		pwd_command(t_list **list);
+void		env_command(t_list **list, t_env *env);
+void		unset_command(t_list **list, t_env *env);
+int			parse_args(t_list **list, char *var);
+void		cd_command(t_list **list, t_env *env);
+void		export_command(t_list **list, t_env *env);
 
 #endif

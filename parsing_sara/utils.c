@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/04 17:51:10 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/02 23:46:59 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_prompt(void)
+char	*find_prompt(t_env *env)
 {
 	char	*folder;
 	char	*user;
 	char	*prompt;
 
-	folder = getenv("PWD");
-	user = getenv("USER");
+	folder = ft_getenv(env, "PWD");
+	user = ft_getenv(env, "USER");
 	if (ft_strrchr(folder, '/'))
 		folder = ft_strrchr(folder, '/') + 1;
 	folder = ft_strjoin ("\033[1;33m", folder);
@@ -63,21 +63,4 @@ char	*chr_to_str(char c)
 	str[0] = c;
 	str[1] = '\0';
 	return (str);
-}
-
-int	ft_lstsize_env(t_env *lst)
-{
-	t_env	*temp;
-	int		i;
-
-	if (!lst)
-		return (0);
-	i = 1;
-	temp = lst;
-	while (temp->next)
-	{
-		i++;
-		temp = temp->next;
-	}
-	return (i);
 }

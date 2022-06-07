@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envr.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/01 00:49:52 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/06 23:05:04 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,24 @@ static char	*before_char(char *str, int c)
 
 void	set_env(char **envp, t_env **env)
 {
+	char	*path;
 	char	*name;
 	char	*value;
 	int		flag;
 	int		i;
 
 	*env = NULL;
+	path = "OLDPWD";
 	i = 0;
 	while (envp[i])
 	{
 		name = before_char(envp[i], '=');
 		value = ft_strchr(envp[i], '=') + 1;
-		if (!ft_strchr(envp[i], '='))
+		if (!value)
 			flag = 0;
 		else
 			flag = 1;
-		if (ft_strcmp(name, "OLDPWD"))
+		if (ft_strcmp(name, path))
 			add_back(env, new_node(name, value, flag));
 		i++;
 	}
@@ -57,7 +59,7 @@ char	*ft_getenv(t_env *env, char *name)
 	return (NULL);
 }
 
-void	env_add_change(t_env **env, char *name, char *value)
+void	env_add_change(t_env **env, char *name, char *value, int flag)
 {
 	t_env	*copy;
 
@@ -68,10 +70,11 @@ void	env_add_change(t_env **env, char *name, char *value)
 		{
 			free(copy->value);
 			copy->value = value;
+			copy->flag = flag;
 		}
 		copy = copy->next;
 	}
-	add_back(env, new_node(name, value, copy->flag));//new
+	add_back(env, new_node(name, value, copy->flag));
 }
 
 void	env_add_change1(t_env **env, char *name, char *value, int flag)
@@ -86,7 +89,6 @@ void	env_add_change1(t_env **env, char *name, char *value, int flag)
 			free(copy->value);
 			copy->value = value;
 			copy->flag = flag;
-			
 		}
 		copy = copy->next;
 	}
@@ -98,7 +100,6 @@ void	unset_node(t_env **env, char *name)
 	t_env	*before_node;
 	t_env	*copy;
 	int		sign;
-	
 
 	copy = *env;
 	sign = 0;
