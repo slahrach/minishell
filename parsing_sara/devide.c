@@ -6,30 +6,11 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:30:39 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:31:06 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-t_list	*new(void)
-{
-	t_list	*new;
-
-	new = malloc (sizeof (t_list));
-	new->inside = NULL;
-	new->exit_status = 0;
-	new->next = NULL;
-	new->pipe_after = 0;
-	new->pipe_before = 0;
-	new->append = NULL;
-	new->delimiter = NULL;
-	new->infile = NULL;
-	new->outfile = NULL;
-	new->arr = NULL;
-	new->content = NULL;
-	return (new);
-}
 
 static void	make_arr(t_list **head)
 {
@@ -56,24 +37,36 @@ static void	make_arr(t_list **head)
 	}
 }
 
-static void	t_pipe(t_list **list, t_list **head)
+static int	t_pipe(t_data *data, t_list **list, t_list **head)
 {
 	if (!(*head) || !(*list)->next)
-		error(4);
+	{
+		error(data, 0);
+		return (1);
+	}
 	(*list) = (*list)->next;
 	(*head)->pipe_after = 1;
-	ft_lstadd_back(head, new());
+	ft_lstadd_back(head, _new());
 	(*head) = (*head)->next;
 	(*head)->pipe_before = 1;
+	return (0);
 }
 
-static void	check(t_list **list, t_list **head)
+static int	check(t_data *data, t_list **list, t_list **head)
 {
 	char	*content;
 
 	if (!(*list)->next)
-		error(4);
+	{
+		error(data, 0);
+		return (1);
+	}
 	content = ft_strdup((*list)->next->content);
+	if ((*list)->next->id)
+	{
+		error(data, 0);
+		return (1);
+	}
 	if ((*list)->id == INPUT)
 		redir_add_back(&(*head)->infile, redir_new(content));
 	else if ((*list)->id == OUTPUT)
@@ -83,9 +76,10 @@ static void	check(t_list **list, t_list **head)
 	else if ((*list)->id == APPEND)
 		redir_add_back(&(*head)->append, redir_new(content));
 	(*list) = (*list)->next->next;
+	return (0);
 }
 
-t_list	*devide(t_list **list_free)
+t_list	*devide(t_data *data, t_list **list_free)
 {
 	t_list	*list;
 	t_list	*head;
@@ -93,12 +87,15 @@ t_list	*devide(t_list **list_free)
 	char	*content;
 
 	list = *list_free;
-	head = new();
+	head = _new();
 	temp = head;
 	while (list)
 	{
 		if (list->id == PIPE)
-			t_pipe (&list, &head);
+		{
+			if (t_pipe (data, &list, &head))
+				break ;
+		}
 		else if (list->id == 0)
 		{
 			content = ft_strdup(list->content);
@@ -106,7 +103,10 @@ t_list	*devide(t_list **list_free)
 			list = list->next;
 		}
 		else
-			check(&list, &head);
+		{
+			if (check(data, &list, &head))
+				break ;
+		}
 	}
 	make_arr(&temp);
 	ft_lstclear(list_free);

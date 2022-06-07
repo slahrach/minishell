@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/07 00:14:55 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 01:24:22 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,25 @@ void	execute_commands(t_data *data)
 {
 	char	*str;
 
-	str = ft_strmapi(data->f_list->arr[0], ft_tolower);
-	if (!ft_strcmp(data->f_list->arr[0], "$?"))
-		print_status(&data);
-	if (!ft_strcmp(str, "echo"))
-		echo_command(&data->f_list);
-	else if (!ft_strcmp(data->f_list->arr[0], "cd"))
-		cd_command(&data->f_list, data->env);
-	else if (!ft_strcmp(data->f_list->arr[0], "pwd"))
-		pwd_command(&data->f_list);
-	else if (!strcmp(data->f_list->arr[0], "export"))
-		export_command(&data->f_list, data->env);
-	else if (!ft_strcmp(str, "env"))
-		env_command(&data->f_list, data->env);
-	else if (!ft_strcmp(data->f_list->arr[0], "unset"))
-		unset_command(&data->f_list, data->env);
-	else if (!ft_strcmp(data->f_list->arr[0], "exit"))
-		exit_command(&data->f_list);
-	//exit_status_command(&data);
+	if (data->f_list && data->f_list->arr[0])
+	{
+		str = ft_strmapi(data->f_list->arr[0], ft_tolower);
+		if (!ft_strcmp(data->f_list->arr[0], "$?"))
+			print_status(&data);
+		if (!ft_strcmp(str, "echo"))
+			echo_command(&data->f_list);
+		else if (!ft_strcmp(data->f_list->arr[0], "cd"))
+			cd_command(&data->f_list, data->env);
+		else if (!ft_strcmp(data->f_list->arr[0], "pwd"))
+			pwd_command(&data->f_list);
+		else if (!strcmp(data->f_list->arr[0], "export"))
+			export_command(&data->f_list, data->env);
+		else if (!ft_strcmp(str, "env"))
+			env_command(&data->f_list, data->env);
+		else if (!ft_strcmp(data->f_list->arr[0], "unset"))
+			unset_command(&data->f_list, data->env);
+		else if (!ft_strcmp(data->f_list->arr[0], "exit"))
+			exit_command(&data->f_list);
+	}
+	exit_status_command(&data);
 }

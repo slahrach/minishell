@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/02 23:46:59 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:31:15 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,23 @@ char	*chr_to_str(char c)
 	str[0] = c;
 	str[1] = '\0';
 	return (str);
+}
+
+t_list	*_new(void)
+{
+	t_list	*new;
+
+	new = malloc (sizeof (t_list));
+	new->inside = NULL;
+	new->exit_status = 0;
+	new->next = NULL;
+	new->pipe_after = 0;
+	new->pipe_before = 0;
+	new->append = NULL;
+	new->delimiter = NULL;
+	new->infile = NULL;
+	new->outfile = NULL;
+	new->arr = NULL;
+	new->content = NULL;
+	return (new);
 }

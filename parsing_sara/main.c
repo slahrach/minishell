@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:45:55 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:29:01 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	handle_sigquit(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
-	//t_list	*inside;
 	t_data	data;
 	char	*prompt;
 
@@ -41,57 +40,29 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, handle_sigquit);
 	set_env(envp, &data.env);
+	data.last_exitstatus = 0;
 	while (1)
 	{
+		data.error = 0;
 		prompt = find_prompt(data.env);
-		if (!prompt)
-			prompt = ft_strdup("\033[1;31m$\033[0m ");
 		data.line = readline (prompt);
 		if (!data.line)
 			exit (0);
 		if (*data.line)
 		{
 			add_history(data.line);
-			to_parse(data.line, &data.list, data.env);
-			data.f_list = devide(&data.list);
-			execute_commands(&data);
+			to_parse(data.line, &data, data.env);
+			if (!data.error)
+			{
+				data.f_list = devide(&data, &data.list);
+				if (!data.error)
+					execute_commands(&data);
+				ft_lstclear1(&data.f_list);
+			}
+			else
+				ft_lstclear(&data.list);
 		}
-		//t_list *tmp = data.f_list;
-		/*while (tmp)
-		{
-			printf("pipe_after = %d \n", tmp->pipe_after);
-			printf("pipe_before = %d \n", tmp->pipe_before);
-			while (tmp->append)
-			{
-				printf("***append****%s\n", tmp->append->content);
-				tmp->append = tmp->append->next;
-			}
-			while (tmp->infile)
-			{
-				printf("***infile****%s\n", tmp->infile->content);
-				tmp->infile = tmp->infile->next;
-			}
-			while (tmp->outfile)
-			{
-				printf("***outfile****%s\n", tmp->outfile->content);
-				tmp->outfile = tmp->outfile->next;
-			}
-			while (tmp->delimiter)
-			{
-				printf("***delimiter****%s\n", tmp->delimiter->content);
-				tmp->delimiter = tmp->delimiter->next;
-			}
-			inside = tmp->inside;
-			while (inside)
-			{
-				printf("%s\n", inside->content);
-				inside = inside->next;
-			}
-			tmp = tmp->next;
-		}
-		//while (1);*/
 		free(prompt);
-		ft_lstclear1(&data.f_list);
 	}
 	return (0);
 }

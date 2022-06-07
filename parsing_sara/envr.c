@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 23:05:04 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:13:31 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,6 @@ char	*ft_getenv(t_env *env, char *name)
 		env = env->next;
 	}
 	return (NULL);
-}
-
-void	env_add_change(t_env **env, char *name, char *value, int flag)
-{
-	t_env	*copy;
-
-	copy = *env;
-	while (copy)
-	{
-		if (!ft_strcmp(name, copy->name))
-		{
-			free(copy->value);
-			copy->value = value;
-			copy->flag = flag;
-		}
-		copy = copy->next;
-	}
-	add_back(env, new_node(name, value, copy->flag));
 }
 
 void	env_add_change1(t_env **env, char *name, char *value, int flag)

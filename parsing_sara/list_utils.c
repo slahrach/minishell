@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:54:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 22:46:39 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:06:15 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ t_env	*find_last(t_env *lst)
 		return (NULL);
 	temp = lst;
 	while (temp->next != NULL)
-	{
 		temp = temp->next;
-	}
 	return (temp);
 }

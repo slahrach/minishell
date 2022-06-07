@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 23:05:38 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 04:30:10 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 typedef struct s_data
 {
+	int			error;
 	int			last_exitstatus;
 	char		*line;
 	t_list		*list;
@@ -34,21 +35,22 @@ typedef struct s_data
 }	t_data;
 
 char		*find_prompt(t_env *env);
-void		error(int a);
-void		to_parse(char *line, t_list **list, t_env *env);
+void		error(t_data *data, int a);
+void		to_parse(char *line, t_data *data, t_env *env);
 char		*expansion(char *token, t_env *env);
 int			is_whitespace(char c);
-char		*non_quoting(int *i, char *line, t_list **list, t_env *env);
-char		*handle_quoting(int	*i, char *line, t_list **list, t_env *env);
+char		*non_quoting(int *i, char *line, t_data *data, t_env *env);
+char		*handle_quoting(int	*i, char *line, t_data *data, t_env *env);
 int			is_special(char c);
 char		*chr_to_str(char c);
 int			builtins(t_list *f_list, t_env **env);
-t_list		*devide(t_list **list);
+t_list		*devide(t_data *data, t_list **list);
 t_env		*find_last(t_env *lst);
 void		add_front(t_env **lst, t_env *new);
 void		add_back(t_env **lst, t_env *new);
 int			sizelst(t_env *lst);
 t_env		*new_node(char *name, char *value, int flag);
+t_list		*_new(void);
 void		set_env(char **envp, t_env **env);
 char		*ft_getenv(t_env *env, char *name);
 void		env_add_change(t_env **env, char *name, char *value, int flag);
