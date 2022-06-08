@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:11:05 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:33:19 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 22:42:40 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,7 @@ void	ft_lstclear1(t_list **lst)
 	while (*lst)
 	{
 		temp = (*lst)->next;
-		ft_clear(&(*lst)->append);
-		ft_clear(&(*lst)->delimiter);
-		ft_clear(&(*lst)->infile);
-		ft_clear(&(*lst)->outfile);
+		ft_clear(&(*lst)->redirect);
 		ft_lstclear(&(*lst)->inside);
 		free_arr((*lst)->arr);
 		free(*lst);

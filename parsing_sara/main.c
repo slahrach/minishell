@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:45:55 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/08 06:02:54 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	handle_sigint(int sig)
+void	handle_sigint(int sig)//needs protection inside the child process
 {
 	if (sig != SIGINT)
 		return ;
@@ -32,7 +32,7 @@ void	handle_sigquit(int sig)
 
 int	main(int argc, char **argv, char **envp)
 {
-	//t_list	*inside;
+	// t_list	*inside;
 	t_data	data;
 	char	*prompt;
 
@@ -56,40 +56,6 @@ int	main(int argc, char **argv, char **envp)
 			data.f_list = devide(&data.list);
 			execute_commands(&data);
 		}
-		//t_list *tmp = data.f_list;
-		/*while (tmp)
-		{
-			printf("pipe_after = %d \n", tmp->pipe_after);
-			printf("pipe_before = %d \n", tmp->pipe_before);
-			while (tmp->append)
-			{
-				printf("***append****%s\n", tmp->append->content);
-				tmp->append = tmp->append->next;
-			}
-			while (tmp->infile)
-			{
-				printf("***infile****%s\n", tmp->infile->content);
-				tmp->infile = tmp->infile->next;
-			}
-			while (tmp->outfile)
-			{
-				printf("***outfile****%s\n", tmp->outfile->content);
-				tmp->outfile = tmp->outfile->next;
-			}
-			while (tmp->delimiter)
-			{
-				printf("***delimiter****%s\n", tmp->delimiter->content);
-				tmp->delimiter = tmp->delimiter->next;
-			}
-			inside = tmp->inside;
-			while (inside)
-			{
-				printf("%s\n", inside->content);
-				inside = inside->next;
-			}
-			tmp = tmp->next;
-		}
-		//while (1);*/
 		free(prompt);
 		ft_lstclear1(&data.f_list);
 	}

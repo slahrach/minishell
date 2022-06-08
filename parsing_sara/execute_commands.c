@@ -6,69 +6,37 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/07 06:53:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/08 08:52:36 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/************will be changed based on the new struct**************/
-
-void	check_infiles(t_redir *infile, t_tools *tool)
+void	check_redirections(t_redir *redirect, t_tools *tool)
 {
-	t_redir	*tmp;
+	t_redir *tmp;
 
-	tmp = infile;
-	tool->fd_in = 0;
+	tmp = redirect;
 	while (tmp)
 	{
-		tool->fd_in = open (tmp, O_RDONLY);
-		if (tool->fd_in == -1)
+		if (tmp->id == 1)
 		{
-			printf("bash: %s: No such file or directory\n", tmp);
-			exit(1);
+			tool->fd_in = open (tmp->content, O_RDONLY);
+			if (tool->fd_in == -1)
+			{
+				printf("bash: %s: No such file or directory\n", tmp->content);
+				exit(1);
+			}
 		}
+		else if (tmp->id == 2)
+			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		else if (tmp->id == 5)
+			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		else if (tmp->id == 4)
+			tool->fd_in = here_doc(tmp, tool);
 		tmp = tmp->next;
 	}
 }
-
-void	check_outfiles(t_redir *outfile, t_tools *tool)
-{
-	t_redir	*tmp;
-
-	tmp = outfile;
-	while (tmp->next)
-	{
-		tool->fd_out = open (tmp, O_WRONLY | O_CREAT, 0777);
-		tmp = tmp->next;
-	}
-	tool->fd_out = open (tmp, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-}
-
-void	check_appends_or_outfiles(t_redir *append,t_redir *outfile, t_tools *tool)
-{
-	t_redir	*tmp;
-	t_redir	*tmp1;
-
-	tmp = append;
-	tmp1 = outfile;
-	while (tmp->next || tmp1->next)
-	{
-		if (tmp)
-		{
-			tool->fd_out = open (tmp, O_WRONLY | O_CREAT, 0777);
-			tmp = tmp->next;
-		}
-		if (tmp1)
-		{
-			tool->fd_out = open (tmp1, O_WRONLY | O_CREAT, 0777);
-			tmp1 = tmp->next;
-		}
-	}
-	tool->fd_out = open (tmp, O_WRONLY | O_CREAT | O_APPEND, 0777);
-}
-
-/************will be changed based on the new struct**************/
 
 void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 {
@@ -100,24 +68,26 @@ void	print_error(char *cmd)
 
 int	execute_commands_(t_data *data, t_list *tmp)
 {
-	t_tools	*tool;
 	int		pid;
 
-	tool = malloc (sizeof(t_tools));
-	check_infiles(tmp->infile, tool);
-	if (pipe(tool->p) == -1)
+	if (pipe(data->tool->p) == -1)
 		exit (1);
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(tool->fd_in, 0);
-		close (tool->fd_in);
-		close(tool->p[0]);
-		dup2(tool->p[1], 1);
-		close(tool->p[1]);
+		// signal(SIGQUIT,SIG_DFL);
+		close(data->tool->p[0]);
+		dup2(data->tool->p[1], 1);
+		close(data->tool->p[1]);
+		if (tmp->redirect)
+			check_redirections(tmp->redirect, data->tool);
+		dup2(data->tool->fd_in, 0);
+		close (data->tool->fd_in);
+		dup2(data->tool->fd_out, 1);
+		close (data->tool->fd_out);
 		if (!check_builtins(tmp))
 		{
-			check_builtins_or_other_cmd(tmp);
+			check_builtins_or_other_cmd(data, tmp);
 			exit(0);
 		}
 		else
@@ -129,34 +99,83 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	}
 	else
 	{
-		close(tool->p[1]);
-		dup2(tool->p[0], 0);
-		close(tool->p[0]);
+		close(data->tool->p[1]);
+		dup2(data->tool->p[0], 0);
+		close(data->tool->p[0]);
 	}
 	return (pid);
 }
 
-int	execute_last_commands(t_data *data, t_list *tmp)
+int	execute_last_command(t_data *data, t_list *tmp)
 {
 	int		pid;
-
 	
+	if (pipe(data->tool->p) == -1)
+		exit(1);
+	pid = fork();
+	if (pid == -1)
+		exit(1);
+	if (tmp->redirect)
+		check_redirections(tmp->redirect, data->tool);
+	if (pid == 0)
+	{
+		dup2(data->tool->fd_in, 0);
+		close (data->tool->fd_in);
+		dup2(data->tool->fd_out, 1);
+		close (data->tool->fd_out);
+		if (!check_builtins(tmp))
+		{
+			check_builtins_or_other_cmd(data, tmp);
+			exit(0);
+		}
+		else
+		{
+			check_builtins_or_other_cmd(data, tmp);
+			print_error(tmp->arr[0]);
+			exit (1);
+		}
+	}
+	else
+		close (data->tool->fd_out);
+	return (pid);
+}
+
+void	close_n_wait(t_tools *tool, int *pid)
+{
+	int		i;
+
+	i = 0;
+	close(tool->p[0]);
+	close(tool->p[1]);
+	while (pid[i])
+	{
+		waitpid(pid[i], NULL, 0);
+		i++;
+	}
 }
 
 void	execute_commands(t_data *data)
 {
-	char	*str;
 	t_list	*tmp;
 	int		*pid;
 	int		i;
+	int		fd_in;
+	int		fd_out;
 	
 	tmp = data->f_list;
+	i = 0;
+	fd_in = dup(0);
+	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
+	data->tool = malloc (sizeof(t_tools));
 	while (tmp->next)
 	{
 		pid[i++] = execute_commands_(data, tmp);
 		tmp = tmp->next;
 	}
 	pid[i] = execute_last_command(data, tmp);
+	close_n_wait(data->tool, pid);
+	dup2(fd_in, 0);
+	dup2(fd_out, 1);
 	exit_status_command(&data);
 }

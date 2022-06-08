@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:54:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 22:46:39 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/08 00:00:59 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,21 @@ t_env	*find_last(t_env *lst)
 		temp = temp->next;
 	}
 	return (temp);
+}
+
+int	ft_lstsize_env(t_env *lst)
+{
+	t_env	*temp;
+	int		i;
+
+	if (!lst)
+		return (0);
+	i = 1;
+	temp = lst;
+	while (temp->next)
+	{
+		i++;
+		temp = temp->next;
+	}
+	return (i);
 }

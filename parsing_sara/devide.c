@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:30:39 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 22:45:22 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ t_list	*new(void)
 	new->next = NULL;
 	new->pipe_after = 0;
 	new->pipe_before = 0;
-	new->append = NULL;
-	new->delimiter = NULL;
-	new->infile = NULL;
-	new->outfile = NULL;
+	new->redirect = NULL;
 	new->arr = NULL;
 	new->content = NULL;
 	return (new);
@@ -74,14 +71,7 @@ static void	check(t_list **list, t_list **head)
 	if (!(*list)->next)
 		error(4);
 	content = ft_strdup((*list)->next->content);
-	if ((*list)->id == INPUT)
-		redir_add_back(&(*head)->infile, redir_new(content));
-	else if ((*list)->id == OUTPUT)
-		redir_add_back(&(*head)->outfile, redir_new(content));
-	else if ((*list)->id == DELIMITER)
-		redir_add_back(&(*head)->delimiter, redir_new(content));
-	else if ((*list)->id == APPEND)
-		redir_add_back(&(*head)->append, redir_new(content));
+	redir_add_back(&(*head)->redirect, redir_new(content, (*list)->id));
 	(*list) = (*list)->next->next;
 }
 

@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 16:36:50 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:32:39 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/07 22:41:46 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,7 @@ t_list	*ft_lstnew(void *content)
 	new->content = content;
 	new->arr = NULL;
 	new->inside = NULL;
-	new->append = NULL;
-	new->delimiter = NULL;
-	new->infile = NULL;
-	new->outfile = NULL;
+	new->redirect = NULL;
 	new->pipe_after = 0;
 	new->pipe_before = 0;
 	new->id = 0;
@@ -33,13 +30,14 @@ t_list	*ft_lstnew(void *content)
 	return (new);
 }
 
-t_redir	*redir_new(char	*content)
+t_redir	*redir_new(char	*content, int id)
 {
 	t_redir	*new;
 
 	new = (t_redir *) malloc (sizeof (t_redir));
 	if (!new)
 		return (NULL);
+	new->id = id;
 	new->content = content;
 	new->next = NULL;
 	return (new);

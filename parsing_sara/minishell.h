@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 06:46:14 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/08 08:53:23 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,14 @@ void		unset_command(t_list **list, t_env *env);
 int			parse_args(t_list **list, char *var);
 void		cd_command(t_list **list, t_env *env);
 void		export_command(t_list **list, t_env *env);
+void		other_commands(t_data *data, t_list *tmp, t_tools *tool);
+void		check_builtins_or_other_cmd(t_data *data, t_list *tmp);
+int			check_builtins(t_list *tmp);
+int			check_path(char *path);
+char		*find_path(t_env *env, char	*cmd);
+void		print_error(char *cmd);
+int			ft_lstsize_env(t_env *lst);
+char		**linked_list_to_table(t_env *env);
+int			here_doc(t_redir *tmp, t_tools *tool);
 
 #endif
