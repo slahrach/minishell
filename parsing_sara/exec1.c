@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/07 22:50:01 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/09 10:48:06 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,37 +65,45 @@ int	check_builtins(t_list *tmp)
 {
 	char	*str;
 
-	str = ft_strmapi(tmp->arr[0], ft_tolower);
-	if (!ft_strcmp(tmp->arr[0], "$?") || !ft_strcmp(str, "echo") || \
-	!ft_strcmp(tmp->arr[0], "cd") || !ft_strcmp(tmp->arr[0], "pwd") || \
-	!strcmp(tmp->arr[0], "export") || !ft_strcmp(str, "env") || \
-	!ft_strcmp(tmp->arr[0], "unset") || !ft_strcmp(tmp->arr[0], "exit"))
-		return (0);
-	else
-		return (1);
+	if (tmp->arr[0])
+	{
+		str = ft_strmapi(tmp->arr[0], ft_tolower);
+		if (!ft_strcmp(tmp->arr[0], "$?") || !ft_strcmp(str, "echo") || \
+		!ft_strcmp(tmp->arr[0], "cd") || !ft_strcmp(tmp->arr[0], "pwd") || \
+		!strcmp(tmp->arr[0], "export") || !ft_strcmp(str, "env") || \
+		!ft_strcmp(tmp->arr[0], "unset") || !ft_strcmp(tmp->arr[0], "exit"))
+			return (0);
+		else
+			return (1);
+	}
+	return (3);
 }
 
 void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 {
 	char	*str;
 
-	str = ft_strmapi(tmp->arr[0], ft_tolower);
-	if (!ft_strcmp(tmp->arr[0], "$?"))
-		print_status(&data);
-	if (!ft_strcmp(str, "echo"))
-		echo_command(&tmp);
-	else if (!ft_strcmp(tmp->arr[0], "cd"))
-		cd_command(&tmp, data->env);
-	else if (!ft_strcmp(tmp->arr[0], "pwd"))
-		pwd_command(&tmp);
-	else if (!strcmp(tmp->arr[0], "export"))
-		export_command(&tmp, data->env);
-	else if (!ft_strcmp(str, "env"))
-		env_command(&tmp, data->env);
-	else if (!ft_strcmp(tmp->arr[0], "unset"))
-		unset_command(&tmp, data->env);
-	else if (!ft_strcmp(tmp->arr[0], "exit"))
-		exit_command(&tmp);
-	else
-		other_commands(data, tmp, data->tool);
+	if (tmp->arr[0])
+	{
+		str = ft_strmapi(tmp->arr[0], ft_tolower);
+		if (!ft_strcmp(tmp->arr[0], "$?"))
+			print_status(&data);
+		else if (!ft_strcmp(str, "echo"))
+			echo_command(&tmp);
+		else if (!ft_strcmp(tmp->arr[0], "cd"))
+			cd_command(&tmp, data->env);
+		else if (!ft_strcmp(tmp->arr[0], "pwd"))
+			pwd_command(&tmp);
+		else if (!strcmp(tmp->arr[0], "export"))
+			export_command(&tmp, data->env);
+		else if (!ft_strcmp(str, "env"))
+			env_command(&tmp, data->env);
+		else if (!ft_strcmp(tmp->arr[0], "unset"))
+			unset_command(&tmp, data->env);
+		else if (!ft_strcmp(tmp->arr[0], "exit"))
+			exit_command(&tmp);
+		else
+			other_commands(data, tmp, data->tool);
+		exit_status_command(&data);
+	}
 }

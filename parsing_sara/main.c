@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/09 09:56:08 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/09 10:51:36 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	signal(SIGQUIT, SIG_IGN);
 	set_env(envp, &data.env);
+	data.last_exitstatus = 0;
 	while (1)
 	{
 		prompt = find_prompt(data.env);

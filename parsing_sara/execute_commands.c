@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/09 09:52:24 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/09 11:09:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 		tool->path = find_path(data->env, tmp->arr[0]);
 	if (!tool->path)
 	{
-		write(2, "command not found\n", 19);
+		write(2, "command not found\n", 25);
 		exit(1);
 	}
 	execve(tool->path, tmp->arr, linked_list_to_table(data->env));
@@ -81,11 +81,8 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		close(data->tool->p[1]);
 		if (tmp->redirect)
 			check_redirections(tmp->redirect, data->tool);
-		if (tmp->id == 1)//
-		{	
-			dup2(data->tool->fd_in, 0);
-			close (data->tool->fd_in);
-		}
+		dup2(data->tool->fd_in, 0);
+		close (data->tool->fd_in);
 		dup2(data->tool->fd_out, 1);
 		close (data->tool->fd_out);
 		if (!check_builtins(tmp))
@@ -96,7 +93,6 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		else
 		{
 			check_builtins_or_other_cmd(data, tmp);
-			print_error(tmp->arr[0]);
 			exit (1);
 		}
 	}
@@ -129,12 +125,11 @@ int	execute_last_command(t_data *data, t_list *tmp)
 		if (!check_builtins(tmp))
 		{
 			check_builtins_or_other_cmd(data, tmp);
-			exit(0);
+			//exit(0);
 		}
 		else
 		{
 			check_builtins_or_other_cmd(data, tmp);
-			print_error(tmp->arr[0]);
 			exit (1);
 		}
 	}
@@ -171,14 +166,17 @@ void	execute_commands(t_data *data)
 	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
 	data->tool = malloc (sizeof(t_tools));
+	data->tool->fd_in = dup(0);
+	data->tool->fd_out = dup(1);
 	while (tmp->next)
 	{
 		pid[i++] = execute_commands_(data, tmp);
 		tmp = tmp->next;
 	}
+	puts("------+---------");
 	pid[i] = execute_last_command(data, tmp);
 	close_n_wait(data->tool, pid);
 	dup2(fd_in, 0);
 	dup2(fd_out, 1);
-	exit_status_command(&data);
+	// exit_status_command(&data);
 }

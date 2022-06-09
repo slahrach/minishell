@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 06:17:22 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/09 09:47:34 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/09 11:06:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	here_doc(t_redir *tmp, t_tools *tool)
 	{
 		while (1)
 		{
+			signal(SIGQUIT,SIG_DFL);
 			line = get_next_line(0);
 			if (!ft_strcmp(line, tmp->content) && line[ft_strlen(tmp->content)] == '\n')
 				exit(0);
