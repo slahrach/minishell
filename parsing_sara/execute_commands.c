@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/08 08:52:36 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/09 09:52:24 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	check_redirections(t_redir *redirect, t_tools *tool)
 		else if (tmp->id == 5)
 			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
 		else if (tmp->id == 4)
-			tool->fd_in = here_doc(tmp, tool);
+			here_doc(tmp, tool);
 		tmp = tmp->next;
 	}
 }
@@ -75,14 +75,17 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	pid = fork();
 	if (pid == 0)
 	{
-		// signal(SIGQUIT,SIG_DFL);
+		signal(SIGQUIT,SIG_DFL);
 		close(data->tool->p[0]);
 		dup2(data->tool->p[1], 1);
 		close(data->tool->p[1]);
 		if (tmp->redirect)
 			check_redirections(tmp->redirect, data->tool);
-		dup2(data->tool->fd_in, 0);
-		close (data->tool->fd_in);
+		if (tmp->id == 1)//
+		{	
+			dup2(data->tool->fd_in, 0);
+			close (data->tool->fd_in);
+		}
 		dup2(data->tool->fd_out, 1);
 		close (data->tool->fd_out);
 		if (!check_builtins(tmp))

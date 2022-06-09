@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/08 08:53:43 by iouardi          ###   ########.fr        #
+#    Updated: 2022/06/09 08:12:03 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,17 +26,20 @@ SRCS = main.c \
 	export.c \
 	find_cmd_path.c \
 	execute_commands.c \
-	here_doc.c
+	here_doc.c \
+	get_next_line.c \
+	get_next_line_utils.c
 
 CFLAGS = -Wall -Wextra -Werror
 
 
-LIB = libft/libft.a
+LIB = libft.a
 
 OBJS = ${SRCS:.c=.o}
 
 ${NAME} : ${OBJS}
-		make -C libft
+		@make -C libft
+		@cp libft/libft.a ./
 		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include -fsanitize=address -g
 
 all : ${NAME}

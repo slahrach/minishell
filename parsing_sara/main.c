@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/08 06:02:54 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/09 09:56:08 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void	handle_sigint(int sig)//needs protection inside the child process
 	rl_redisplay();
 }
 
-void	handle_sigquit(int sig)
+void	handle_sig(int sig)
 {
-	if (!sig || rl_end > 0)
-		exit (0);
-	else
-		rl_on_new_line();
+	if (sig != SIGINT)
+		return ;
+	printf("\n");
+	rl_on_new_line();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -38,15 +38,16 @@ int	main(int argc, char **argv, char **envp)
 
 	if (!argc || !argv || !envp)
 		return (0);
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
+	signal(SIGQUIT, SIG_IGN);
 	set_env(envp, &data.env);
 	while (1)
 	{
 		prompt = find_prompt(data.env);
 		if (!prompt)
 			prompt = ft_strdup("\033[1;31m$\033[0m ");
+		signal(SIGINT, handle_sigint);
 		data.line = readline (prompt);
+		signal(SIGINT, handle_sig);
 		if (!data.line)
 			exit (0);
 		if (*data.line)
