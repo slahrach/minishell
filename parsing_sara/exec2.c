@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 05:48:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 22:57:42 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/10 23:22:13 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,6 @@ void	pwd_command(t_list **list)
 {
 	char	*buffer;
 
-	if (ft_lstsize((*list)->inside) != 1)
-	{
-		printf("pwd : too many arguments !\n");
-		(*list)->exit_status = 1;
-		return ;
-	}
 	buffer = getcwd(NULL, 0);
 	if (buffer)
 		printf("%s\n", buffer);

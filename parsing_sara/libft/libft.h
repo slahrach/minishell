@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:30:03 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/09 14:10:43 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_env
 
 typedef struct s_redir
 {
+	int				id;
 	char			*content;
 	struct s_redir	*next;
 }	t_redir;
@@ -39,12 +40,18 @@ typedef struct s_list
 	char			**arr;
 	int				pipe_after;
 	int				pipe_before;
-	t_redir			*infile;
-	t_redir			*outfile;
-	t_redir			*append;
-	t_redir			*delimiter;
+	t_redir			*redirect;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_tools
+{
+	int		p[2];
+	char	*path;
+	int		fd_in;
+	int		fd_out;
+	int		fd_here;
+}	t_tools;
 
 int			ft_isalpha(int c);
 int			ft_isdigit(int arg);
@@ -93,7 +100,7 @@ void		ft_lstdelone(t_list *lst, void (*del)(void*));
 void		ft_lstclear(t_list **lst);
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-t_redir		*redir_new(char	*content);
+t_redir		*redir_new(char	*content, int id);
 t_redir		*redir_last(t_redir *lst);
 void		redir_add_front(t_redir **lst, t_redir *new);
 void		redir_add_back(t_redir **lst, t_redir *new);

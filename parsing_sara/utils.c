@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 04:31:15 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/10 23:39:43 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,7 @@ t_list	*_new(void)
 	new->next = NULL;
 	new->pipe_after = 0;
 	new->pipe_before = 0;
-	new->append = NULL;
-	new->delimiter = NULL;
-	new->infile = NULL;
-	new->outfile = NULL;
+	new->redirect = NULL;
 	new->arr = NULL;
 	new->content = NULL;
 	return (new);

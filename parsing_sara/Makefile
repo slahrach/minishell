@@ -6,7 +6,7 @@
 #    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/06 23:07:20 by slahrach         ###   ########.fr        #
+#    Updated: 2022/06/11 00:06:35 by slahrach         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,17 +24,24 @@ SRCS = main.c \
 	exec2.c \
 	cd_command.c \
 	export.c \
+	find_cmd_path.c \
+	execute_commands.c \
+	here_doc.c \
+	get_next_line.c \
+	get_next_line_utils.c \
+	utils2.c \
 
 CFLAGS = -Wall -Wextra -Werror
 
 
-LIB = libft/libft.a
+LIB = libft.a
 
 OBJS = ${SRCS:.c=.o}
 
 ${NAME} : ${OBJS}
-		make -C libft
-		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I/Users/slahrach/.brew/opt/readline/include #-fsanitize=address -g
+		@make -C libft
+		@cp libft/libft.a ./
+		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I/Users/slahrach/.brew/opt/readline/include -fsanitize=address -g
 
 all : ${NAME}
 
@@ -45,6 +52,7 @@ clean :
 fclean : clean
 	make fclean -C libft
 	rm -rf ${NAME}
+	rm -rf ${LIB}
 
 re : fclean all
 

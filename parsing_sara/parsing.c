@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:54:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 04:17:01 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 00:01:11 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static	char	*remove_quotes(int *i, char *line, t_env *env, t_data *data)
 	}
 	str1 = ft_substr(line, (*i) + 1, j);
 	if (line[*i] == '"')
-		str1 = expansion(str1, env);
+		str1 = expansion(data, str1, env);
 	*i += j + 2;
 	return (str1);
 }
@@ -57,35 +57,6 @@ char	*handle_quoting(int	*i, char *line, t_data *data, t_env *env)
 	return (NULL);
 }
 
-int	check_special(int *i, char *line, int id, t_list **list)
-{
-	t_list	*new;
-
-	if (id)
-	{
-		if (id == 1 && line[*i + 1] && line[*i + 1] == '<')
-		{
-			new = ft_lstnew(ft_strdup("<<"));
-			new->id = DELIMITER;
-			(*i) += 2;
-		}
-		else if (id == 2 && line[*i + 1] && line[*i + 1] == '>')
-		{
-			new = ft_lstnew(ft_strdup(">>"));
-			new->id = APPEND;
-			(*i) += 2;
-		}
-		else
-		{
-			new = ft_lstnew(chr_to_str(line[*i]));
-			new->id = id;
-			(*i) += 1;
-		}
-		ft_lstadd_back(list, new);
-	}
-	return (id);
-}
-
 char	*non_quoting(int *i, char *line, t_data *data, t_env *env)
 {
 	t_list	**list;
@@ -105,7 +76,7 @@ char	*non_quoting(int *i, char *line, t_data *data, t_env *env)
 			&& line[j] != '"' && line[j] != '\'')
 			j++;
 		str1 = ft_substr(line, *i, j - (*i));
-		str1 = expansion(str1, env);
+		str1 = expansion(data, str1, env);
 		*i = j;
 		str2 = handle_quoting(i, line, data, env);
 		if (str2)
@@ -113,6 +84,22 @@ char	*non_quoting(int *i, char *line, t_data *data, t_env *env)
 		return (str1);
 	}
 	return (NULL);
+}
+
+void	call(t_data *data, char *str, t_list **list)
+{
+	t_list	*new;
+
+	if (str)
+	{
+		new = ft_lstnew(str);
+		if (data->status)
+		{
+			new->id = STATUS;
+			data->status = 0;
+		}
+		ft_lstadd_back(list, new);
+	}
 }
 
 void	to_parse(char *line_t, t_data *data, t_env *env)
@@ -130,11 +117,9 @@ void	to_parse(char *line_t, t_data *data, t_env *env)
 	while (line[i])
 	{
 		str = handle_quoting(&i, line, data, env);
-		if (str)
-			ft_lstadd_back(list, ft_lstnew(str));
+		call(data, str, list);
 		str = non_quoting(&i, line, data, env);
-		if (str)
-			ft_lstadd_back(list, ft_lstnew(str));
+		call(data, str, list);
 		if (is_whitespace(line[i]))
 			i++;
 	}

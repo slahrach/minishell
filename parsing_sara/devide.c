@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 04:31:06 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 00:20:52 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,20 @@ static int	check(t_data *data, t_list **list, t_list **head)
 		error(data, 0);
 		return (1);
 	}
-	if ((*list)->id == INPUT)
-		redir_add_back(&(*head)->infile, redir_new(content));
-	else if ((*list)->id == OUTPUT)
-		redir_add_back(&(*head)->outfile, redir_new(content));
-	else if ((*list)->id == DELIMITER)
-		redir_add_back(&(*head)->delimiter, redir_new(content));
-	else if ((*list)->id == APPEND)
-		redir_add_back(&(*head)->append, redir_new(content));
+	redir_add_back(&(*head)->redirect, redir_new(content, (*list)->id));
 	(*list) = (*list)->next->next;
 	return (0);
+}
+
+static void	cmds(t_list **list, t_list **head)
+{
+	t_list	*new;
+
+	new = ft_lstnew(ft_strdup((*list)->content));
+	if ((*list)->id == STATUS)
+		new->id = 1;
+	ft_lstadd_back(&((*head)->inside), new);
+	(*list) = (*list)->next;
 }
 
 t_list	*devide(t_data *data, t_list **list_free)
@@ -84,7 +88,6 @@ t_list	*devide(t_data *data, t_list **list_free)
 	t_list	*list;
 	t_list	*head;
 	t_list	*temp;
-	char	*content;
 
 	list = *list_free;
 	head = _new();
@@ -96,12 +99,8 @@ t_list	*devide(t_data *data, t_list **list_free)
 			if (t_pipe (data, &list, &head))
 				break ;
 		}
-		else if (list->id == 0)
-		{
-			content = ft_strdup(list->content);
-			ft_lstadd_back(&(head->inside), ft_lstnew(content));
-			list = list->next;
-		}
+		else if (list->id == 0 || list->id == STATUS)
+			cmds(&list, &head);
 		else
 		{
 			if (check(data, &list, &head))

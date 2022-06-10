@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/07 01:24:22 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/10 23:29:07 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,55 +35,75 @@ void	exit_command(t_list **f_list)
 			(*f_list)->exit_status = atoi % 256;
 	}
 	printf("exit\n");
-	//exit(0);
+	exit(0);
 }
 
-void	exit_status_command(t_data **data)
+void	exit_status_command(t_data *data)
 {
 	t_list	*list;
 
-	list = (*data)->f_list;
+	list = data->f_list;
 	while (list)
 	{
 		if (list->exit_status)
 		{
-			(*data)->last_exitstatus = list->exit_status;
+			g_last_exitstatus = list->exit_status;
 			return ;
 		}
-		(*data)->last_exitstatus = 0;
+		g_last_exitstatus = 0;
 		list = list->next;
 	}
 }
 
-void	print_status(t_data **data)
+void	print_status(t_data *data)
 {
-	printf("%d : command not found\n", (*data)->last_exitstatus);
-	(*data)->f_list->exit_status = 127;
+	printf("%s : command not found\n", data->f_list->inside->content);
+	data->f_list->exit_status = 127;
 }
 
-void	execute_commands(t_data *data)
+int	check_builtins(t_data *data, t_list *tmp)
 {
 	char	*str;
 
-	if (data->f_list && data->f_list->arr[0])
+	if (tmp->arr[0])
 	{
-		str = ft_strmapi(data->f_list->arr[0], ft_tolower);
-		if (!ft_strcmp(data->f_list->arr[0], "$?"))
-			print_status(&data);
-		if (!ft_strcmp(str, "echo"))
-			echo_command(&data->f_list);
-		else if (!ft_strcmp(data->f_list->arr[0], "cd"))
-			cd_command(&data->f_list, data->env);
-		else if (!ft_strcmp(data->f_list->arr[0], "pwd"))
-			pwd_command(&data->f_list);
-		else if (!strcmp(data->f_list->arr[0], "export"))
-			export_command(&data->f_list, data->env);
-		else if (!ft_strcmp(str, "env"))
-			env_command(&data->f_list, data->env);
-		else if (!ft_strcmp(data->f_list->arr[0], "unset"))
-			unset_command(&data->f_list, data->env);
-		else if (!ft_strcmp(data->f_list->arr[0], "exit"))
-			exit_command(&data->f_list);
+		str = ft_strmapi(tmp->arr[0], ft_tolower);
+		if (data->f_list->inside->id || !ft_strcmp(str, "echo") || \
+		!ft_strcmp(tmp->arr[0], "cd") || !ft_strcmp(tmp->arr[0], "pwd") || \
+		!strcmp(tmp->arr[0], "export") || !ft_strcmp(str, "env") || \
+		!ft_strcmp(tmp->arr[0], "unset") || !ft_strcmp(tmp->arr[0], "exit"))
+			return (0);
+		else
+			return (1);
 	}
-	exit_status_command(&data);
+	return (3);
+}
+
+void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
+{
+	char	*str;
+
+	if (tmp->arr[0])
+	{
+		str = ft_strmapi(tmp->arr[0], ft_tolower);
+		if (data->f_list->inside->id)
+			print_status(data);
+		else if (!ft_strcmp(str, "echo"))
+			echo_command(&tmp);
+		else if (!ft_strcmp(tmp->arr[0], "cd"))
+			cd_command(&tmp, data->env);
+		else if (!ft_strcmp(tmp->arr[0], "pwd"))
+			pwd_command(&tmp);
+		else if (!strcmp(tmp->arr[0], "export"))
+			export_command(&tmp, data->env);
+		else if (!ft_strcmp(str, "env"))
+			env_command(&tmp, data->env);
+		else if (!ft_strcmp(tmp->arr[0], "unset"))
+			unset_command(&tmp, data->env);
+		else if (!ft_strcmp(tmp->arr[0], "exit"))
+			exit_command(&tmp);
+		else
+			other_commands(data, tmp, data->tool);
+		exit_status_command(data);
+	}
 }

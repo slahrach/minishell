@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:00:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 23:14:09 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:00:10 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static	void	change_pwd_env(t_env *env)
 
 	pwd_val = getcwd(NULL, 0);
 	if (pwd_val)
-		env_add_change1(&env, "PWD", pwd_val, 1);
+		env_add_change(&env, "PWD", pwd_val, 1);
 }
 
 static	void	cd_home(t_list **list, t_env *env)
