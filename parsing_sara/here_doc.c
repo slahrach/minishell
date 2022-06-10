@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 06:17:22 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/09 11:06:43 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/10 12:40:03 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,48 +14,25 @@
 
 void	here_doc(t_redir *tmp, t_tools *tool)
 {
-	// char    *line;
-	// int		pid;
-
-	// line = NULL;
-	// pid = fork();
-	// tool->fd_here = open (tmp->content, O_RDWR, O_CREAT | O_TRUNC, 0666);
-	// while (1)
-	// {
-	// 	line = ft_strjoin(line, readline(" >"));
-	// 	if (line)
-	// 		if (!ft_strcmp(line, tmp->content))
-	// 			exit(0) ;
-	// 	if (line)
-	// 		ft_putstr_fd(line, tool->fd_here);
-	// }
-	// return (tool->fd_here);
-	int		pid;
 	char	*line;
+	int		len;
 
 	if (pipe(tool->p) == -1)
 		exit (1);
-	pid = fork();
 	line = NULL;
-	if (pid == -1)
-		exit (1);
-	if (pid == 0)
+	len = 0;
+	len = ft_strlen(tmp->content);
+	while (1)
 	{
-		while (1)
-		{
-			signal(SIGQUIT,SIG_DFL);
-			line = get_next_line(0);
-			if (!ft_strcmp(line, tmp->content) && line[ft_strlen(tmp->content)] == '\n')
-				exit(0);
-			write(tool->p[1], line, ft_strlen(line));
-		}
-		close (tool->p[1]);
+		signal(SIGQUIT,SIG_DFL);
+		line = readline("heredoc> ");
+		if (!ft_strncmp(line, tmp->content, len))
+			break ;
+		line = ft_strjoin(line, "\n");
+		write(tool->p[1], line, ft_strlen(line));
+		free(line);
 	}
-	else
-	{
-		dup2(tool->p[0], 0);
-		close(tool->p[0]);
-		close(tool->p[1]);
-		waitpid(pid, NULL, 0);
-	}
+	close (tool->p[1]);
+	close (tool->fd_in);
+	tool->fd_in = tool->p[0];
 }

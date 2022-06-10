@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/09 08:12:03 by iouardi          ###   ########.fr        #
+#    Updated: 2022/06/10 12:07:53 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,9 +26,7 @@ SRCS = main.c \
 	export.c \
 	find_cmd_path.c \
 	execute_commands.c \
-	here_doc.c \
-	get_next_line.c \
-	get_next_line_utils.c
+	here_doc.c 
 
 CFLAGS = -Wall -Wextra -Werror
 

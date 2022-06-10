@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/09 08:01:31 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/10 12:07:04 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <errno.h>
 # include <fcntl.h>
 # include "libft/libft.h"
-# include "get_next_line.h"
 # include <signal.h>
 # define INPUT 1
 # define OUTPUT 2
