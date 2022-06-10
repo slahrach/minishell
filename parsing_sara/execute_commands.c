@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/10 12:41:20 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/10 14:42:03 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,12 @@ int	execute_last_command(t_data *data, t_list *tmp)
 		exit(0);
 	}
 	else
+	{
 		close (data->tool->fd_out);
+		exit_status_command(&data);
+		if (!ft_strcmp(tmp->arr[0], "exit"))
+			exit(exit_status_command(&data));
+	}
 	return (pid);
 }
 

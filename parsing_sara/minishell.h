@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/10 12:07:04 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/10 14:47:56 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void		env_add_change1(t_env **env, char *name, char *value, int flag);
 /********************execution*******************************/
 
 void		execute_commands(t_data	*data);
-void		exit_command(t_list **f_list);
-void		exit_status_command(t_data **data);
+void		exit_command(t_data *data, t_list **f_list);
+int			exit_status_command(t_data **data);
 void		print_status(t_data **data);
 void		echo_command(t_list **list);
 void		pwd_command(t_list **list);
