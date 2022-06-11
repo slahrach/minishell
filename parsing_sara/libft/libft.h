@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/09 14:10:43 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 01:54:08 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,6 @@ void		redir_add_back(t_redir **lst, t_redir *new);
 void		ft_lstclear1(t_list **lst);
 void		clear_env(t_env **env);
 void		ft_clear(t_redir **lst);
+char		*ft_strjoin0(char *s1, char *s2);
 
 #endif

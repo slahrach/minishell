@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/09 11:54:22 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 01:41:23 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,12 @@ static char	*before_char(char *str, int c)
 
 void	set_env(char **envp, t_env **env)
 {
-	char	*path;
 	char	*name;
 	char	*value;
 	int		flag;
 	int		i;
 
 	*env = NULL;
-	path = "OLDPWD";
 	i = 0;
 	while (envp[i])
 	{
@@ -42,8 +40,9 @@ void	set_env(char **envp, t_env **env)
 			flag = 0;
 		else
 			flag = 1;
-		if (ft_strcmp(name, path))
+		if (ft_strcmp(name, "OLDPWD"))
 			add_back(env, new_node(name, value, flag));
+		free(name);
 		i++;
 	}
 }

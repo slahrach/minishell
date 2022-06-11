@@ -6,7 +6,7 @@
 #    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/11 00:06:35 by slahrach         ###   ########.fr        #
+#    Updated: 2022/06/11 01:15:46 by slahrach         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ OBJS = ${SRCS:.c=.o}
 ${NAME} : ${OBJS}
 		@make -C libft
 		@cp libft/libft.a ./
-		gcc ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I/Users/slahrach/.brew/opt/readline/include -fsanitize=address -g
+		gcc -g ${CFLAGS} ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I/Users/slahrach/.brew/opt/readline/include
 
 all : ${NAME}
 
@@ -57,6 +57,6 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} ${CFLAGS} -I /Users/slahrach/.brew/opt/readline/include -c $<
+	${CC} -g ${CFLAGS} -I /Users/slahrach/.brew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re

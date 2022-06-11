@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/10 23:35:50 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 01:59:38 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ void	execute_commands(t_data *data)
 		pid[i++] = execute_commands_(data, tmp);
 		tmp = tmp->next;
 	}
-	puts("------+---------");
+	//puts("------+---------");
 	pid[i] = execute_last_command(data, tmp);
 	close_n_wait(data->tool, pid);
 	dup2(fd_in, 0);

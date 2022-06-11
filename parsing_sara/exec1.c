@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/10 23:29:07 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 02:11:17 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ void	exit_command(t_list **f_list)
 		else
 			(*f_list)->exit_status = atoi % 256;
 	}
+	//exit_status_command(data);
 	printf("exit\n");
-	exit(0);
+	//exit(0);
 }
 
 void	exit_status_command(t_data *data)

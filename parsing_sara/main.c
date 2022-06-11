@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/09 12:28:25 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 01:56:03 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char **argv, char **envp)
 		data.line = readline (prompt);
 		signal(SIGINT, handle_sig);
 		if (!data.line)
-			exit (0);
+			break ;
 		if (*data.line)
 		{
 			add_history(data.line);
@@ -68,5 +68,6 @@ int	main(int argc, char **argv, char **envp)
 		}
 		free(prompt);
 	}
+	clear_env(&data.env);
 	return (0);
 }
