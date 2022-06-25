@@ -6,11 +6,45 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/10 14:42:03 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/25 11:01:16 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// void	check_redirections(t_redir *redirect, t_tools *tool)
+// {
+// 	t_redir *tmp;
+
+// 	tmp = redirect;
+// 	while (tmp)
+// 	{
+// 		if (tmp->id == 1)
+// 		{
+// 			tool->fd_in = open (tmp->content, O_RDONLY);
+// 			if (tool->fd_in == -1)
+// 			{
+// 				printf("bash: %s: No such file or directory\n", tmp->content);
+// 				exit(1);
+// 			}
+// 		}
+// 		else if (tmp->id == 2)
+// 			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+// 		else if (tmp->id == 5)
+// 			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
+// 		else if (tmp->id == 4)
+// 			here_doc(tmp, tool);
+// 		tmp = tmp->next;
+// 	}
+// }
+
+// new
+
+void	close_fds(int fd)
+{
+	if (fd != 0 && fd != 1)
+		close (fd);
+}
 
 void	check_redirections(t_redir *redirect, t_tools *tool)
 {
@@ -21,6 +55,7 @@ void	check_redirections(t_redir *redirect, t_tools *tool)
 	{
 		if (tmp->id == 1)
 		{
+			close_fds(tool->fd_in);
 			tool->fd_in = open (tmp->content, O_RDONLY);
 			if (tool->fd_in == -1)
 			{
@@ -29,9 +64,15 @@ void	check_redirections(t_redir *redirect, t_tools *tool)
 			}
 		}
 		else if (tmp->id == 2)
+		{
+			close_fds(tool->fd_out);
 			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		}
 		else if (tmp->id == 5)
+		{
+			close_fds(tool->fd_out);
 			tool->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		}
 		else if (tmp->id == 4)
 			here_doc(tmp, tool);
 		tmp = tmp->next;
@@ -121,8 +162,9 @@ int	execute_last_command(t_data *data, t_list *tmp)
 	{
 		close (data->tool->fd_out);
 		exit_status_command(&data);
-		if (!ft_strcmp(tmp->arr[0], "exit"))
-			exit(exit_status_command(&data));
+		if (tmp->arr[0])
+			if (!ft_strcmp(tmp->arr[0], "exit"))
+				exit(exit_status_command(&data));
 	}
 	return (pid);
 }
@@ -140,6 +182,33 @@ void	close_n_wait(t_tools *tool, int *pid)
 		i++;
 	}
 }
+//new
+int builtin_or_other_cmd(t_data *data, t_list *tmp)
+{
+	char	*str;
+
+	if (tmp->arr[0])
+	{
+		str = ft_strmapi(tmp->arr[0], ft_tolower);
+		if (data->f_list->inside->id)
+			return (1);
+		else if (!ft_strcmp(str, "echo"))
+			return (2);
+		else if (!ft_strcmp(tmp->arr[0], "cd"))
+			return (3);
+		else if (!ft_strcmp(tmp->arr[0], "pwd"))
+			return (4);
+		else if (!strcmp(tmp->arr[0], "export"))
+			return (5);
+		else if (!ft_strcmp(str, "env"))
+			return (6);
+		else if (!ft_strcmp(tmp->arr[0], "unset"))
+			return (7);
+		else if (!ft_strcmp(tmp->arr[0], "exit"))
+			return (8);
+	}
+	return (0);
+}
 
 void	execute_commands(t_data *data)
 {
@@ -155,6 +224,11 @@ void	execute_commands(t_data *data)
 	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
 	data->tool = malloc (sizeof(t_tools));
+	//new
+	if (!data->f_list->pipe_after && builtin_or_other_cmd(data, tmp))
+	{	check_builtins_or_other_cmd(data, tmp);
+		return ;
+	}
 	while (tmp->next)
 	{
 		pid[i++] = execute_commands_(data, tmp);

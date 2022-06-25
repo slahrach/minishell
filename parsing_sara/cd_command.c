@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_command.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:00:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 23:14:09 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/11 23:37:04 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	cd_command(t_list **list, t_env *env)
 	arr = (*list)->arr;
 	if (!arr[1])
 	{
+		puts("waaaach dkhlti hna u bitch");
 		cd_home(list, env);
 		return ;
 	}
