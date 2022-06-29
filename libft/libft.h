@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 01:54:08 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/28 23:53:03 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_redir
 
 typedef struct s_list
 {
+	int				fd_in;
+	int				fd_out;
 	int				err;
 	int				id;
 	int				exit_status;
@@ -43,15 +45,13 @@ typedef struct s_list
 	int				pipe_before;
 	t_redir			*redirect;
 	struct s_list	*next;
+	
 }	t_list;
 
 typedef struct s_tools
 {
 	int		p[2];
 	char	*path;
-	int		fd_in;
-	int		fd_out;
-	int		fd_here;
 }	t_tools;
 
 int			ft_isalpha(int c);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 01:54:57 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/06/29 01:10:17 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ t_list	*_new(void)
 	new->err = 0;
 	new->next = NULL;
 	new->pipe_after = 0;
+	new->fd_in = 0;
+	new->fd_out = 0;
 	new->pipe_before = 0;
 	new->redirect = NULL;
 	new->arr = NULL;

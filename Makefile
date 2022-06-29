@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/06/10 12:07:53 by iouardi          ###   ########.fr        #
+#    Updated: 2022/06/28 22:30:51 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ OBJS = ${SRCS:.c=.o}
 ${NAME} : ${OBJS}
 		@make -C libft
 		@cp libft/libft.a ./
-		gcc ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I/Users/slahrach/.brew/opt/readline/include -fsanitize=address -g
+		gcc ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include -fsanitize=address -g
 
 all : ${NAME}
 
@@ -55,6 +55,6 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} -I /Users/slahrach/.brew/opt/readline/include -c $<
+	${CC} -I /Users/iouardi/.brew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re

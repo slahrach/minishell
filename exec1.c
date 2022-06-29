@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/11 23:46:54 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/29 01:01:30 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ void	exit_command(t_data *data, t_list **f_list)
 		else
 			(*f_list)->exit_status = atoi % 256;
 	}
-	// printf("%d=========\n", (*f_list)->exit_status);
+	printf("%d======before===\n", (*f_list)->exit_status);
 	exit_status_command(data);
+	printf("%d=====after====\n", g_last_exitstatus);
 	printf("exit\n");
-	//exit(0);
+	exit(g_last_exitstatus);
 }
 
 int	exit_status_command(t_data *data)
@@ -89,7 +90,7 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 	if (tmp->arr[0])
 	{
 		str = ft_strmapi(tmp->arr[0], ft_tolower);
-		if (data->f_list->inside->id)
+		if (data->f_list->inside && data->f_list->inside->id)
 			print_status(data);
 		else if (!ft_strcmp(str, "echo"))
 			echo_command(&tmp);
