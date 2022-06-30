@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/28 23:52:53 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/30 19:50:42 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,8 @@ char		*find_path(t_env *env, char	*cmd);
 void		print_error(char *cmd);
 int			ft_lstsize_env(t_env *lst);
 char		**linked_list_to_table(t_env *env);
-void		here_doc(t_redir *tmp, t_tools *tool);
+void		here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool);
 char		*get_next_line(int fd);
+void		check_redirections(t_data *data, t_list **f_list, t_tools *tool);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/29 01:55:46 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/06/30 20:15:44 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	close_fds(int fd)
 		close (fd);
 }
 
-void	check_pipes(t_list **list, t_tools *tool)
+void	check_pipes(t_data *data, t_list **list, t_tools *tool)
 {
 	t_list *tmp;
 
@@ -31,46 +31,53 @@ void	check_pipes(t_list **list, t_tools *tool)
 			exit (1);
 		tmp->fd_out = tool->p[1];
 		tmp->next->fd_in = tool->p[0];
+		check_redirections(data, &tmp, tool);
 		tmp = tmp->next;
 	}
 	tmp->fd_out = STDOUT_FILENO;
+	check_redirections(data, &tmp, tool);
 }
 
-void	check_redirections(t_list **f_list, t_redir *redirect)
+void	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 {
-	t_redir *tmp;
+	t_redir	*tmp;
+	t_list	*tmp1;
 
-	tmp = redirect;
-	printf("%s\n", redirect->content);
+	tmp1 = (*f_list);
+	tmp = tmp1->redirect;
 	while (tmp)
 	{
 		if (tmp->id == 1)
 		{
-			(*f_list)->fd_in = open (tmp->content, O_RDONLY);
-			if ((*f_list)->fd_in == -1)
+			tmp1->fd_in = open (tmp->content, O_RDONLY);
+			if (tmp1->fd_in == -1)
 			{
 				printf("bash: %s: No such file or directory\n", tmp->content);
 				exit(1);
 			}
 		}
-		else if (tmp->id == 2)
+		if (tmp->id == 2)
 		{
-			(*f_list)->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			tmp1->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			if (tmp1->fd_out == -1)
+			{
+				printf("bash: %s: No such file or directory\n", tmp->content);
+				exit(1);
+			}
 		}
-		else if (tmp->id == 5)
+		if (tmp->id == 5)
 		{
-			(*f_list)->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			tmp1->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
 		}
-		/*else if (tmp->id == 4)
+		else if (tmp->id == 4)
 		{
-			here_doc(tmp, data->tool);
+			here_doc(tmp, tmp1, tool);
 			// if (data->error)
 			// {
 			// 	printf("Error\nsyntax error !\n");
 			// 	g_last_exitstatus = 258;
 			// }
-			
-		}*/
+		}
 		tmp = tmp->next;
 	}
 }
@@ -106,9 +113,6 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	pid = fork();
 	if (pid == -1)
 		exit(1);
-	check_redirections(&tmp, tmp->redirect);
-	printf("in %d = %d\n",i, tmp->fd_in);
-	printf("out %d= %d\n",i, tmp->fd_out);
 	if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_IGN);
@@ -117,20 +121,20 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		check_builtins_or_other_cmd(data, tmp);
 		exit(1);
 	}
-	close (tmp->fd_in);
-	close (tmp->fd_out);
-	i++;
+	else
+	{
+		close (tmp->fd_in);
+		close (tmp->fd_out);
+		i++;
+	}
 	return (pid);
 }
 
-
-void	close_n_wait(t_tools *tool, int *pid)
+void	close_n_wait(t_tools *tool, int *pid, t_list *tmp)
 {
 	int		i;
 
 	i = 0;
-	close(tool->p[0]);
-	close(tool->p[1]);
 	while (pid[i])
 	{
 		waitpid(pid[i], NULL, 0);
@@ -168,6 +172,7 @@ int builtin_or_other_cmd(t_data *data, t_list *tmp)
 void	execute_commands(t_data *data)
 {
 	t_list	*tmp;
+	t_list	*tmp1;
 	int		*pid;
 	int		i;
 	int		fd_in;
@@ -185,14 +190,15 @@ void	execute_commands(t_data *data)
 		check_builtins_or_other_cmd(data, tmp);
 		return ;
 	}
-	check_pipes(&data->f_list, data->tool);
+	check_pipes(data, &data->f_list, data->tool);
+	tmp = data->f_list;
 	while (tmp)
 	{
 		pid[i++] = execute_commands_(data, tmp);
+		tmp1 = tmp;
 		tmp = tmp->next;
 	}
-	// pid[i] = execute_last_command(data, tmp);
-	close_n_wait(data->tool, pid);
+	close_n_wait(data->tool, pid, tmp1);
 	dup2(fd_in, 0);
 	dup2(fd_out, 1);
 }
