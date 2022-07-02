@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/02 16:00:21 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/02 16:30:28 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 		tool->path = ft_strdup(tmp->arr[0]);
 	else
 		tool->path = find_path(data->env, tmp->arr[0]);
-	if (!tool->path)
+	if (!tool->path)//in this case even if there r pipes this msg should be printed in the STDOUT
 	{
 		printf("bash: %s: command not found\n", tmp->arr[0]);
 		exit(1);
