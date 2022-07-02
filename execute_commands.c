@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/30 20:15:44 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/02 16:00:21 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 
 int	execute_commands_(t_data *data, t_list *tmp)
 {
-	static int i = 1;
 	int		pid;
 
 	pid = fork();
@@ -117,6 +116,7 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		dup2(tmp->fd_in, 0);
+		close(data->tool->p[0]);
 		dup2(tmp->fd_out, 1);
 		check_builtins_or_other_cmd(data, tmp);
 		exit(1);
@@ -125,7 +125,6 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	{
 		close (tmp->fd_in);
 		close (tmp->fd_out);
-		i++;
 	}
 	return (pid);
 }
@@ -135,6 +134,8 @@ void	close_n_wait(t_tools *tool, int *pid, t_list *tmp)
 	int		i;
 
 	i = 0;
+	close(tool->p[0]);
+	close(tool->p[1]);
 	while (pid[i])
 	{
 		waitpid(pid[i], NULL, 0);
