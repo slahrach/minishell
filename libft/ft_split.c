@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/09 20:54:05 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/26 00:44:36 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/03 22:42:25 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,64 @@ char	**ft_split(char const *s, char c)
 	return (ptr);
 }
 
+static void	fill_1(char	**ptr, int r, char const *s, char c, int i)
+{
+	int	j;
+
+	j = 0;
+	if (i == 0)
+	{
+		ptr[j] = ft_strdup(s);
+		j++;
+	}
+	else
+		while (j < 2)
+		{
+			if (j == 0)
+				ptr[j] = ft_strndup(s, r);
+			else
+				ptr[j] = ft_strdup(ft_strchr(s, c) + 1);
+			if (!ptr[j])
+			{
+				free_multi(ptr, j);
+				return ;
+			}
+			j++;
+		}
+	ptr[j] = NULL;
+}
+
+char	**ft_split1(char const *s, char c)
+{
+	int		r;
+	char	**ptr;
+	int		i;
+
+	if (!s)
+		return (NULL);
+	r = 0;
+	i = 1;
+	while (s[r] != c && s[r])
+		r++;
+	if (r == (int)ft_strlen(s))
+		i = 0;
+	ptr = (char **)malloc((3) * sizeof (char *));
+	if (!ptr)
+		return (NULL);
+	fill_1 (ptr, r, s, c, i);
+	return (ptr);
+}
+
 // #include <stdio.h>
 // int main()
 // {
-// 	int	i;
-// 	i = 0;
-// 	char **ptr;
-// 	char s[] = "54554541";
-// 	ptr = ft_split(s, '\t');
-// 	while(ptr[i] != NULL)
+// 	char *str  = "hjgjhkjlk";
+// 	int i = 0;
+// 	char **s = ft_split1(str, '=');
+// 	while (s[i])
 // 	{
-// 		printf("%s\n",ptr[i]);
+// 		printf("%s\n", s[i]);
 // 		i++;
 // 	}
 // }
+

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/29 01:01:30 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/04 01:23:35 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,7 @@ void	exit_command(t_data *data, t_list **f_list)
 		else
 			(*f_list)->exit_status = atoi % 256;
 	}
-	printf("%d======before===\n", (*f_list)->exit_status);
 	exit_status_command(data);
-	printf("%d=====after====\n", g_last_exitstatus);
 	printf("exit\n");
 	exit(g_last_exitstatus);
 }
@@ -61,7 +59,7 @@ int	exit_status_command(t_data *data)
 
 void	print_status(t_data *data)
 {
-	printf("%s : command not found\n", data->f_list->inside->content);
+	printf("%d : command not found\n", g_last_exitstatus);
 	data->f_list->exit_status = 127;
 }
 

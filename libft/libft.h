@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/28 23:53:03 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/03 22:27:12 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,6 @@ void		ft_lstclear1(t_list **lst);
 void		clear_env(t_env **env);
 void		ft_clear(t_redir **lst);
 char		*ft_strjoin0(char *s1, char *s2);
+char		**ft_split1(char const *s, char c);
 
 #endif

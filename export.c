@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:02:23 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/06 22:14:31 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/03 22:29:12 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	cases(t_list **list, char *arr, t_env *env)
 	flag = 1;
 	if (!ft_strchr(arr, '='))
 		flag = 0;
-	splited = ft_split(arr, '=');
+	splited = ft_split1(arr, '=');
 	if (!parse_args(list, splited[0]))
 		return ;
 	if (!already_exists_export(splited, env, flag))

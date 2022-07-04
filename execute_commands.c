@@ -6,17 +6,11 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/02 16:30:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/04 01:22:50 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	close_fds(int fd)
-{
-	if (fd != 0 && fd != 1)
-		close (fd);
-}
 
 void	check_pipes(t_data *data, t_list **list, t_tools *tool)
 {
@@ -53,31 +47,16 @@ void	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 			if (tmp1->fd_in == -1)
 			{
 				printf("bash: %s: No such file or directory\n", tmp->content);
+				g_last_exitstatus = 1;
 				exit(1);
 			}
 		}
 		if (tmp->id == 2)
-		{
 			tmp1->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-			if (tmp1->fd_out == -1)
-			{
-				printf("bash: %s: No such file or directory\n", tmp->content);
-				exit(1);
-			}
-		}
 		if (tmp->id == 5)
-		{
 			tmp1->fd_out = open (tmp->content, O_WRONLY | O_CREAT | O_APPEND, 0777);
-		}
 		else if (tmp->id == 4)
-		{
 			here_doc(tmp, tmp1, tool);
-			// if (data->error)
-			// {
-			// 	printf("Error\nsyntax error !\n");
-			// 	g_last_exitstatus = 258;
-			// }
-		}
 		tmp = tmp->next;
 	}
 }
@@ -98,20 +77,24 @@ void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 	if (!tool->path)//in this case even if there r pipes this msg should be printed in the STDOUT
 	{
 		printf("bash: %s: command not found\n", tmp->arr[0]);
-		exit(1);
+		tmp->exit_status = 1;
+		return ;
 	}
 	execve(tool->path, tmp->arr, linked_list_to_table(data->env));
+	tmp->exit_status = 1;
 	print_error(tmp->arr[0]);
-	exit(1);
+	// return ;
 }
 
 int	execute_commands_(t_data *data, t_list *tmp)
 {
 	int		pid;
+	int		err;
 
 	pid = fork();
 	if (pid == -1)
 		exit(1);
+	err = 0;
 	if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_IGN);
@@ -119,7 +102,7 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		close(data->tool->p[0]);
 		dup2(tmp->fd_out, 1);
 		check_builtins_or_other_cmd(data, tmp);
-		exit(1);
+		exit(g_last_exitstatus);
 	}
 	else
 	{
@@ -142,7 +125,7 @@ void	close_n_wait(t_tools *tool, int *pid, t_list *tmp)
 		i++;
 	}
 }
-//new
+
 int builtin_or_other_cmd(t_data *data, t_list *tmp)
 {
 	char	*str;
@@ -185,14 +168,18 @@ void	execute_commands(t_data *data)
 	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
 	data->tool = malloc (sizeof(t_tools));
-	//new
 	if (!data->f_list->pipe_after && builtin_or_other_cmd(data, tmp) && !tmp->redirect)
 	{	
 		check_builtins_or_other_cmd(data, tmp);
 		return ;
 	}
-	check_pipes(data, &data->f_list, data->tool);
 	tmp = data->f_list;
+	if (tmp->err)
+	{
+		printf("Error\nsyntax error !\n");
+		g_last_exitstatus = 258;
+	}
+	check_pipes(data, &data->f_list, data->tool);
 	while (tmp)
 	{
 		pid[i++] = execute_commands_(data, tmp);
