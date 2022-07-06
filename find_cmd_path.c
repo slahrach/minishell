@@ -6,18 +6,18 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:08:18 by iouardi           #+#    #+#             */
-/*   Updated: 2022/06/07 06:51:31 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 03:37:14 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char    **find_path_1(t_env *env)
+char	**find_path_1(t_env **env)
 {
-	t_env   *tmp;
-	char    **path;
+	t_env	*tmp;
+	char	**path;
 
-	tmp = env;
+	tmp = *env;
 	path = NULL;
 	while (tmp)
 	{
@@ -57,27 +57,27 @@ char	*find_path2(char **path, int i)
 	return (NULL);
 }
 
-void	free_all(char **cmd_temp1)//recheck this cz it may cz a prblm
+int	path_removed(t_env **env, char *cmd, char **path)
 {
-	int		i;
-
-	i = 0;
-	while (cmd_temp1[i])
+	if (!path)
 	{
-		free (cmd_temp1[i]);
-		cmd_temp1[i] = NULL;
-		i++;
+		printf("bash: %s: No such file or directory\n", cmd);
+		(*env)->flag_unset_path = 1;
+		return (0);
 	}
-	free (cmd_temp1);
+	return (1);
 }
 
-char	*find_path(t_env *env, char	*cmd)
+char	*find_path(t_env **env, char *cmd)
 {
 	int		i;
 	char	**path;
 	char	*path_tmp;
 
 	path = find_path_1(env);
+	(*env)->flag_unset_path = 0;
+	if (!path_removed(env, cmd, path))
+		return (NULL);
 	i = 0;
 	while (path[i])
 	{

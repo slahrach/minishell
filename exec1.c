@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/04 01:23:35 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 07:45:28 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,43 +24,23 @@ void	exit_command(t_data *data, t_list **f_list)
 		if (!atoi && ft_strcmp(list->next->content, "0"))
 		{
 			write(2, "numeric argument required !\n", 28);
-			(*f_list)->exit_status = 255;
+			g_last_exitstatus = 255;
 		}
 		else if (ft_lstsize((list)) > 2)
 		{
 			write(2, "too many arguments \n", 21);
-			(*f_list)->exit_status = 1;
+			g_last_exitstatus = 1;
 		}
 		else
-			(*f_list)->exit_status = atoi % 256;
+			g_last_exitstatus = atoi % 256;
 	}
-	exit_status_command(data);
 	printf("exit\n");
-	exit(g_last_exitstatus);
-}
-
-int	exit_status_command(t_data *data)
-{
-	t_list	*list;
-
-	list = data->f_list;
-	while (list)
-	{
-		if (list->exit_status)
-		{
-			g_last_exitstatus = list->exit_status;
-			return(g_last_exitstatus);
-		}
-		g_last_exitstatus = 0;
-		list = list->next;
-	}
-	return (g_last_exitstatus);
 }
 
 void	print_status(t_data *data)
 {
-	printf("%d : command not found\n", g_last_exitstatus);
-	data->f_list->exit_status = 127;
+	printf("%s : command not found\n", data->f_list->inside->content);
+	g_last_exitstatus = 127;
 }
 
 int	check_builtins(t_data *data, t_list *tmp)
@@ -101,11 +81,10 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 		else if (!ft_strcmp(str, "env"))
 			env_command(&tmp, data->env);
 		else if (!ft_strcmp(tmp->arr[0], "unset"))
-			unset_command(&tmp, data->env);
+			unset_command(&tmp, &(data->env));
 		else if (!ft_strcmp(tmp->arr[0], "exit"))
 			exit_command(data, &tmp);
 		else
 			other_commands(data, tmp, data->tool);
-		exit_status_command(data);
 	}
 }

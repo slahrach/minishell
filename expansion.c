@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 18:50:57 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 00:02:06 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/05 00:14:27 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	other(char *token, int *i, t_list **head)
 	}
 }
 
-void	change(t_list **head, t_env *env)
+void	change(t_list **head, t_env **env)
 {
 	char	*str;
 	t_list	*temp;
@@ -98,7 +98,7 @@ void	change(t_list **head, t_env *env)
 	}
 }
 
-char	*expansion(t_data *data, char *token, t_env *env)
+char	*expansion(t_data *data, char *token, t_env **env)
 {
 	int		i;
 	char	*result;

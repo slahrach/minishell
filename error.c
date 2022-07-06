@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 01:37:47 by slahrach          #+#    #+#             */
-/*   Updated: 2022/05/14 16:53:35 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/06 02:25:53 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,4 @@ void	error_delimiter(t_list **head, t_data *data, int a)
 		redi = redi->next;
 	}
 	error(data, a);
-
 }

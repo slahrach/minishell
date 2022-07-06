@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:00:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 23:37:04 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 08:11:10 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ static	void	cd_home(t_list **list, t_env *env)
 	if (!path)
 	{
 		printf("cd: HOME not set \n");
-		(*list)->exit_status = 1;
+		g_last_exitstatus = 1;
 		return ;
 	}
 	if (chdir(path))
 	{
 		printf("bash: cd: %s: No such file or directory\n", path);
-		(*list)->exit_status = 1;
+		g_last_exitstatus = 1;
 		return ;
 	}
 	change_pwd_env(env);

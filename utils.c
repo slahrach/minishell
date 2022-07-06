@@ -6,20 +6,20 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 06:00:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/29 01:10:17 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/05 00:25:24 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_prompt(t_env *env)
+char	*find_prompt(t_data *data)
 {
 	char	*folder;
 	char	*user;
 	char	*prompt;
 
-	folder = ft_getenv(env, "PWD");
-	user = ft_getenv(env, "USER");
+	folder = ft_getenv(&data->env, "PWD");
+	user = ft_getenv(&data->env, "USER");
 	if (ft_strrchr(folder, '/'))
 		folder = ft_strrchr(folder, '/') + 1;
 	folder = ft_strjoin ("\033[1;33m", folder);

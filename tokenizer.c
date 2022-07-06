@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:54:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 00:01:11 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/06 03:45:28 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static	char	*remove_quotes(int *i, char *line, t_env *env, t_data *data)
+static	char	*remove_quotes(int *i, char *line, t_env **env, t_data *data)
 {
+	t_list	*last;
 	int		j;
 	char	*str1;
 
@@ -25,13 +26,17 @@ static	char	*remove_quotes(int *i, char *line, t_env *env, t_data *data)
 		return (NULL);
 	}
 	str1 = ft_substr(line, (*i) + 1, j);
+	last = ft_lstlast(data->list_token);
 	if (line[*i] == '"')
-		str1 = expansion(data, str1, env);
+	{
+		if (!last || (last && last->id != DELIMITER))
+			str1 = expansion(data, str1, env);
+	}
 	*i += j + 2;
 	return (str1);
 }
 
-char	*handle_quoting(int	*i, char *line, t_data *data, t_env *env)
+char	*handle_quoting(int	*i, char *line, t_data *data, t_env **env)
 {
 	t_list	**list;
 	char	*str2;
@@ -57,26 +62,27 @@ char	*handle_quoting(int	*i, char *line, t_data *data, t_env *env)
 	return (NULL);
 }
 
-char	*non_quoting(int *i, char *line, t_data *data, t_env *env)
+char	*non_quoting(int *i, char *line, t_data *data, t_env **env)
 {
-	t_list	**list;
+	t_list	*last;
 	int		id;
 	char	*str1;
 	char	*str2;
 	int		j;
 
-	list = &data->list_token;
 	if (line[*i] && !is_whitespace(line[*i]))
 	{
 		id = is_special(line[*i]);
-		if (check_special(i, line, id, list))
+		if (check_special(i, line, id, &data->list_token))
 			return (NULL);
 		j = *i;
 		while (line[j] && !is_whitespace(line[j]) && !is_special(line[j])
 			&& line[j] != '"' && line[j] != '\'')
 			j++;
 		str1 = ft_substr(line, *i, j - (*i));
-		str1 = expansion(data, str1, env);
+		last = ft_lstlast(data->list_token);
+		if (!last || (last && last->id != DELIMITER))
+			str1 = expansion(data, str1, env);
 		*i = j;
 		str2 = handle_quoting(i, line, data, env);
 		if (str2)
@@ -102,14 +108,12 @@ void	call(t_data *data, char *str, t_list **list)
 	}
 }
 
-void	tokenize(char *line_t, t_data *data, t_env *env)
+void	tokenize(char *line_t, t_data *data, t_env **env, t_list **list)
 {
-	t_list	**list;
 	char	*line;
 	char	*str;
 	int		i;
 
-	list = &data->list_token;
 	i = 0;
 	*list = NULL;
 	line = ft_strtrim(line_t, "\n\f\t\v\r ");
@@ -124,4 +128,5 @@ void	tokenize(char *line_t, t_data *data, t_env *env)
 			i++;
 	}
 	free(line);
+	line = NULL;
 }

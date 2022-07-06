@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 23:39:53 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 00:13:11 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/06 03:47:15 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,18 @@ t_list	*new(void)
 	new->arr = NULL;
 	new->content = NULL;
 	return (new);
+}
+
+void	free_all(char **cmd_temp1)
+{
+	int		i;
+
+	i = 0;
+	while (cmd_temp1[i])
+	{
+		free (cmd_temp1[i]);
+		cmd_temp1[i] = NULL;
+		i++;
+	}
+	free (cmd_temp1);
 }

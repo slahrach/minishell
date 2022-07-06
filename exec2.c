@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/03 23:13:19 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/03 23:13:24 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 07:19:42 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	echo_command(t_list **list)
 	}
 	if (nl)
 		printf("\n");
+	g_last_exitstatus = 0;
 }
 
 void	pwd_command(t_list **list)
@@ -47,7 +48,7 @@ void	pwd_command(t_list **list)
 	else
 	{
 		printf("pwd : command failed !\n");
-		(*list)->exit_status = 1;
+		g_last_exitstatus = 1;
 	}
 }
 
@@ -62,7 +63,7 @@ void	env_command(t_list **list, t_env *env)
 	{
 		while (tmp)
 		{
-			if (tmp->flag)
+			if (tmp->flag && tmp->value)
 				printf("%s=%s\n", tmp->name, tmp->value);
 			tmp = tmp->next;
 		}
@@ -70,7 +71,7 @@ void	env_command(t_list **list, t_env *env)
 	else
 	{
 		printf("too many arguments !\n");
-		(*list)->exit_status = 127;
+		g_last_exitstatus = 127;
 	}
 }
 
@@ -81,7 +82,7 @@ int	parse_args(t_list **list, char *var)
 	if (!ft_isalpha(var[0]) && var[0] != '_')
 	{
 		printf("bash: unset: `%s': not a valid identifier\n", var);
-		(*list)->exit_status = 1;
+		g_last_exitstatus = 1;
 		return (0);
 	}
 	i = 1;
@@ -90,7 +91,7 @@ int	parse_args(t_list **list, char *var)
 		if (!ft_isalnum(var[i]) && var[i] != '_')
 		{
 			printf("bash: unset: `%s': not a valid identifier\n", var);
-			(*list)->exit_status = 1;
+			g_last_exitstatus = 1;
 			return (0);
 		}
 		i++;
@@ -98,7 +99,7 @@ int	parse_args(t_list **list, char *var)
 	return (1);
 }
 
-void	unset_command(t_list **list, t_env *env)
+void	unset_command(t_list **list, t_env **env)
 {
 	char	**arr;
 	int		i;
@@ -112,7 +113,7 @@ void	unset_command(t_list **list, t_env *env)
 			i++;
 			continue ;
 		}
-		unset_node(&env, arr[i]);
+		unset_node(env, arr[i]);
 		i++;
 	}
 }

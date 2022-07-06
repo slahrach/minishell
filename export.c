@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:02:23 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/03 22:29:12 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 03:29:05 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,26 @@ void	print_export_env(t_env *env)
 	}
 }
 
+int	already_exists_export_supp(t_env *tmp, char **arg, int flag)
+{
+	if ((tmp->value && arg[1]))
+	{
+		if (!ft_strcmp(tmp->value, arg[1]))
+			return (1);
+		else
+			return (2);
+	}
+	else if (!tmp->value && arg[1])
+		return (2);
+	else if ((!arg[1] && flag))
+		return (3);
+	else if (!arg[1] && !tmp->value && !flag)
+		return (1);
+	else if (!arg[1] && tmp->value && !flag)
+		return (1);
+	return (10);
+}
+
 static int	already_exists_export(char **arg, t_env *env, int flag)
 {
 	t_env	*tmp;
@@ -38,21 +58,12 @@ static int	already_exists_export(char **arg, t_env *env, int flag)
 	{
 		if (!ft_strcmp(tmp->name, arg[0]))
 		{
-			if ((tmp->value && arg[1]))
-			{
-				if (!ft_strcmp(tmp->value, arg[1]))
-					return (1);
-				else
-					return (2);
-			}
-			else if (!tmp->value && arg[1])
+			if (already_exists_export_supp(tmp, arg, flag) == 1)
+				return (1);
+			if (already_exists_export_supp(tmp, arg, flag) == 2)
 				return (2);
-			else if ((!arg[1] && flag))
+			if (already_exists_export_supp(tmp, arg, flag) == 3)
 				return (3);
-			else if (!arg[1] && !tmp->value && !flag)
-				return (1);
-			else if (!arg[1] && tmp->value && !flag)
-				return (1);
 		}
 		tmp = tmp->next;
 	}
@@ -95,7 +106,7 @@ void	export_command(t_list **list, t_env *env)
 		if (*arr[i] == '=')
 		{
 			printf("export: `=': bad assigment\n");
-			(*list)->exit_status = 1;
+			g_last_exitstatus = 1;
 			return ;
 		}
 		cases(list, arr[i], env);

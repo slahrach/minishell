@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   devide.c                                           :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 00:20:52 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/06 03:44:44 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	check(t_data *data, t_list **list, t_list **head)
 
 	if (!(*list)->next)
 	{
-		error_delimiter(head, data , 0);
+		error_delimiter(head, data, 0);
 		return (1);
 	}
 	content = ft_strdup((*list)->next->content);

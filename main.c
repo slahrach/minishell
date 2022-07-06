@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/28 23:53:41 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 08:03:22 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,43 +32,46 @@ void	handle_sig(int sig)
 	g_last_exitstatus = 130;
 }
 
+void	main_supp(t_data *data)
+{
+	add_history(data->line);
+	tokenize(data->line, data, &data->env, &data->list_token);
+	if (!data->error)
+	{
+		data->f_list = parse(data, &data->list_token);
+		if (!data->error)
+			execute_commands(data);
+		ft_lstclear1(&data->f_list);
+	}
+	else
+		ft_lstclear(&data->list_token);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	t_data	data;
+	t_data	*data;
 	char	*prompt;
 
 	if (!argc || !argv)
 		return (0);
-	set_env(envp, &data.env);
-
+	data = malloc(sizeof(t_data));
+	set_env(envp, &data->env);
 	while (1)
 	{
-		data.status = 0;
-		data.error = 0;
-		prompt = find_prompt(data.env);
+		data->status = 0;
+		data->error = 0;
+		prompt = find_prompt(data);
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
-		data.line = readline (prompt);
-		signal(SIGQUIT, handle_sig);
+		data->line = readline (prompt);
 		signal(SIGINT, handle_sig);
-		if (!data.line)
+		if (!data->line)
 			break ;
-		if (*data.line)
-		{
-			add_history(data.line);
-			tokenize(data.line, &data, data.env);
-			if (!data.error)
-			{
-				data.f_list = parse(&data, &data.list_token);
-				if (!data.error)
-					execute_commands(&data);
-				ft_lstclear1(&data.f_list);
-			}
-			else
-				ft_lstclear(&data.list_token);
-		}
+		if (*data->line)
+			main_supp(data);
 		free(prompt);
 	}
-	clear_env(&data.env);
+	clear_env(&data->env);
+	free(data);
 	return (0);
 }

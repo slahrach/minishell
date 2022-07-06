@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/03 22:27:12 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 06:02:02 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_env
 	char			*name;
 	char			*value;
 	int				flag;
+	int				flag_unset_path;
 	struct s_env	*next;
 }	t_env;
 
@@ -45,7 +46,6 @@ typedef struct s_list
 	int				pipe_before;
 	t_redir			*redirect;
 	struct s_list	*next;
-	
 }	t_list;
 
 typedef struct s_tools

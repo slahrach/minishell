@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 23:33:32 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/06 07:41:16 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,16 @@ void	set_env(char **envp, t_env **env)
 	}
 }
 
-char	*ft_getenv(t_env *env, char *name)
+char	*ft_getenv(t_env **env_, char *name)
 {
+	t_env	*env;
+
+	env = *env_;
 	while (env)
 	{
-		if (!ft_strcmp(name, env->name))
-			return (env->value);
-		env = env->next;
+		if ((env)->name && !ft_strcmp(name, (env)->name))
+			return ((env)->value);
+		(env) = (env)->next;
 	}
 	return (NULL);
 }
@@ -85,43 +88,13 @@ void	env_add_change1(t_env **env, char *name, char *value, int flag)
 	{
 		if (!ft_strcmp(name, copy->name))
 		{
-			free(copy->value);
-			copy->value = value;
-			copy->flag = flag;
+			if (ft_strcmp(copy->value, value))
+			{
+				free(copy->value);
+				copy->value = value;
+				copy->flag = flag;
+			}
 		}
-		copy = copy->next;
-	}
-}
-
-void	unset_node(t_env **env, char *name)
-{
-	t_env	*after_node;
-	t_env	*before_node;
-	t_env	*copy;
-	int		sign;
-
-	copy = *env;
-	sign = 0;
-	while (copy)
-	{
-		if (!sign)
-		{
-			before_node = copy;
-			sign = 1;
-		}
-		if (!ft_strcmp(name, copy->name))
-		{
-			if (!copy->next)
-				after_node = NULL;
-			else
-				after_node = copy->next;
-			free(copy->name);
-			free(copy->value);
-			free(copy);
-			before_node->next = after_node;
-			return ;
-		}
-		before_node = copy;
 		copy = copy->next;
 	}
 }
