@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/03 23:13:19 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/06 07:19:42 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/14 21:39:53 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	env_command(t_list **list, t_env *env)
 	{
 		while (tmp)
 		{
-			if (tmp->flag && tmp->value)
+			if (tmp->flag && tmp->name && tmp->value)
 				printf("%s=%s\n", tmp->name, tmp->value);
 			tmp = tmp->next;
 		}
@@ -82,7 +82,7 @@ int	parse_args(t_list **list, char *var)
 	if (!ft_isalpha(var[0]) && var[0] != '_')
 	{
 		printf("bash: unset: `%s': not a valid identifier\n", var);
-		g_last_exitstatus = 1;
+		g_last_exitstatus = 258;
 		return (0);
 	}
 	i = 1;
@@ -91,7 +91,7 @@ int	parse_args(t_list **list, char *var)
 		if (!ft_isalnum(var[i]) && var[i] != '_')
 		{
 			printf("bash: unset: `%s': not a valid identifier\n", var);
-			g_last_exitstatus = 1;
+			g_last_exitstatus = 258;
 			return (0);
 		}
 		i++;

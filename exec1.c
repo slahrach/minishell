@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/06 07:45:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/14 21:10:24 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 		else if (!ft_strcmp(str, "echo"))
 			echo_command(&tmp);
 		else if (!ft_strcmp(tmp->arr[0], "cd"))
-			cd_command(&tmp, data->env);
+			cd_command(&tmp, &data->env);
 		else if (!ft_strcmp(tmp->arr[0], "pwd"))
 			pwd_command(&tmp);
 		else if (!strcmp(tmp->arr[0], "export"))

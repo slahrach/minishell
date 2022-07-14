@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/06 07:41:16 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/14 21:45:28 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,46 @@ void	env_add_change1(t_env **env, char *name, char *value, int flag)
 				free(copy->value);
 				copy->value = value;
 				copy->flag = flag;
+				return ;
+			}
+		}
+		copy = copy->next;
+	}
+}
+
+int	already_exists_oldpwd(t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->name, "OLDPWD"))
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
+void	env_add_change2(t_env **env, char *name, int flag)
+{
+	t_env	*copy;
+	char	*OLDPWD;
+
+	copy = *env;
+	while (copy)
+	{
+		if (!ft_strcmp(name, copy->name))
+		{
+			if (!already_exists_oldpwd(*env))
+			{
+				add_back(env, new_node("OLDPWD", copy->value, copy->flag));
+				return ;
+			}
+			else
+			{
+				env_add_change1(env, "OLDPWD", copy->value, flag);
+				return ;
 			}
 		}
 		copy = copy->next;

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/06 07:44:46 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/14 21:09:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void		pwd_command(t_list **list);
 void		env_command(t_list **list, t_env *env);
 void		unset_command(t_list **list, t_env **env);
 int			parse_args(t_list **list, char *var);
-void		cd_command(t_list **list, t_env *env);
+void		cd_command(t_list **list, t_env **env);
 void		export_command(t_list **list, t_env *env);
 void		other_commands(t_data *data, t_list *tmp, t_tools *tool);
 void		check_builtins_or_other_cmd(t_data *data, t_list *tmp);
@@ -96,6 +96,7 @@ void		check_pipes(t_data *data, t_list **list, t_tools *tool);
 void		close_n_wait(t_tools *tool, int *pid);
 int			builtin_or_other_cmd(t_data *data, t_list *tmp);
 void		free_all(char **cmd_temp1);
-static int	success_cd(t_env *env, char *arr);
+static int	success_cd(t_env **env, char *arr);
+void		env_add_change2(t_env **env, char *name, int flag);
 
 #endif
