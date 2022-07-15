@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:07:52 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/14 21:45:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/15 14:00:34 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,11 @@ void	env_add_change1(t_env **env, char *name, char *value, int flag)
 	copy = *env;
 	while (copy)
 	{
-		if (!ft_strcmp(name, copy->name))
+		if (name && copy->name && !ft_strcmp(name, copy->name))
 		{
-			if (ft_strcmp(copy->value, value))
+			if (value && copy->value && ft_strcmp(copy->value, value))
 			{
-				free(copy->value);
+				// free(copy->value);
 				copy->value = value;
 				copy->flag = flag;
 				return ;
@@ -122,7 +122,7 @@ void	env_add_change2(t_env **env, char *name, int flag)
 	copy = *env;
 	while (copy)
 	{
-		if (!ft_strcmp(name, copy->name))
+		if (name && copy->name && !ft_strcmp(name, copy->name))
 		{
 			if (!already_exists_oldpwd(*env))
 			{

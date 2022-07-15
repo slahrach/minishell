@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/06 08:02:25 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/15 12:35:38 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	{
 		signal(SIGQUIT, SIG_DFL);
 		dup2(tmp->fd_in, 0);
-		close(data->tool->p[0]);
 		dup2(tmp->fd_out, 1);
+		close(data->tool->p[0]);
 		check_builtins_or_other_cmd(data, tmp);
 		exit(g_last_exitstatus);
 	}
