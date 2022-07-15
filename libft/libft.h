@@ -50,7 +50,7 @@ typedef struct s_list
 
 typedef struct s_tools
 {
-	int		p[2];
+	int		*p;
 	char	*path;
 }	t_tools;
 

@@ -18,6 +18,10 @@ void	check_pipes(t_data *data, t_list **list, t_tools *tool)
 
 	tmp = *list;
 	tmp->fd_in = STDIN_FILENO;
+	data->tool = NULL;
+	data->tool = malloc (sizeof(t_tools));
+	data->tool->p = NULL;
+	data->tool->p = malloc (2 * sizeof (int));
 	while (tmp->next)
 	{
 		if (pipe(tool->p) == -1)
@@ -51,6 +55,43 @@ int	check_redirections_supp(t_list *tmp1, t_redir *tmp)
 	return (0);
 }
 
+void	handle_sigint_hrdoc(int sig)
+{
+	printf("");
+	if (sig != SIGINT)
+		return ;
+	else
+		exit(0);
+	printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	g_last_exitstatus = 1;
+}
+
+void	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
+{
+	pid_t	pid0;
+	pid_t	pid1;
+
+	pid0 = fork();
+	if (pid0 == 0)
+	{
+		signal(SIGINT, handle_sigint_hrdoc);
+		pid1 = fork();
+		if (pid1 == 0)
+		{
+			here_doc(tmp, tmp1, tool, data);
+			exit(0);
+		}
+		else
+			waitpid(pid1, NULL, 0);
+		exit(0);
+	}
+	else
+		waitpid(pid0, NULL, 0);
+}
+
 void	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 {
 	t_redir	*tmp;
@@ -69,7 +110,7 @@ void	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 			tmp1->fd_out = open (tmp->content, \
 				O_WRONLY | O_CREAT | O_APPEND, 0777);
 		else if (tmp->id == 4)
-			here_doc(tmp, tmp1, tool, data);
+			ft_here_doc(tmp, tmp1, tool, data);
 		tmp = tmp->next;
 	}
 }

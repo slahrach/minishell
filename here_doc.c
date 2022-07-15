@@ -12,42 +12,52 @@
 
 #include "minishell.h"
 
+void	handle(int sig)
+{
+	if (sig != SIGINT)
+		return ;
+	g_last_exitstatus = -1;
+}
+
 void	here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 {
-	char	*line1;
-	t_list	*tokens;
+	char	**splited;
 	char	*line;
-	char	*delim;
-	int		len;
+	int		i;
+	int		j;
 
 	if (pipe(tool->p) == -1)
 		exit (1);
-	line1 = NULL;
-	len = 0;
 	while (1)
 	{
+		i = 0;
 		signal(SIGQUIT, SIG_IGN);
 		line = readline("heredoc> ");
-		tokenize(line, data, &data->env, &tokens);
-		while (tokens)
-		{
-			line1 = ft_strjoin(line1, tokens->content);
-			//line = ft_strjoin(line, " ");
-			tokens = tokens->next;
-		
-		}
-		// printf("'%s' her len = %zu\n", tokens->content, ft_strlen(tokens->content));
-		// printf("'%s' her len = %zu\n", tmp->content, ft_strlen(tmp->content));
-		line = ft_strjoin(line1, "\n");
-		printf("'%s'\n", line1);
-		delim = ft_strjoin(tmp->content, "\n");
-		// printf("%d\n", ft_strcmp(line, delim));
 		if (!line)
-			break;
-		else if (!ft_strncmp(line, delim, len))
 			break ;
-		write(tool->p[1], line, ft_strlen(line));
-		free(line);
+		if (!ft_strcmp(line, tmp->content))
+			break ;
+		splited = ft_split(line, ' ');
+		while (splited[i])
+		{
+			splited[i] = expansion(data, splited[i], &data->env);
+			i++;
+		}
+		i = 0;
+		j = 0;
+		while (splited[i])
+		{
+			while (line[j] && line[j] == ' ')
+			{
+				write(tool->p[1], " ", 1);
+				j++;
+			}
+			write(tool->p[1], splited[i], ft_strlen(splited[i]));
+			while (line[j] && line[j] != ' ')
+				j++;
+			i++;
+		}
+		write(tool->p[1], "\n", 1);
 	}
 	close (tool->p[1]);
 	tmp1->fd_in = tool->p[0];

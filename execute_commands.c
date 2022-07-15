@@ -89,7 +89,6 @@ void	execute_commands(t_data *data)
 	fd_in = dup(0);
 	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
-	data->tool = malloc (sizeof(t_tools));
 	if (execute_one_builtin(data, tmp))
 		return ;
 	tmp = data->f_list;
