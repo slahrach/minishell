@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/06 08:03:22 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/16 19:05:38 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ int	main(int argc, char **argv, char **envp)
 	if (!argc || !argv)
 		return (0);
 	data = malloc(sizeof(t_data));
+	data->env = malloc(sizeof(t_env));
+	data->tool = malloc(sizeof(t_tools));
+	data->tool->p[0] = -1;
 	set_env(envp, &data->env);
 	while (1)
 	{

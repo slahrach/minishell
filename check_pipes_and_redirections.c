@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 03:05:41 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/06 04:15:32 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/16 18:01:17 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@ void	check_pipes(t_data *data, t_list **list, t_tools *tool)
 
 	tmp = *list;
 	tmp->fd_in = STDIN_FILENO;
-	data->tool = NULL;
-	data->tool = malloc (sizeof(t_tools));
-	data->tool->p = NULL;
-	data->tool->p = malloc (2 * sizeof (int));
 	while (tmp->next)
 	{
 		if (pipe(tool->p) == -1)

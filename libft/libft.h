@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/06 06:02:02 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/16 19:04:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_list
 
 typedef struct s_tools
 {
-	int		*p;
+	int		p[2];
 	char	*path;
 }	t_tools;
 
