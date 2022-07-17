@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/14 21:10:24 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/17 20:43:39 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,9 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 
 	if (tmp->arr[0])
 	{
-		str = ft_strmapi(tmp->arr[0], ft_tolower);
 		if (data->f_list->inside && data->f_list->inside->id)
 			print_status(data);
-		else if (!ft_strcmp(str, "echo"))
+		else if (!ft_strcmp(tmp->arr[0], "echo"))
 			echo_command(&tmp);
 		else if (!ft_strcmp(tmp->arr[0], "cd"))
 			cd_command(&tmp, &data->env);
@@ -78,7 +77,7 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 			pwd_command(&tmp);
 		else if (!strcmp(tmp->arr[0], "export"))
 			export_command(&tmp, data->env);
-		else if (!ft_strcmp(str, "env"))
+		else if (!ft_strcmp(tmp->arr[0], "env"))
 			env_command(&tmp, data->env);
 		else if (!ft_strcmp(tmp->arr[0], "unset"))
 			unset_command(&tmp, &(data->env));

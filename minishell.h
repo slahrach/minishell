@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/14 21:09:43 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/17 21:07:52 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,9 +90,9 @@ int			ft_lstsize_env(t_env *lst);
 char		**linked_list_to_table(t_env *env);
 void		here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data);
 char		*get_next_line(int fd);
-void		check_redirections(t_data *data, t_list **f_list, t_tools *tool);
+int			check_redirections(t_data *data, t_list **f_list, t_tools *tool);
 void		unset_node(t_env **env, char *name);
-void		check_pipes(t_data *data, t_list **list, t_tools *tool);
+int			check_pipes(t_data *data, t_list **list, t_tools *tool);
 void		close_n_wait(t_tools *tool, int *pid);
 int			builtin_or_other_cmd(t_data *data, t_list *tmp);
 void		free_all(char **cmd_temp1);

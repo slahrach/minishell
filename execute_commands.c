@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/16 19:03:22 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/17 21:27:36 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 		return ;
 	}
 	execve(tool->path, tmp->arr, linked_list_to_table(data->env));
+	free (tool->path);
 	print_error(tmp->arr[0]);
 }
 
@@ -76,6 +77,20 @@ int	execute_one_builtin(t_data *data, t_list *tmp)
 	return (0);
 }
 
+int	check_here_doc(t_list *f_list)
+{
+	t_redir	*tmp;
+	
+	tmp = f_list->redirect;
+	while (tmp)
+	{
+		if (tmp->id == 4)
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 void	execute_commands(t_data *data)
 {
 	t_list	*tmp;
@@ -88,11 +103,15 @@ void	execute_commands(t_data *data)
 	i = 0;
 	fd_in = dup(0);
 	fd_out = dup(1);
-	pid = malloc (sizeof(int) * ft_lstsize(tmp));
+	if (!check_here_doc(tmp))
+		pid = malloc (sizeof(int) * ft_lstsize(tmp));
+	else
+		pid = malloc (sizeof(int) * (ft_lstsize(tmp) + 1));
 	if (execute_one_builtin(data, tmp))
 		return ;
 	tmp = data->f_list;
-	check_pipes(data, &data->f_list, data->tool);
+	if (check_pipes(data, &data->f_list, data->tool))
+		pid[i++] = check_pipes(data, &data->f_list, data->tool);
 	while (tmp)
 	{
 		pid[i++] = execute_commands_(data, tmp);

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:00:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/15 12:48:12 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/17 20:41:15 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ static	void	change_pwd_env(t_env **env)
 		env_add_change2(env, "PWD", 1);
 		env_add_change1(env, "PWD", pwd_val, 1);
 	}
-	// free (pwd_val);//
 }
 
 static	void	cd_home(t_list **list, t_env **env)
