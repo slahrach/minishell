@@ -12,13 +12,6 @@
 
 #include "minishell.h"
 
-void	handle(int sig)
-{
-	if (sig != SIGINT)
-		return ;
-	g_last_exitstatus = -1;
-}
-
 void	here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 {
 	char	**splited;
@@ -26,8 +19,6 @@ void	here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 	int		i;
 	int		j;
 
-	if (pipe(tool->p) == -1)
-		exit (1);
 	while (1)
 	{
 		i = 0;
@@ -59,6 +50,4 @@ void	here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 		}
 		write(tool->p[1], "\n", 1);
 	}
-	close (tool->p[1]);
-	tmp1->fd_in = tool->p[0];
 }

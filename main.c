@@ -55,7 +55,6 @@ int	main(int argc, char **argv, char **envp)
 	if (!argc || !argv)
 		return (0);
 	data = malloc(sizeof(t_data));
-	data->env = malloc(sizeof(t_env));
 	data->tool = malloc(sizeof(t_tools));
 	data->tool->p[0] = -1;
 	set_env(envp, &data->env);
@@ -75,6 +74,7 @@ int	main(int argc, char **argv, char **envp)
 		free(prompt);
 	}
 	clear_env(&data->env);
+	free(data->tool);
 	free(data);
 	return (0);
 }

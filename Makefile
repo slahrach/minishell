@@ -41,7 +41,7 @@ OBJS = ${SRCS:.c=.o}
 ${NAME} : ${OBJS}
 		@make -C libft
 		@cp libft/libft.a ./
-		gcc -g ${OBJS} ${LIB} -o ${NAME} -lreadline -L /goinfre/iouardi/homebrew/Cellar/readline/8.1.2/lib -I/goinfre/iouardi/homebrew/Cellar/readline/8.1.2/include #-fsanitize=address
+		gcc -g ${OBJS} ${LIB} -o ${NAME} -lreadline -L/goinfre/slahrach/homebrew/opt/readline/lib -I/goinfre/slahrach/homebrew/opt/readline/include
 
 all : ${NAME}
 
@@ -57,7 +57,7 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} -I /goinfre/iouardi/homebrew/Cellar/readline/8.1.2/include -c $<
+	${CC} -I/goinfre/slahrach/homebrew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re
 # gcc -g -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include main.c utils.c  error.c  tokenizer.c expansion.c  parser.c  envr.c  list_utils.c  exec1.c  exec2.c  cd_command.c  export.c  find_cmd_path.c  execute_commands.c  here_doc.c utils2.c libft/libft.a

@@ -56,41 +56,38 @@ int check_redirections_supp(t_list *tmp1, t_redir *tmp)
 	return (0);
 }
 
-void handle_sigint_hrdoc(int sig)
+void	handle_sigint_hrdoc(int sig)
 {
-	printf("");
 	if (sig != SIGINT)
-		return;
+		return ;
 	else
+	{
+		g_last_exitstatus = -1;
 		exit(0);
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-	g_last_exitstatus = 1;
+	}
 }
 
 int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 {
-	pid_t pid0;
-	pid_t pid1;
+	pid_t	pid0;
+	pid_t	pid1;
 
+	if (pipe(tool->p) == -1)
+		exit (1);
 	pid0 = fork();
 	if (pid0 == 0)
 	{
 		signal(SIGINT, handle_sigint_hrdoc);
-		pid1 = fork();
-		if (pid1 == 0)
-		{
-			here_doc(tmp, tmp1, tool, data);
-			exit(0);
-		}
-		else
-			waitpid(pid1, NULL, 0);
+		here_doc(tmp, tmp1, tool, data);
 		exit(0);
 	}
 	else
-		waitpid(pid0, NULL, 0);
+		waitpid(pid0, &g_last_exitstatus, 0);
+	close (tool->p[1]);
+	if (g_last_exitstatus == -1)
+		
+	else
+		tmp1->fd_in = tool->p[0];
 	return (pid0);
 }
 
@@ -114,7 +111,7 @@ int check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 			tmp1->fd_out = open(tmp->content,
 								O_WRONLY | O_CREAT | O_APPEND, 0777);
 		else if (tmp->id == 4)
-			here_doc(tmp, tmp1, tool, data);
+			ft_here_doc(tmp, tmp1, tool, data);
 		tmp = tmp->next;
 	}
 	return (pid);
