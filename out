@@ -8,3 +8,4 @@
 //if we unset PATH env shpould print an error msg
 //pwd | ls | cat | cat | pwd | /bin/ls
 // pwd | ls | cat | cat | pwd | ls
+//unset more than one arg

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/17 21:07:52 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 15:47:24 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ int			builtin_or_other_cmd(t_data *data, t_list *tmp);
 void		free_all(char **cmd_temp1);
 static int	success_cd(t_env **env, char *arr);
 void		env_add_change2(t_env **env, char *name, int flag);
+int			parse_args_export(t_list **list, char *var);
 
 #endif

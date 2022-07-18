@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:02:23 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/06 03:29:05 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 16:32:57 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,27 @@ int	already_exists_export_supp(t_env *tmp, char **arg, int flag)
 	return (10);
 }
 
+static int	already_exists_export_concat(char **arg, t_env *env, int flag)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->name, arg[0], ft_strlen(arg[0]) - 1))
+		{
+			if (already_exists_export_supp(tmp, arg, flag) == 1)
+				return (1);
+			if (already_exists_export_supp(tmp, arg, flag) == 2)
+				return (2);
+			if (already_exists_export_supp(tmp, arg, flag) == 3)
+				return (3);
+		}
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 static int	already_exists_export(char **arg, t_env *env, int flag)
 {
 	t_env	*tmp;
@@ -70,6 +91,50 @@ static int	already_exists_export(char **arg, t_env *env, int flag)
 	return (0);
 }
 
+void	join_n_add_change(t_env **env, char **arg, int flag)
+{
+	t_env *tmp;
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strncmp(tmp->name, arg[0], ft_strlen(arg[0]) - 1))
+		{
+			tmp->value = ft_strjoin(tmp->value, arg[1]);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+}
+
+static	char	*ft_strndup(const char *s1, int l)
+{
+	char	*ptr;
+
+	ptr = (char *) malloc ((l + 1) * sizeof(char));
+	if (!ptr)
+		return (0);
+	ft_strlcpy (ptr, s1, l + 1);
+	return (ptr);
+}
+
+int	cases_concat(t_list **list, int flag, t_env *env, char **splited)
+{
+	char	*tmp;
+	
+	tmp = ft_strndup(splited[0], ft_strlen(splited[0]) - 1);
+	if (parse_args_export(list, splited[0]) == 2)
+	{
+		if (!already_exists_export_concat(splited, env, flag))
+			add_back(&env, new_node(tmp, splited[1], flag));
+		else if (already_exists_export_concat(splited, env, flag) == 2)
+			join_n_add_change(&env, splited, flag);
+		free (tmp);
+		return (0);
+	}
+	return (1);
+}
+
 static void	cases(t_list **list, char *arr, t_env *env)
 {
 	char	**splited;
@@ -79,14 +144,20 @@ static void	cases(t_list **list, char *arr, t_env *env)
 	if (!ft_strchr(arr, '='))
 		flag = 0;
 	splited = ft_split1(arr, '=');
-	if (!parse_args(list, splited[0]))
+	if (!parse_args_export(list, splited[0]))
 		return ;
+	if (!cases_concat(list, flag, env, splited))
+	{
+		free_all(splited);
+		return ;
+	}
 	if (!already_exists_export(splited, env, flag))
 		add_back(&env, new_node(splited[0], splited[1], flag));
 	else if (already_exists_export(splited, env, flag) == 2)
 		env_add_change1(&env, splited[0], splited[1], flag);
 	else if (already_exists_export(splited, env, flag) == 3)
 		env_add_change1(&env, splited[0], ft_strdup(""), flag);
+	free_all(splited);
 }
 
 void	export_command(t_list **list, t_env *env)

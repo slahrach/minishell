@@ -6,11 +6,25 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/03 23:13:19 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/18 12:36:06 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 17:18:05 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	option_is_valid_echo(char *arr)
+{
+	int		i;
+
+	i = 1;
+	while (arr[i])
+	{
+		if (arr[i] != 'n')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 void	echo_command(t_list **list)
 {
@@ -21,10 +35,12 @@ void	echo_command(t_list **list)
 	i = 1;
 	nl = 1;
 	arr = (*list)->arr;
-	if (arr[1] && !ft_strcmp(arr[1], "-n"))
+	while (arr[i] && !ft_strncmp(arr[i], "-n", 2))
 	{
-		i = 2;
+		if (option_is_valid_echo(arr[i]))
+			break ;
 		nl = 0;
+		i++;
 	}
 	while (arr[i])
 	{
@@ -74,6 +90,37 @@ void	env_command(t_list **list, t_env *env)
 		printf("too many arguments !\n");
 		g_last_exitstatus = 127;
 	}
+}
+
+int	parse_args_export(t_list **list, char *var)
+{
+	int		i;
+	int		l;
+
+	if (!ft_isalpha(var[0]) && var[0] != '_')
+	{
+		printf("bash: unset: `%s': not a valid identifier\n", var);
+		g_last_exitstatus = 258;
+		return (0);
+	}
+	i = 1;
+	l = ft_strlen(var) - 1;
+	while (i < l)
+	{
+		if (!ft_isalnum(var[i]) && var[i] != '_')
+		{
+			printf("bash: unset: `%s': not a valid identifier\n", var);
+			g_last_exitstatus = 258;
+			return (0);
+		}
+		i++;
+	}
+	if (var[i] != '+' && !ft_isalnum(var[i]))
+		return (0);
+	else
+		if (var[i] == '+')
+			return (2);
+	return (1);
 }
 
 int	parse_args(t_list **list, char *var)
