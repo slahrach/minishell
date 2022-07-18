@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 17:48:53 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/11 01:51:28 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/18 17:47:52 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ char	*ft_strjoin1(char *s1, char *s2)
 	}
 	str[i] = '\0';
 	free(s1);
+	s1 = NULL;
 	return (str);
 }
 

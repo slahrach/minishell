@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/07/18 16:56:21 by iouardi          ###   ########.fr        #
+#    Updated: 2022/07/18 18:26:26 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} -I /Users/iouardi/.brew/opt/readline/include -c $<
+	${CC} -g -I /Users/iouardi/.brew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re
 # gcc -g -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include main.c utils.c  error.c  tokenizer.c expansion.c  parser.c  envr.c  list_utils.c  exec1.c  exec2.c  cd_command.c  export.c  find_cmd_path.c  execute_commands.c  here_doc.c utils2.c libft/libft.a

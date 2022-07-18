@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 03:05:41 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/18 12:24:10 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 00:04:50 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,26 @@ int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 	return (pid0);
 }
 
+int	how_many_heredocs_we_have(t_data *data)
+{
+	int		cmpt;
+	t_list	*tmp;
+
+	cmpt = 0;
+	tmp = data->f_list;
+	while (tmp)
+	{
+		while (tmp->redirect)
+		{
+			if (tmp->redirect->id == 4)
+				cmpt++;
+			tmp->redirect = tmp->redirect->next;
+		}
+		tmp = tmp->next;
+	}
+	return (cmpt);
+}
+
 int	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 {
 	t_redir *tmp;
@@ -100,6 +120,12 @@ int	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 
 	tmp1 = (*f_list);
 	tmp = tmp1->redirect;
+	if (how_many_heredocs_we_have(data) > 16)
+	{
+		printf("maximum here-document count exceeded\n");
+		g_last_exitstatus = 2;
+		exit (g_last_exitstatus);
+	}
 	while (tmp)
 	{
 		if (check_redirections_supp(tmp1, tmp))
@@ -110,7 +136,7 @@ int	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 		if (tmp->id == 5)
 			tmp1->fd_out = open(tmp->content,
 								O_WRONLY | O_CREAT | O_APPEND, 0777);
-		else if (tmp->id == 4)
+		else if (tmp->id == 4 && how_many_heredocs_we_have(data) <= 16)
 			ft_here_doc(tmp, tmp1, tool, data);
 		tmp = tmp->next;
 	}

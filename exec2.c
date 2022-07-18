@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/03 23:13:19 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/18 17:18:05 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 00:33:24 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ void	echo_command(t_list **list)
 	}
 	while (arr[i])
 	{
-		printf("%s", arr[i]);
-		if (arr[i + 1])
+		if (!*arr[i])
+			printf("DONE\n");
+		printf("'%s'", arr[i]);
+		if (arr[i + 1] != 0)
 			printf(" ");
 		i++;
 	}
@@ -147,6 +149,20 @@ int	parse_args(t_list **list, char *var)
 	return (1);
 }
 
+int	already_exists_unset(char *arr, t_env *env)
+{
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
+	{
+		if (!ft_strcmp(arr, tmp->name))
+			return (1);
+		tmp = tmp->next;
+	}
+	return (0);
+}
+
 void	unset_command(t_list **list, t_env **env)
 {
 	char	**arr;
@@ -156,6 +172,11 @@ void	unset_command(t_list **list, t_env **env)
 	arr = (*list)->arr;
 	while (arr[i])
 	{
+		if (!already_exists_unset(arr[i], *env))
+		{
+			i++;
+			continue ;
+		}
 		if (!parse_args(list, arr[i]))
 		{
 			i++;
