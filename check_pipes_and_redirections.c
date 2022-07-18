@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 03:05:41 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/17 22:29:59 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 12:24:10 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,28 @@
 int check_pipes(t_data *data, t_list **list, t_tools *tool)
 {
 	t_list *tmp;
-	int		pid;
 
 	tmp = *list;
 	tmp->fd_in = STDIN_FILENO;
-	pid = 0;
 	while (tmp->next)
 	{
 		if (pipe(tool->p) == -1)
 			exit(1);
 		tmp->fd_out = tool->p[1];
 		tmp->next->fd_in = tool->p[0];
-		check_redirections(data, &tmp, tool);
+		if (check_redirections(data, &tmp, tool))
+			return (1);
 		tmp = tmp->next;
 	}
 	tmp->fd_out = STDOUT_FILENO;
-	pid = check_redirections(data, &tmp, tool);
+	if (check_redirections(data, &tmp, tool))
+		return (1);
 	if (tmp->err)
 	{
 		printf("Error\nsyntax error !\n");
 		g_last_exitstatus = 258;
 	}
-	if (!pid)
-		return (0);
-	return (pid);
+	return (0);
 }
 
 int check_redirections_supp(t_list *tmp1, t_redir *tmp)
@@ -60,20 +58,18 @@ void	handle_sigint_hrdoc(int sig)
 {
 	if (sig != SIGINT)
 		return ;
-	else
-	{
-		g_last_exitstatus = -1;
-		exit(0);
-	}
+	g_last_exitstatus = -1;
+	exit(0);
 }
 
 int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 {
 	pid_t	pid0;
 	pid_t	pid1;
+	int		p[2];
 
 	if (pipe(tool->p) == -1)
-		exit (1);
+		exit (1);//a modifier
 	pid0 = fork();
 	if (pid0 == 0)
 	{
@@ -82,28 +78,32 @@ int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 		exit(0);
 	}
 	else
-		waitpid(pid0, &g_last_exitstatus, 0);
+		waitpid(pid0, NULL, 0);
 	close (tool->p[1]);
-	if (g_last_exitstatus == -1)
-		
-	else
+	if (g_last_exitstatus != 130)
 		tmp1->fd_in = tool->p[0];
+	else
+	{
+		if (pipe(p) == -1)
+			exit (2);//
+		close (p[1]);
+		tmp1->fd_in = p[0];
+		g_last_exitstatus = 1;
+	}
 	return (pid0);
 }
 
-int check_redirections(t_data *data, t_list **f_list, t_tools *tool)
+int	check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 {
 	t_redir *tmp;
 	t_list *tmp1;
-	int		pid;
 
 	tmp1 = (*f_list);
 	tmp = tmp1->redirect;
-	pid = 0;
 	while (tmp)
 	{
 		if (check_redirections_supp(tmp1, tmp))
-			return (pid);
+			return (1);
 		if (tmp->id == 2)
 			tmp1->fd_out = open(tmp->content,
 								O_WRONLY | O_CREAT | O_TRUNC, 0777);
@@ -114,7 +114,7 @@ int check_redirections(t_data *data, t_list **f_list, t_tools *tool)
 			ft_here_doc(tmp, tmp1, tool, data);
 		tmp = tmp->next;
 	}
-	return (pid);
+	return (0);
 }
 
 int builtin_or_other_cmd(t_data *data, t_list *tmp)
@@ -152,8 +152,11 @@ void close_n_wait(t_tools *tool, int *pid)
 	close(tool->p[1]);
 	while (pid[i])
 	{
-		waitpid(pid[i], &g_last_exitstatus, 0);
-		WIFEXITED(g_last_exitstatus);
+		if (g_last_exitstatus == 130)
+			waitpid(pid[i], NULL, 0);
+		else
+			{waitpid(pid[i], &g_last_exitstatus, 0);
+		WIFEXITED(g_last_exitstatus);}
 		i++;
 	}
 	g_last_exitstatus %= 255;

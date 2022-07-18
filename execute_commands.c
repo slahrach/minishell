@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/17 21:27:36 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 12:28:55 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ int	execute_one_builtin(t_data *data, t_list *tmp)
 	{	
 		check_builtins_or_other_cmd(data, tmp);
 		if (!ft_strcmp(tmp->arr[0], "exit"))
+		{
+			clear_env(&data->env);
 			exit (g_last_exitstatus);
+		}
 		return (1);
 	}
 	return (0);
@@ -103,15 +106,15 @@ void	execute_commands(t_data *data)
 	i = 0;
 	fd_in = dup(0);
 	fd_out = dup(1);
-	if (!check_here_doc(tmp))
-		pid = malloc (sizeof(int) * ft_lstsize(tmp));
-	else
-		pid = malloc (sizeof(int) * (ft_lstsize(tmp) + 1));
+	pid = malloc (sizeof(int) * ft_lstsize(tmp));
 	if (execute_one_builtin(data, tmp))
+	{
+		free (pid);
 		return ;
+	}
 	tmp = data->f_list;
 	if (check_pipes(data, &data->f_list, data->tool))
-		pid[i++] = check_pipes(data, &data->f_list, data->tool);
+		return ;
 	while (tmp)
 	{
 		pid[i++] = execute_commands_(data, tmp);
@@ -120,4 +123,5 @@ void	execute_commands(t_data *data)
 	dup2(fd_in, 0);
 	dup2(fd_out, 1);
 	close_n_wait(data->tool, pid);
+	free (pid);
 }

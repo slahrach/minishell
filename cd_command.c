@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:00:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/17 20:41:15 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 12:47:43 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static	void	change_pwd_env(t_env **env)
 		env_add_change2(env, "PWD", 1);
 		env_add_change1(env, "PWD", pwd_val, 1);
 	}
+	// free (pwd_val);
 }
 
 static	void	cd_home(t_list **list, t_env **env)
@@ -70,38 +71,6 @@ static int	success_cd(t_env **env, char *arr)
 		env_add_change1(env, "PWD", pwd_val, 1);
 	return (0);
 }
-
-// static int	success_cd(t_env **env, char *arr)
-// {
-// 	t_env	*tmp_new;
-// 	t_env	*tmp;
-// 	t_env	*tmp1;
-// 	char	*pwd_val;
-
-// 	while (tmp)
-// 	{
-// 		if (!ft_strcmp(tmp->name, "TERM_PROGRAM_VERSION"))
-// 		{
-// 			tmp_new = new_node("OLDPWD", arr, tmp->flag);
-// 			tmp1 = tmp->next->next;
-// 			tmp->next = tmp_new;
-// 			tmp_new->next = tmp1;
-// 			pwd_val = getcwd(NULL, 0);
-// 			if (pwd_val)
-// 				env_add_change1(env, "PWD", pwd_val, 1);
-
-// 			// change_pwd_env(env);
-			
-// 			return (1);
-// 		}
-// 		tmp = tmp->next;
-// 	}
-// 	pwd_val = getcwd(NULL, 0);
-// 	if (pwd_val)
-// 		env_add_change1(env, "PWD", pwd_val, 1);
-// 	// change_pwd_env(env);
-// 	return (0);
-// }
 
 void	cd_command(t_list **list, t_env **env)
 {

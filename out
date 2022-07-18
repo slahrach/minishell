@@ -1,2 +1,10 @@
-ljjkjkjfg
-dffddf
+#    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
+	here_doc.c \
+	check_pipes_and_redirections.c
+# gcc -g -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I/Users/iouardi/.brew/opt/readline/include main.c utils.c  error.c  tokenizer.c expansion.c  parser.c  envr.c  list_utils.c  exec1.c  exec2.c  cd_command.c  export.c  find_cmd_path.c  execute_commands.c  here_doc.c utils2.c libft/libft.a
+//export ar+=hjfhj// cas valid
+//max herdocs <=16
+//echo -n 
+//if we unset PATH env shpould print an error msg
+//pwd | ls | cat | cat | pwd | /bin/ls
+// pwd | ls | cat | cat | pwd | ls

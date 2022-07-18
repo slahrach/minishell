@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/03 23:13:19 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/14 21:39:53 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/18 12:36:06 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	pwd_command(t_list **list)
 		printf("pwd : command failed !\n");
 		g_last_exitstatus = 1;
 	}
+	free (buffer);
 }
 
 void	env_command(t_list **list, t_env *env)
