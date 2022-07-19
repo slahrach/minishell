@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 03:05:41 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/19 01:26:22 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 02:23:27 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,18 @@ int	how_many_heredocs_we_have(t_data *data)
 {
 	int		cmpt;
 	t_list	*tmp;
+	t_redir	*tmp1;
 
 	cmpt = 0;
 	tmp = data->f_list;
 	while (tmp)
 	{
-		while (tmp->redirect)
+		tmp1 = tmp->redirect;
+		while (tmp1)
 		{
-			if (tmp->redirect->id == 4)
+			if (tmp1->id == 4)
 				cmpt++;
-			tmp->redirect = tmp->redirect->next;
+			tmp1 = tmp1->next;
 		}
 		tmp = tmp->next;
 	}

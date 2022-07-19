@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:11:05 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:55:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 02:24:53 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	clear_env(t_env **env)
 		temp = (*env)->next;
 		free((*env)->name);
 		free((*env)->value);
-		free(*env);
 		(*env) = temp;
 	}
 	env = NULL;
