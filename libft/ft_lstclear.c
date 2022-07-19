@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstclear.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 19:11:05 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 22:28:28 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/19 01:55:28 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	clear_env(t_env **env)
 		temp = (*env)->next;
 		free((*env)->name);
 		free((*env)->value);
+		free(*env);
 		(*env) = temp;
 	}
 	env = NULL;

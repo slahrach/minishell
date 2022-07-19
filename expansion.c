@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 18:50:57 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/05 00:14:27 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 00:52:19 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,23 @@ char	*expansion(t_data *data, char *token, t_env **env)
 	result = NULL;
 	if (!token)
 		return (NULL);
-	while (token[i])
+	if (token[i])
 	{
-		dollar(data, token, &i, &head);
-		other(token, &i, &head);
+		while (token[i])
+		{
+			dollar(data, token, &i, &head);
+			other(token, &i, &head);
+		}
+		change(&head, env);
+		temp = head;
+		while (temp)
+		{
+			result = ft_strjoin1(result, temp->content);
+			temp = temp->next;
+		}
+		free(token);
+		ft_lstclear(&head);
+		return (result);
 	}
-	change(&head, env);
-	temp = head;
-	while (temp)
-	{
-		result = ft_strjoin1(result, temp->content);
-		temp = temp->next;
-	}
-	free(token);
-	ft_lstclear(&head);
-	return (result);
+	return (token);
 }

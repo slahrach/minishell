@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:54:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/06 03:45:28 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 01:06:37 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static	char	*remove_quotes(int *i, char *line, t_env **env, t_data *data)
 		(*i)++;
 		return (NULL);
 	}
-	str1 = ft_substr(line, (*i) + 1, j);
+	if (!j)
+		str1 = ft_strdup("");
+	else
+		str1 = ft_substr(line, (*i) + 1, j);
 	last = ft_lstlast(data->list_token);
 	if (line[*i] == '"')
 	{
@@ -117,7 +120,6 @@ void	tokenize(char *line_t, t_data *data, t_env **env, t_list **list)
 	i = 0;
 	*list = NULL;
 	line = ft_strtrim(line_t, "\n\f\t\v\r ");
-	free(line_t);
 	while (line[i])
 	{
 		str = handle_quoting(&i, line, data, env);

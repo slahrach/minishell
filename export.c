@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:02:23 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/18 23:43:30 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 01:20:15 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ int	cases_concat(t_list **list, int flag, t_env *env, char **splited)
 		free (tmp);
 		return (0);
 	}
+	free(tmp);
 	return (1);
 }
 
@@ -145,7 +146,10 @@ static void	cases(t_list **list, char *arr, t_env *env)
 		flag = 0;
 	splited = ft_split1(arr, '=');
 	if (!parse_args_export(list, splited[0]))
+	{
+		free_all(splited);
 		return ;
+	}
 	if (!cases_concat(list, flag, env, splited))
 	{
 		free_all(splited);

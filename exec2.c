@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/03 23:13:19 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/19 00:33:24 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 00:48:35 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ void	echo_command(t_list **list)
 	}
 	while (arr[i])
 	{
-		if (!*arr[i])
-			printf("DONE\n");
-		printf("'%s'", arr[i]);
+		printf("%s", arr[i]);
 		if (arr[i + 1] != 0)
 			printf(" ");
 		i++;

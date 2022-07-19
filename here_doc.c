@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 06:17:22 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/06 00:40:15 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 02:01:08 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,7 @@ void	here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 			i++;
 		}
 		write(tool->p[1], "\n", 1);
+		free_all(splited);
+		free (line);
 	}
 }

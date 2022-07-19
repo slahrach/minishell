@@ -6,7 +6,7 @@
 #    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/07/18 18:26:26 by iouardi          ###   ########.fr        #
+#    Updated: 2022/07/19 01:03:37 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ OBJS = ${SRCS:.c=.o}
 ${NAME} : ${OBJS}
 		@make -C libft
 		@cp libft/libft.a ./
-		gcc -g ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I /Users/iouardi/.brew/opt/readline/include -fsanitize=address
+		gcc -g ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I /Users/iouardi/.brew/opt/readline/include
 
 all : ${NAME}
 

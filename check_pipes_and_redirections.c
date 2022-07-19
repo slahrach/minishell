@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 03:05:41 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/19 00:04:50 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 01:26:22 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 	int		p[2];
 
 	if (pipe(tool->p) == -1)
-		exit (1);//a modifier
+		exit (1);
 	pid0 = fork();
 	if (pid0 == 0)
 	{
@@ -85,7 +85,7 @@ int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 	else
 	{
 		if (pipe(p) == -1)
-			exit (2);//
+			exit (2);
 		close (p[1]);
 		tmp1->fd_in = p[0];
 		g_last_exitstatus = 1;

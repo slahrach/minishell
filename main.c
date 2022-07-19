@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/17 22:32:38 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 01:56:54 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	main_supp(t_data *data)
 		if (!data->error)
 			execute_commands(data);
 		ft_lstclear1(&data->f_list);
+		
 	}
-	else
-		ft_lstclear(&data->list_token);
+	ft_lstclear(&data->list_token);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -72,6 +72,7 @@ int	main(int argc, char **argv, char **envp)
 		if (*data->line)
 			main_supp(data);
 		free(prompt);
+		free(data->line);
 	}
 	clear_env(&data->env);
 	free(data->tool);
