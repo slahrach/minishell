@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/28 20:54:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:06:37 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:38:03 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,9 @@ char	*non_quoting(int *i, char *line, t_data *data, t_env **env)
 		id = is_special(line[*i]);
 		if (check_special(i, line, id, &data->list_token))
 			return (NULL);
-		j = *i;
-		while (line[j] && !is_whitespace(line[j]) && !is_special(line[j])
-			&& line[j] != '"' && line[j] != '\'')
-			j++;
+		j = *i - 1;
+		while (line[++j] && !is_whitespace(line[j]) && !is_special(line[j])
+			&& line[j] != '"' && line[j] != '\'');
 		str1 = ft_substr(line, *i, j - (*i));
 		last = ft_lstlast(data->list_token);
 		if (!last || (last && last->id != DELIMITER))

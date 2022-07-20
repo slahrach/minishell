@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 16:36:50 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:42:37 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 04:15:44 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ t_redir	*redir_new(char	*content, int id)
 		return (NULL);
 	new->content = ft_strdup(content);
 	new->id = id;
+	new->next = NULL;
+	return (new);
+}
+
+t_fds	*new_fds(int fd)
+{
+	t_fds	*new;
+
+	new = (t_fds *) malloc(sizeof(t_fds));
+	if (!new)
+		return (NULL);
+	new->fd = fd;
 	new->next = NULL;
 	return (new);
 }

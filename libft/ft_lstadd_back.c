@@ -6,7 +6,7 @@
 /*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 23:49:36 by slahrach          #+#    #+#             */
-/*   Updated: 2022/06/07 00:31:51 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/20 04:12:45 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,25 @@ void	redir_add_back(t_redir **lst, t_redir *new)
 		return ;
 	}
 	last = redir_last(*lst);
+	if (new->next == NULL)
+		last->next = new;
+	while (new->next != NULL)
+	{
+		last->next = new;
+		new = new->next;
+	}
+}
+
+void	ft_lstadd_back_fds(t_fds **lst, t_fds *new)
+{
+	t_fds	*last;
+
+	if (!(*lst))
+	{
+		ft_lstadd_front_fds(lst, new);
+		return ;
+	}
+	last = ft_lstlast_fds(*lst);
 	if (new->next == NULL)
 		last->next = new;
 	while (new->next != NULL)

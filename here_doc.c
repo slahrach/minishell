@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 06:17:22 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 03:18:06 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 05:23:01 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,23 @@ void	check_herdocs_num(t_data *data)
 	}
 }
 
-void	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
+int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 {
 	pid_t	pid0;
 
 	if (pipe(tool->p) == -1)
-		exit (1);
+	{
+		printf("pipe failed\n");
+		g_last_exitstatus = 1;
+		return (1);
+	}
 	pid0 = fork();
+	if (pid0 == -1)
+	{
+		printf("fork failed\n");
+		g_last_exitstatus = 1;
+		return (1);
+	}
 	if (pid0 == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -110,10 +120,14 @@ void	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 		waitpid(pid0, NULL, 0);
 	close (tool->p[1]);
 	if (g_last_exitstatus != 130)
+	{
 		tmp1->fd_in = tool->p[0];
+		ft_lstadd_back_fds(&data->fd, new_fds(tmp1->fd_in));
+	}
 	else
 	{
 		data->signal_flag = 0;
 		g_last_exitstatus = 1;
 	}
+	return (0);
 }

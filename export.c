@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:02:23 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/20 01:10:33 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 06:17:59 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,32 @@ void	join_n_add_change(t_env **env, char **arg, int flag)
 		if (!ft_strncmp(tmp->name, arg[0], ft_strlen(arg[0]) - 1))
 		{
 			tmp->value = ft_strjoin(tmp->value, arg[1]);
-			printf ("%d=flag\n", flag);
 			tmp->flag = flag;
 			return ;
 		}
 		tmp = tmp->next;
 	}
+}
+
+int	cases_supp(char **splited)
+{
+	if (ft_strchr(splited[0], '+'))
+	{
+		if (!parse_args_export(splited[0]))
+		{
+			free_all(splited);
+			return (1);
+		}
+	}
+	else
+	{
+		if (!parse_args(splited[0]))
+		{
+			free_all(splited);
+			return (1);
+		}
+	}
+	return (0);
 }
 
 static void	cases(char *arr, t_env *env)
@@ -60,11 +80,8 @@ static void	cases(char *arr, t_env *env)
 	if (!ft_strchr(arr, '='))
 		flag = 0;
 	splited = ft_split1(arr, '=');
-	if (!parse_args_export(splited[0]))
-	{
-		free_all(splited);
+	if (cases_supp(splited))
 		return ;
-	}
 	if (!cases_concat(flag, env, splited))
 	{
 		free_all(splited);

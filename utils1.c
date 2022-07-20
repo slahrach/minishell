@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 23:51:52 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 03:17:33 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:39:42 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,23 @@ int	check_here_doc(t_list *f_list)
 		tmp = tmp->next;
 	}
 	return (0);
+}
+
+void	change(t_list **head, t_env **env)
+{
+	char	*str;
+	t_list	*temp;
+
+	temp = *head;
+	while (temp)
+	{
+		if (temp->id)
+		{
+			str = ft_strdup(temp->content);
+			free(temp->content);
+			temp->content = ft_strdup(ft_getenv(env, str));
+			free(str);
+		}
+		temp = temp->next;
+	}
 }

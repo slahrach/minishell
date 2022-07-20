@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 18:50:57 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 00:52:19 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:39:03 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,22 +79,12 @@ void	other(char *token, int *i, t_list **head)
 	}
 }
 
-void	change(t_list **head, t_env **env)
+void	supp(t_data *data, char	*token, int *i, t_list **head)
 {
-	char	*str;
-	t_list	*temp;
-
-	temp = *head;
-	while (temp)
+	while (token[*i])
 	{
-		if (temp->id)
-		{
-			str = ft_strdup(temp->content);
-			free(temp->content);
-			temp->content = ft_strdup(ft_getenv(env, str));
-			free(str);
-		}
-		temp = temp->next;
+		dollar(data, token, i, head);
+		other(token, i, head);
 	}
 }
 
@@ -112,11 +102,7 @@ char	*expansion(t_data *data, char *token, t_env **env)
 		return (NULL);
 	if (token[i])
 	{
-		while (token[i])
-		{
-			dollar(data, token, &i, &head);
-			other(token, &i, &head);
-		}
+		supp(data, token, &i, &head);
 		change(&head, env);
 		temp = head;
 		while (temp)

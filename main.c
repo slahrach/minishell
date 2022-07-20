@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/20 03:08:34 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 05:11:07 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,27 +34,48 @@ void	handle_sig(int sig)
 
 void	main_supp(t_data *data)
 {
-	int		a;
+	t_fds	*tmp;
 
-	a = 3;
+	tmp = data->fd;
 	add_history(data->line);
 	tokenize(data->line, data, &data->env, &data->list_token);
 	if (!data->error)
 	{
 		data->f_list = parse(data, &data->list_token);
 		if (!data->error)
+		{	
 			execute_commands(data);
+			while (tmp)
+			{
+				close (tmp->fd);
+				tmp = tmp->next;
+			}
+			clear_fds(&data->fd);
+		}
 		ft_lstclear1(&data->f_list);
 	}
-	while (a++ <= 100)
-		close(a);
 	ft_lstclear(&data->list_token);
+}
+
+static int	init(t_data *data)
+{
+	data->signal_flag = 1;
+	data->status = 0;
+	data->error = 0;
+	data->fd = NULL;
+	data->prompt = find_prompt(data);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	data->line = readline (data->prompt);
+	signal(SIGINT, handle_sig);
+	if (!data->line)
+		return (1);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
-	char	*prompt;
 
 	if (!argc || !argv)
 		return (0);
@@ -64,19 +85,11 @@ int	main(int argc, char **argv, char **envp)
 	set_env(envp, &data->env);
 	while (1)
 	{
-		data->signal_flag = 1;
-		data->status = 0;
-		data->error = 0;
-		prompt = find_prompt(data);
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
-		data->line = readline (prompt);
-		signal(SIGINT, handle_sig);
-		if (!data->line)
+		if (init(data))
 			break ;
 		if (*data->line)
 			main_supp(data);
-		free(prompt);
+		free(data->prompt);
 		free(data->line);
 	}
 	clear_env(&data->env);

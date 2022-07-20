@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 21:29:10 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/16 19:04:43 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 06:19:26 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+
+typedef struct s_fds
+{
+	int				fd;
+	struct s_fds	*next;
+}	t_fds;
 
 typedef struct s_env
 {
@@ -110,5 +116,10 @@ void		clear_env(t_env **env);
 void		ft_clear(t_redir **lst);
 char		*ft_strjoin0(char *s1, char *s2);
 char		**ft_split1(char const *s, char c);
+void		ft_lstadd_back_fds(t_fds **lst, t_fds *new);
+void		ft_lstadd_front_fds(t_fds **lst, t_fds *new);
+t_fds		*ft_lstlast_fds(t_fds *lst);
+t_fds		*new_fds(int fd);
+void		clear_fds(t_fds **head);
 
 #endif

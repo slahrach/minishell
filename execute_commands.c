@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 03:10:16 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 05:41:56 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ int	execute_commands_(t_data *data, t_list *tmp)
 
 	pid = fork();
 	if (pid == -1)
-		exit(1);
+	{
+		printf ("pipe failed\n");
+		return (-1);
+	}
 	if (pid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
@@ -48,8 +51,16 @@ int	execute_commands_(t_data *data, t_list *tmp)
 	}
 	else
 	{
-		close (tmp->fd_in);
-		close (tmp->fd_out);
+		if (tmp->fd_in != 0)
+		{
+			close (tmp->fd_in);
+			tmp->fd_in = 0;
+		}
+		if (tmp->fd_out != 1)
+		{
+			close (tmp->fd_out);
+			tmp->fd_out = 1;
+		}
 		if (tmp->arr[0] && !ft_strcmp(tmp->arr[0], "exit"))
 			exit_command(&tmp);
 	}
@@ -88,14 +99,10 @@ void	execute_commands(t_data *data)
 {
 	t_list	*tmp;
 	int		*pid;
-	int		fd_in;
-	int		fd_out;
 	int		i;
 
-	tmp = data->f_list;
 	i = 0;
-	fd_in = dup(0);
-	fd_out = dup(1);
+	tmp = data->f_list;
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
 	if (execute_commands_supp(data, tmp, pid))
 		return ;
@@ -105,10 +112,10 @@ void	execute_commands(t_data *data)
 	while (tmp)
 	{
 		pid[i++] = execute_commands_(data, tmp);
+		if (pid[i] == -1)
+			break ;
 		tmp = tmp->next;
 	}
-	dup2(fd_in, 0);
-	dup2(fd_out, 1);
 	close_n_wait(data->tool, pid);
 	free (pid);
 }

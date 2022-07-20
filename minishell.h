@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/20 03:08:52 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 05:29:41 by slahrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define STATUS 6
 
 int	g_last_exitstatus;
-// int	signal_flag;
 
 typedef struct s_data
 {
@@ -36,6 +35,8 @@ typedef struct s_data
 	int			error;
 	int			status;
 	char		*line;
+	char		*prompt;
+	t_fds		*fd;
 	t_list		*list_token;
 	t_list		*f_list;
 	t_env		*env;
@@ -68,6 +69,7 @@ void		env_add_change(t_env **env, char *name, char *value, int flag);
 void		unset_node(t_env **env, char *name);
 void		env_add_change1(t_env **env, char *name, char *value, int flag);
 void		env_command(t_list **list, t_env *env);
+void		change(t_list **head, t_env **env);
 
 /********************execution*******************************/
 
@@ -104,7 +106,7 @@ int			parse_args_export(char *var);
 void		handle_sigint_hrdoc(int sig);
 void		check_herdocs_num(t_data *data);
 int			how_many_heredocs_we_have(t_data *data);
-void		ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, \
+int			ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, \
 	t_data *data);
 int			already_exists_oldpwd(t_env *env);
 void		env_add_change2(t_env **env, char *name, int flag);
