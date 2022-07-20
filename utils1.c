@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 23:51:52 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 01:36:14 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:17:33 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,6 @@ void	env_add_change2(t_env **env, char *name, int flag)
 		}
 		copy = copy->next;
 	}
-}
-
-void	handle_sigint_hrdoc(int sig)
-{
-	if (sig != SIGINT)
-		return ;
-	g_last_exitstatus = -1;
-	exit(0);
 }
 
 void	print_error(char *cmd)

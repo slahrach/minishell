@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/06 03:05:41 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/19 23:49:52 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:12:57 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	close_n_wait(t_tools *tool, int *pid)
 		{
 			waitpid(pid[i], &g_last_exitstatus, 0);
 			WIFEXITED(g_last_exitstatus);
+			if (WIFSIGNALED(g_last_exitstatus))
+				g_last_exitstatus = WTERMSIG(g_last_exitstatus) + 128;
 		}
 		i++;
 	}

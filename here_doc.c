@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 06:17:22 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 01:21:31 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:18:06 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,13 @@ void	check_herdocs_num(t_data *data)
 void	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 {
 	pid_t	pid0;
-	int		p[2];
 
 	if (pipe(tool->p) == -1)
 		exit (1);
 	pid0 = fork();
 	if (pid0 == 0)
 	{
-		signal(SIGINT, handle_sigint_hrdoc);
+		signal(SIGINT, SIG_DFL);
 		here_doc(tmp, tool, data);
 		exit(0);
 	}
@@ -114,10 +113,7 @@ void	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 		tmp1->fd_in = tool->p[0];
 	else
 	{
-		if (pipe(p) == -1)
-			exit (2);
-		close (p[1]);
-		tmp1->fd_in = p[0];
+		data->signal_flag = 0;
 		g_last_exitstatus = 1;
 	}
 }

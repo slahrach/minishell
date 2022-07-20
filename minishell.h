@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:45:06 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/20 01:24:06 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:08:52 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@
 # define STATUS 6
 
 int	g_last_exitstatus;
+// int	signal_flag;
 
 typedef struct s_data
 {
+	int			signal_flag;
 	int			error;
 	int			status;
 	char		*line;

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 01:37:06 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 03:10:16 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ void	execute_commands(t_data *data)
 	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
 	if (execute_commands_supp(data, tmp, pid))
+		return ;
+	if (!data->signal_flag)
 		return ;
 	tmp = data->f_list;
 	while (tmp)
