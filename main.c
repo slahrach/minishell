@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 05:24:31 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:56:54 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 01:33:48 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ void	handle_sig(int sig)
 
 void	main_supp(t_data *data)
 {
+	int		a;
+
+	a = 3;
 	add_history(data->line);
 	tokenize(data->line, data, &data->env, &data->list_token);
 	if (!data->error)
@@ -42,8 +45,9 @@ void	main_supp(t_data *data)
 		if (!data->error)
 			execute_commands(data);
 		ft_lstclear1(&data->f_list);
-		
 	}
+	while (a++ <= 100)
+		close(a);
 	ft_lstclear(&data->list_token);
 }
 

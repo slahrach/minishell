@@ -6,69 +6,11 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:02:23 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:20:15 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 01:10:33 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_export_env(t_env *env)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		if (!tmp->value && tmp->flag)
-			printf("declare -x %s=\"\"\n", tmp->name);
-		else if (!tmp->value && !tmp->flag)
-			printf("declare -x %s\n", tmp->name);
-		else
-			printf("declare -x %s=\"%s\"\n", tmp->name, tmp->value);
-		tmp = tmp->next;
-	}
-}
-
-int	already_exists_export_supp(t_env *tmp, char **arg, int flag)
-{
-	if ((tmp->value && arg[1]))
-	{
-		if (!ft_strcmp(tmp->value, arg[1]))
-			return (1);
-		else
-			return (2);
-	}
-	else if (!tmp->value && arg[1])
-		return (2);
-	else if ((!arg[1] && flag))
-		return (3);
-	else if (!arg[1] && !tmp->value && !flag)
-		return (1);
-	else if (!arg[1] && tmp->value && !flag)
-		return (1);
-	return (10);
-}
-
-static int	already_exists_export_concat(char **arg, t_env *env, int flag)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	while (tmp)
-	{
-		if (!ft_strncmp(tmp->name, arg[0], ft_strlen(arg[0]) - 1))
-		{
-			if (already_exists_export_supp(tmp, arg, flag) == 1)
-				return (1);
-			if (already_exists_export_supp(tmp, arg, flag) == 2)
-				return (2);
-			if (already_exists_export_supp(tmp, arg, flag) == 3)
-				return (3);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
-}
 
 static int	already_exists_export(char **arg, t_env *env, int flag)
 {
@@ -93,7 +35,7 @@ static int	already_exists_export(char **arg, t_env *env, int flag)
 
 void	join_n_add_change(t_env **env, char **arg, int flag)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = *env;
 	while (tmp)
@@ -101,42 +43,15 @@ void	join_n_add_change(t_env **env, char **arg, int flag)
 		if (!ft_strncmp(tmp->name, arg[0], ft_strlen(arg[0]) - 1))
 		{
 			tmp->value = ft_strjoin(tmp->value, arg[1]);
+			printf ("%d=flag\n", flag);
+			tmp->flag = flag;
 			return ;
 		}
 		tmp = tmp->next;
 	}
 }
 
-static	char	*ft_strndup(const char *s1, int l)
-{
-	char	*ptr;
-
-	ptr = (char *) malloc ((l + 1) * sizeof(char));
-	if (!ptr)
-		return (0);
-	ft_strlcpy (ptr, s1, l + 1);
-	return (ptr);
-}
-
-int	cases_concat(t_list **list, int flag, t_env *env, char **splited)
-{
-	char	*tmp;
-	
-	tmp = ft_strndup(splited[0], ft_strlen(splited[0]) - 1);
-	if (parse_args_export(list, splited[0]) == 2)
-	{
-		if (!already_exists_export_concat(splited, env, flag))
-			add_back(&env, new_node(tmp, splited[1], flag));
-		else if (already_exists_export_concat(splited, env, flag) == 2)
-			join_n_add_change(&env, splited, flag);
-		free (tmp);
-		return (0);
-	}
-	free(tmp);
-	return (1);
-}
-
-static void	cases(t_list **list, char *arr, t_env *env)
+static void	cases(char *arr, t_env *env)
 {
 	char	**splited;
 	int		flag;
@@ -145,12 +60,12 @@ static void	cases(t_list **list, char *arr, t_env *env)
 	if (!ft_strchr(arr, '='))
 		flag = 0;
 	splited = ft_split1(arr, '=');
-	if (!parse_args_export(list, splited[0]))
+	if (!parse_args_export(splited[0]))
 	{
 		free_all(splited);
 		return ;
 	}
-	if (!cases_concat(list, flag, env, splited))
+	if (!cases_concat(flag, env, splited))
 	{
 		free_all(splited);
 		return ;
@@ -184,7 +99,7 @@ void	export_command(t_list **list, t_env *env)
 			g_last_exitstatus = 1;
 			return ;
 		}
-		cases(list, arr[i], env);
+		cases(arr[i], env);
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 00:44:51 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:48:53 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 00:17:09 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ static void	make_arr(t_list **head)
 	}
 }
 
-static int	t_pipe(t_data *data, t_list **list, t_list **head)
+static int	t_pipe(t_list *temp, t_data *data, t_list **list, t_list **head)
 {
-	if (!(*head) || !(*list)->next)
+	if (!temp->inside || !(*head) || !(*list)->next)
 	{
 		error(data, 0);
 		return (1);
@@ -96,7 +96,7 @@ t_list	*parse(t_data *data, t_list **list_free)
 	{
 		if (token->id == PIPE)
 		{
-			if (t_pipe (data, &token, &head))
+			if (t_pipe (temp, data, &token, &head))
 				break ;
 		}
 		else if (token->id == 0 || token->id == STATUS)

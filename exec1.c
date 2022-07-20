@@ -6,13 +6,13 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 18:47:11 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/17 20:43:39 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 23:25:26 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exit_command(t_data *data, t_list **f_list)
+void	exit_command(t_list **f_list)
 {
 	long long	atoi;
 	t_list		*list;
@@ -63,8 +63,6 @@ int	check_builtins(t_data *data, t_list *tmp)
 
 void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 {
-	char	*str;
-
 	if (tmp->arr[0])
 	{
 		if (data->f_list->inside && data->f_list->inside->id)
@@ -74,7 +72,7 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 		else if (!ft_strcmp(tmp->arr[0], "cd"))
 			cd_command(&tmp, &data->env);
 		else if (!ft_strcmp(tmp->arr[0], "pwd"))
-			pwd_command(&tmp);
+			pwd_command();
 		else if (!strcmp(tmp->arr[0], "export"))
 			export_command(&tmp, data->env);
 		else if (!ft_strcmp(tmp->arr[0], "env"))
@@ -82,7 +80,7 @@ void	check_builtins_or_other_cmd(t_data *data, t_list *tmp)
 		else if (!ft_strcmp(tmp->arr[0], "unset"))
 			unset_command(&tmp, &(data->env));
 		else if (!ft_strcmp(tmp->arr[0], "exit"))
-			exit_command(data, &tmp);
+			exit_command(&tmp);
 		else
 			other_commands(data, tmp, data->tool);
 	}

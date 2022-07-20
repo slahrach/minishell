@@ -6,7 +6,7 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 22:00:33 by slahrach          #+#    #+#             */
-/*   Updated: 2022/07/19 01:09:40 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/19 23:26:57 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static	void	change_pwd_env(t_env **env)
 	free (pwd_val);
 }
 
-static	void	cd_home(t_list **list, t_env **env)
+static	void	cd_home(t_env **env)
 {
 	char	*path;
 
@@ -60,7 +60,7 @@ static	void	cd_home(t_list **list, t_env **env)
 	return ;
 }
 
-static int	success_cd(t_env **env, char *arr)
+int	success_cd(t_env **env, char *arr)
 {
 	char	*pwd_val;
 
@@ -80,7 +80,7 @@ void	cd_command(t_list **list, t_env **env)
 	arr = (*list)->arr;
 	if (!arr[1])
 	{
-		cd_home(list, env);
+		cd_home(env);
 		return ;
 	}
 	if (!chdir(arr[1]))

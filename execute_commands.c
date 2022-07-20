@@ -6,19 +6,11 @@
 /*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/18 12:28:55 by iouardi          ###   ########.fr       */
+/*   Updated: 2022/07/20 01:37:06 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_error(char *cmd)
-{
-	char	*err;
-
-	err = strerror (errno);
-	printf ("bash: %s: %s\n", cmd, err);
-}
 
 void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
 {
@@ -50,7 +42,7 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		signal(SIGQUIT, SIG_DFL);
 		dup2(tmp->fd_in, 0);
 		dup2(tmp->fd_out, 1);
-		close(data->tool->p[0]);	
+		close(data->tool->p[0]);
 		check_builtins_or_other_cmd(data, tmp);
 		exit(g_last_exitstatus);
 	}
@@ -59,7 +51,7 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		close (tmp->fd_in);
 		close (tmp->fd_out);
 		if (tmp->arr[0] && !ft_strcmp(tmp->arr[0], "exit"))
-			exit_command(data, &tmp);
+			exit_command(&tmp);
 	}
 	return (pid);
 }
@@ -80,17 +72,15 @@ int	execute_one_builtin(t_data *data, t_list *tmp)
 	return (0);
 }
 
-int	check_here_doc(t_list *f_list)
+int	execute_commands_supp(t_data *data, t_list *tmp, int *pid)
 {
-	t_redir	*tmp;
-	
-	tmp = f_list->redirect;
-	while (tmp)
+	if (execute_one_builtin(data, tmp))
 	{
-		if (tmp->id == 4)
-			return (1);
-		tmp = tmp->next;
+		free (pid);
+		return (1);
 	}
+	if (check_pipes(data, &data->f_list, data->tool))
+		return (1);
 	return (0);
 }
 
@@ -107,14 +97,9 @@ void	execute_commands(t_data *data)
 	fd_in = dup(0);
 	fd_out = dup(1);
 	pid = malloc (sizeof(int) * ft_lstsize(tmp));
-	if (execute_one_builtin(data, tmp))
-	{
-		free (pid);
+	if (execute_commands_supp(data, tmp, pid))
 		return ;
-	}
 	tmp = data->f_list;
-	if (check_pipes(data, &data->f_list, data->tool))
-		return ;
 	while (tmp)
 	{
 		pid[i++] = execute_commands_(data, tmp);
