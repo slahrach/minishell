@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 06:17:22 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 05:23:01 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/20 23:35:23 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,13 +83,18 @@ int	how_many_heredocs_we_have(t_data *data)
 	return (cmpt);
 }
 
-void	check_herdocs_num(t_data *data)
+void	ft_here_doc_supp(t_data *data, t_list *tmp1, t_tools *tool)
 {
-	if (how_many_heredocs_we_have(data) > 16)
+	close (tool->p[1]);
+	if (g_last_exitstatus != 130)
 	{
-		printf("maximum here-document count exceeded\n");
-		g_last_exitstatus = 2;
-		exit (g_last_exitstatus);
+		tmp1->fd_in = tool->p[0];
+		ft_lstadd_back_fds(&data->fd, new_fds(tmp1->fd_in));
+	}
+	else
+	{
+		data->signal_flag = 0;
+		g_last_exitstatus = 1;
 	}
 }
 
@@ -118,16 +123,6 @@ int	ft_here_doc(t_redir *tmp, t_list *tmp1, t_tools *tool, t_data *data)
 	}
 	else
 		waitpid(pid0, NULL, 0);
-	close (tool->p[1]);
-	if (g_last_exitstatus != 130)
-	{
-		tmp1->fd_in = tool->p[0];
-		ft_lstadd_back_fds(&data->fd, new_fds(tmp1->fd_in));
-	}
-	else
-	{
-		data->signal_flag = 0;
-		g_last_exitstatus = 1;
-	}
+	ft_here_doc_supp(data, tmp1, tool);
 	return (0);
 }

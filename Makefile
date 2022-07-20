@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+         #
+#    By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 05:51:28 by slahrach          #+#    #+#              #
-#    Updated: 2022/07/20 03:34:20 by slahrach         ###   ########.fr        #
+#    Updated: 2022/07/20 22:35:56 by iouardi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRCS = main.c \
 	here_doc.c \
 	utils2.c \
 	utils1.c \
+	utils3.c \
 	unset_node.c \
 	check_pipes_and_redirections.c \
 
@@ -44,7 +45,7 @@ OBJS = ${SRCS:.c=.o}
 ${NAME} : ${OBJS}
 		@make -C libft
 		@cp libft/libft.a ./
-		gcc -g $(CFLAGS) ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/slahrach/.brew/opt/readline/lib -I /Users/slahrach/.brew/opt/readline/include #-fsanitize=address
+		gcc -g $(CFLAGS) ${OBJS} ${LIB} -o ${NAME} -lreadline -L /Users/iouardi/.brew/opt/readline/lib -I /Users/iouardi/.brew/opt/readline/include #-fsanitize=address
 
 all : ${NAME}
 
@@ -60,6 +61,6 @@ fclean : clean
 re : fclean all
 
 %.o : %.c
-	${CC} $(CFLAGS) -g -I /Users/slahrach/.brew/opt/readline/include -c $<
+	${CC} $(CFLAGS) -g -I /Users/iouardi/.brew/opt/readline/include -c $<
 
 .PHONY: clean all fclean re

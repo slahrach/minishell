@@ -3,31 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   execute_commands.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slahrach <slahrach@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: iouardi <iouardi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 01:35:03 by iouardi           #+#    #+#             */
-/*   Updated: 2022/07/20 05:41:56 by slahrach         ###   ########.fr       */
+/*   Updated: 2022/07/20 23:31:22 by iouardi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	other_commands(t_data *data, t_list *tmp, t_tools *tool)
+void	execute_commands_supp_supp(t_list *tmp)
 {
-	if (!check_path(tmp->arr[0]) || check_path(tmp->arr[0]) == 2)
-		tool->path = ft_strdup(tmp->arr[0]);
-	else
-		tool->path = find_path(&data->env, tmp->arr[0]);
-	if (!tool->path)
+	if (tmp->fd_in != 0)
 	{
-		if (!data->env->flag_unset_path)
-			printf("bash: %s: command not found\n", tmp->arr[0]);
-		g_last_exitstatus = 127;
-		return ;
+		close (tmp->fd_in);
+		tmp->fd_in = 0;
 	}
-	execve(tool->path, tmp->arr, linked_list_to_table(data->env));
-	free (tool->path);
-	print_error(tmp->arr[0]);
+	if (tmp->fd_out != 1)
+	{
+		close (tmp->fd_out);
+		tmp->fd_out = 1;
+	}
+	if (tmp->arr[0] && !ft_strcmp(tmp->arr[0], "exit"))
+		exit_command(&tmp);
 }
 
 int	execute_commands_(t_data *data, t_list *tmp)
@@ -50,20 +48,7 @@ int	execute_commands_(t_data *data, t_list *tmp)
 		exit(g_last_exitstatus);
 	}
 	else
-	{
-		if (tmp->fd_in != 0)
-		{
-			close (tmp->fd_in);
-			tmp->fd_in = 0;
-		}
-		if (tmp->fd_out != 1)
-		{
-			close (tmp->fd_out);
-			tmp->fd_out = 1;
-		}
-		if (tmp->arr[0] && !ft_strcmp(tmp->arr[0], "exit"))
-			exit_command(&tmp);
-	}
+		execute_commands_supp_supp(tmp);
 	return (pid);
 }
 
@@ -91,7 +76,10 @@ int	execute_commands_supp(t_data *data, t_list *tmp, int *pid)
 		return (1);
 	}
 	if (check_pipes(data, &data->f_list, data->tool))
+	{
+		free (pid);
 		return (1);
+	}
 	return (0);
 }
 
@@ -107,7 +95,10 @@ void	execute_commands(t_data *data)
 	if (execute_commands_supp(data, tmp, pid))
 		return ;
 	if (!data->signal_flag)
+	{
+		free (pid);
 		return ;
+	}
 	tmp = data->f_list;
 	while (tmp)
 	{
